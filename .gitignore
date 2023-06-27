@@ -1,0 +1,6 @@
+*.pyc
+.idea/*
+node_modules/*
+.env
+.vscode/*
+*.log
