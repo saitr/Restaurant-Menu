@@ -14,6 +14,9 @@ from pathlib import Path
 from decouple import config
 import logging.config
 import yaml
+import cloudinary
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,7 +39,16 @@ logging.config.dictConfig(LOGGING)
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'restaurants',
+        'USER': 'root',
+        'PASSWORD': 'Dollarbird@22',
+        'HOST':'localhost',
+        'PORT':'3306',
+    }
+}
 
 
 # Application definition
@@ -50,6 +62,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Local apps
     'menu_app',
+    'rest_framework',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -90,13 +104,13 @@ WSGI_APPLICATION = 'restaurants.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#
+#     }
+# }
 
 
 # Password validation
@@ -168,3 +182,13 @@ AUTHENTICATION_BACKENDS = [
 SESAME_MAX_AGE = 15 * 60
 SESAME_ONE_TIME = True
 SESAME_TOKEN_NAME = "token"
+
+
+
+# clousinary settings
+cloudinary.config(
+    cloud_name = 'dciadpthx',
+    api_key = '655848731445838',
+    api_secret = 'wXNMHNyaGkD87-VFTs-ruUd7X7U',
+    secure = True
+)
