@@ -33,5 +33,5 @@ class ItemAPIList(APIView):
 
 
         # return_status = status.HTTP_200_OK
-        return render(return_list, 'signin.html')
+        return render(return_list, 'home.html')
         # return Response(data = return_list , status=return_status)
