@@ -11,6 +11,7 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
+# Item api 
 class ItemAPIList(APIView):
 
     def get(self, request):
