@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Items
+from ...models import Items,Categories
+import os
 from ...serializers import ItemsSerializer
 from django.core import serializers
 from rest_framework import status
@@ -15,11 +16,14 @@ LOGGER = logging.getLogger(__name__)
 class ItemAPIList(APIView):
 
     def get(self, request):
-        print("inside bus get", request.query_params)
+        print("inside item get", request.query_params['category'])
+        try:
+            selected_category = Categories.objects.get(categoryName=request.query_params['category'])
+            get_item = Items.objects.filter(category=selected_category)
+        except Categories.DoesNotExist:
+            get_item = []  #
 
-        # print("from request", request.user.email)
-        get_item = Items.objects.all()
-        print("get_item", get_item)
+
         return_list = []
         for data in get_item:
             return_dict = {'category':data.category,
@@ -28,10 +32,13 @@ class ItemAPIList(APIView):
                            'item_image': data.item_image,
                            'created_at':data.created_at,
                            'updated_at' : data.updated_at}
+
             return_list.append(return_dict)
         print("return_list", return_list)
 
+        context = {
+            'return_list': return_list
+        }
 
-        # return_status = status.HTTP_200_OK
-        return render(return_list, 'home.html')
-        # return Response(data = return_list , status=return_status)
+        return render(request, 'item.html', context)
+

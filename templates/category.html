@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+    <style>
+        .category-form {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .category-form select {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+
+        .category-form button {
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function redirectToAPI(form) {
+            var category = form.category.value;
+            // Redirect to the desired API endpoint with the selected category
+            window.location.href = '/items?category=' + encodeURIComponent(category);
+        }
+    </script>
+</head>
+<body>
+    <h1>Items</h1>
+    <div class="category-form">
+        <form onsubmit="event.preventDefault(); redirectToAPI(this);">
+            <select name="category">
+                {% for item in return_list %}
+                    <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Go</button>
+        </form>
+    </div>
+</body>
+</html>

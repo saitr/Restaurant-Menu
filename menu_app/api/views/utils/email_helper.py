@@ -79,3 +79,5 @@ class EmailHelper:
                         pdf_file=pdf_file,
                         file_name=file_name,
                         bcc=bcc)
+
+

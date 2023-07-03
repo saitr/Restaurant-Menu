@@ -1,0 +1,143 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+    <style>
+        .cart-button {
+            padding: 5px 10px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .quantity-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cart-symbol {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        function addToCart(itemId) {
+            var quantity = 1; // Initial quantity is set to 1
+
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/cart_api/';
+
+            // Create an input field for the item ID
+            var inputItemId = document.createElement('input');
+            inputItemId.type = 'hidden';
+            inputItemId.name = 'itemId';
+            inputItemId.value = itemId;
+
+            // Create an input field for the quantity
+            var inputQuantity = document.createElement('input');
+            inputQuantity.type = 'hidden';
+            inputQuantity.name = 'quantity';
+            inputQuantity.value = quantity;
+
+            // Create a "+" button to increment quantity
+            var btnIncrement = document.createElement('button');
+            btnIncrement.innerText = '+';
+            btnIncrement.type = 'button';
+            btnIncrement.className = 'quantity-btn';
+            btnIncrement.addEventListener('click', function () {
+                quantity++;
+                updateQuantityDisplay();
+            });
+
+            // Create a "1" display for the current quantity
+            var quantityDisplay = document.createElement('span');
+            quantityDisplay.innerText = quantity;
+            quantityDisplay.className = 'quantity-display';
+
+            // Create a "-" button to decrement quantity
+            var btnDecrement = document.createElement('button');
+            btnDecrement.innerText = '-';
+            btnDecrement.type = 'button';
+            btnDecrement.className = 'quantity-btn';
+            btnDecrement.addEventListener('click', function () {
+                if (quantity > 1) {
+                    quantity--;
+                    updateQuantityDisplay();
+                }
+            });
+
+            // Function to update the quantity display
+            function updateQuantityDisplay() {
+                quantityDisplay.innerText = quantity;
+                inputQuantity.value = quantity;
+            }
+
+            // Append the input fields and buttons to the form
+            form.appendChild(inputItemId);
+            form.appendChild(inputQuantity);
+            form.appendChild(btnIncrement);
+            form.appendChild(quantityDisplay);
+            form.appendChild(btnDecrement);
+
+            // Append the form to the document and submit it
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Item Name</th>
+                <th>Item Image</th>
+                <th>Item Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in return_list %}
+            <tr>
+                <td>{{ item.category }}</td>
+                <td>{{ item.itemName }}</td>
+                <td><img src="{{ item.item_image.url }}" alt="Item Image"></td>
+                <td>{{ item.itemPrice }}</td>
+                <td>
+                    <div class="quantity-buttons">
+                        <button class="quantity-btn" onclick="addToCart('{{ item.itemId }}')">+</button>
+                        <span class="quantity-display">1</span>
+                        <button class="quantity-btn" onclick="addToCart('{{ item.itemId }}')">-</button>
+                    </div>
+                    <button class="cart-button" onclick="addToCart('{{ item.itemId }}')">Add to Cart</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-symbol">
+        <a href="/api/cart">
+            <img src="cart_icon.png" alt="Cart Icon">
+            <span>{{ cartCount }}</span>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,15 +1,15 @@
 
 from rest_framework import serializers
-from .models import User,Categories,Items,Cart,Order,Order_Items,Lodge,Owner_Utility
+from .models import CustomUser,Categories,Items,Cart,Order,Order_Items,Lodge,Owner_Utility
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     """
     User model serializer
     """
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = "__all__"
 
 class CategoriesSerializer(serializers.ModelSerializer):

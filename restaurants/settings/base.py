@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+from typing import Any
 from pathlib import Path
 from decouple import config
 import logging.config
@@ -33,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECRET_KEY = config('restaurants-appkey')
 SECRET_KEY = config('restaurants-appkey')
 
-with open(os.path.join(BASE_DIR, '../config/logging.yml'), 'rt') as f:
+with open(os.path.join(BASE_DIR, '../config/logging_app.yml'), 'rt') as f:
     LOGGING = yaml.safe_load(f.read())
 logging.config.dictConfig(LOGGING)
 
@@ -64,8 +65,19 @@ INSTALLED_APPS = [
     # Local apps
     'menu_app',
     'rest_framework',
+     'rest_framework_simplejwt',
     'cloudinary',
+    'django_otp',
+    'django_celery_results'
+
 ]
+
+AUTH_USER_MODEL = 'menu_app.CustomUser'
+# Twilio configurations
+OTP_TWILIO_ACCOUNT_SID =  config('OTP_TWILIO_ACCOUNT_SID')
+OTP_TWILIO_AUTH_TOKEN =  config('OTP_TWILIO_AUTH_TOKEN')
+OTP_TWILIO_FROM_NUMBER = config('OTP_TWILIO_FROM_NUMBER')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +98,7 @@ ROOT_URLCONF = 'restaurants.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
+        'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,6 +113,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'restaurants.wsgi.application'
 
+SIMPLE_JWT: Any = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -172,7 +187,7 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_CREATE_MISSING_QUEUES = True
 
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 CELERY_TASK_ALWAYS_EAGER = True
 

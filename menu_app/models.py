@@ -1,29 +1,46 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 # from jsonfield import JSONField
 from  cloudinary.models import CloudinaryField
+from .manager import CustomUserManager
+from django.core.validators import MaxValueValidator
 import uuid
 # from .manager import CustomUserManager
 
 
-class User(models.Model):
-     username = models.CharField(max_length=255)
-     phone_number = models.IntegerField()
-     email_id = models.EmailField()
-     is_verified = models.BooleanField()
-     is_chef = models.BooleanField()
-     password = models.CharField(max_length=255)
+# class User(models.Model):
+#      username = models.CharField(max_length=255)
+#      phone_number =  models.CharField(max_length=20, null=False)
+#      email_id = models.EmailField(null=True)
+#      is_verified = models.BooleanField(default=False)
+#      is_chef = models.BooleanField(default=False)
+#      password = models.CharField(max_length=255)
+#
+#      def __str__(self):
+#          return self.username
+#
+#      class Meta:
+#          managed = True
+#          db_table = 'user'
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=20, unique=True)
+    is_verified = models.BooleanField(default=False)
+    is_chef = models.BooleanField(default=False)
+    otp = models.CharField(max_length=20)
 
-     def __str__(self):
-         return self.phone_number
+    objects = CustomUserManager()
 
-     class Meta:
-         managed = True
-         db_table = 'user'
+    # Use 'phone_number' as the unique identifier for authentication
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        db_table = 'CustomUser'
 
 
 class Categories(models.Model):
@@ -53,7 +70,7 @@ class Items(models.Model):
 
 
 class Cart(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
+    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     items = models.ForeignKey(Items, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
@@ -66,7 +83,7 @@ class Cart(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     table_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.IntegerField()
@@ -93,7 +110,7 @@ class Order_Items(models.Model):
         db_table = 'order_Items'
 
 class Lodge(models.Model):
-    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    userid = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     room_number = models.IntegerField()
     from_date = models.DateTimeField()
     to_date = models.DateTimeField()
