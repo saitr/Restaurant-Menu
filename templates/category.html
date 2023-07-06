@@ -23,21 +23,44 @@
             cursor: pointer;
         }
     </style>
-    <script>
-        function redirectToAPI(form) {
-            var category = form.category.value;
-            // Redirect to the desired API endpoint with the selected category
-            window.location.href = '/items?category=' + encodeURIComponent(category);
-        }
-    </script>
+<!--    <script>-->
+<!--        function redirectToAPI(form) {-->
+<!--            var category = form.category.value;-->
+<!--             var table_name = form.table_name.value;-->
+<!--            // Redirect to the desired API endpoint with the selected category-->
+<!--            var url = '/items?category=' + encodeURIComponent(category) + '&table_name=' + encodeURIComponent(table_name);-->
+<!--            // Redirect to the desired API endpoint with the selected category and table_name-->
+<!--            window.location.href = url;-->
+<!--        }-->
+<!--    </script>-->
+ {% for item in return_list %}
+    {% if forloop.last %}
+        <script>
+            function redirectToAPI(form) {
+                var table_name = '{{ item.table_number }}';
+                console.log("table_name", table_name);
+
+                var category = form.category.value;
+                // Redirect to the desired API endpoint with the selected category and table_name
+                var url = '/items?category=' + encodeURIComponent(category) + '&table_name=' + encodeURIComponent(table_name);
+                // Redirect to the desired API endpoint with the selected category and table_name
+                window.location.href = url;
+            }
+        </script>
+    {% endif %}
+{% endfor %}
+
 </head>
+
 <body>
     <h1>Items</h1>
     <div class="category-form">
         <form onsubmit="event.preventDefault(); redirectToAPI(this);">
             <select name="category">
+                console.log("return_list",return_list)
                 {% for item in return_list %}
                     <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>
+
                 {% endfor %}
             </select>
             <button type="submit">Go</button>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Items</title>
+</head>
+<body>
+    <h1>Cart Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over the cart items and display them -->
+            {% for item in return_list %}
+            <tr>
+                <td>{{ item.items.itemName }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <button onclick="placeOrder({{ table_name }})">Place Order</button>
+<script>
+    function placeOrder(table_name, itemId) {
+        // Create a form dynamically
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/order_api/';
+
+        // Create an input field for the table name
+        var inputTableName = document.createElement('input');
+        inputTableName.type = 'hidden';
+        inputTableName.name = 'table_name';
+        inputTableName.value = table_name;
+
+
+        // Append the input fields to the form
+        form.appendChild(inputTableName);
+
+
+        // Append the form to the document
+        document.body.appendChild(form);
+
+        // Prevent the default form submission behavior
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            placeOrderAsync(form);
+        });
+
+        // Submit the form asynchronously
+        function placeOrderAsync(form) {
+            // Send a POST request to the cart API
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form)
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Redirect to image.html
+                    window.location.href = 'image.html';
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error adding item to cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error adding item to cart:', error);
+            });
+        }
+
+        // Submit the form
+        form.submit();
+    }
+</script>
+
+</body>
+</html>

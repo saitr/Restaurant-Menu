@@ -1,38 +1,25 @@
-from django.conf import settings
+
+import barcode
+from barcode.writer import ImageWriter
+from io import BytesIO
+import qrcode
+from django.core.files import File
+from PIL import Image,ImageDraw
+from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
-from django.utils import timezone
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
-# from jsonfield import JSONField
-from  cloudinary.models import CloudinaryField
+from cloudinary.models import CloudinaryField
 from .manager import CustomUserManager
-from django.core.validators import MaxValueValidator
-import uuid
-# from .manager import CustomUserManager
+from django.contrib.auth.models import User, AbstractUser
+from django.conf import settings
 
 
-# class User(models.Model):
-#      username = models.CharField(max_length=255)
-#      phone_number =  models.CharField(max_length=20, null=False)
-#      email_id = models.EmailField(null=True)
-#      is_verified = models.BooleanField(default=False)
-#      is_chef = models.BooleanField(default=False)
-#      password = models.CharField(max_length=255)
-#
-#      def __str__(self):
-#          return self.username
-#
-#      class Meta:
-#          managed = True
-#          db_table = 'user'
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, unique=True)
     is_verified = models.BooleanField(default=False)
     is_chef = models.BooleanField(default=False)
     otp = models.CharField(max_length=20)
-
+    username = models.CharField(max_length=150, unique=True, null=True)
     objects = CustomUserManager()
 
     # Use 'phone_number' as the unique identifier for authentication
@@ -68,28 +55,48 @@ class Items(models.Model):
         managed = True
         db_table = 'items'
 
+class Owner_Utility(models.Model):
+    table_number = models.IntegerField(default=False)
+    qr_code = models.ImageField(upload_to='qr_code',  blank=True)
+
+    class Meta:
+        managed = True
+        db_table = 'owner_utility'
+
+
+def generate_qr_code(sender, instance, **kwargs):
+    if not instance.qr_code:
+        # Assuming 'table_number' is already set on the instance
+        url = f'http://127.0.0.1:8000/category_api/{instance.table_number}'
+
+        qr_code_img = qrcode.make(url)
+        canvas = Image.new('RGB', (350, 350), 'white')
+        draw = ImageDraw.Draw(canvas)
+        canvas.paste(qr_code_img)
+
+        buffer = BytesIO()
+        canvas.save(buffer, format='PNG')
+
+        instance.qr_code.save(f'{instance.table_number}.png', File(buffer), save=False)
+
+models.signals.pre_save.connect(generate_qr_code, sender=Owner_Utility)
+
 
 class Cart(models.Model):
-    userId = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    table_number = models.ForeignKey(Owner_Utility,on_delete=models.CASCADE)
     items = models.ForeignKey(Items, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return self.userId
+    quantity = models.IntegerField(null=True, blank=False, default=1)
 
     class Meta:
         managed = True
         db_table = 'cart'
 
 
-class Order(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    table_number = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    total_price = models.IntegerField()
 
-    def __str__(self):
-        return self.table_number
+class Order(models.Model):
+    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.IntegerField(null=False, blank=False)
 
     class Meta:
         managed = True
@@ -126,18 +133,7 @@ class Lodge(models.Model):
         managed = True
         db_table = 'lodge'
 
-class Owner_Utility(models.Model):
-    number_var = models.IntegerField
-    is_table = models.BooleanField(default=False)
-    room_number = models.BooleanField(default=False)
 
-
-    def __str__(self):
-        return self.number_var
-
-    class Meta:
-        managed = True
-        db_table = 'owner_utility'
 
 
 

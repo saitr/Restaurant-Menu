@@ -15,7 +15,7 @@ LOGGER = logging.getLogger(__name__)
 # Item api
 class CategoryAPIList(APIView):
 
-    def get(self, request):
+    def get(self, request,variant):
         print("inside  category_api", request.query_params)
 
         # print("from request", request.user.email)
@@ -26,11 +26,12 @@ class CategoryAPIList(APIView):
             return_dict = {'categoryName':data.categoryName}
 
             return_list.append(return_dict)
+        return_list.append({"table_number":variant})
         print("return_list", return_list)
 
         context = {
             'return_list': return_list
         }
-
+        # return Response(context, status=status.HTTP_200_OK)
         return render(request, 'category.html', context)
 

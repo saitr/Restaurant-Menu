@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from django.shortcuts import render, redirect
 from ...models import User
 import os
-from ...serializers import UserSerializer
+from ...serializers import CustomUserSerializer
 from django.core import serializers
 from rest_framework import status
 from django.shortcuts import get_object_or_404

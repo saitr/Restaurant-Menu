@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP</title>
+</head>
+<body>
+    <h2>Verify OTP</h2>
+    <form id="otpForm">
+        {% csrf_token %}
+        <label for="otp">Enter OTP:</label>
+        <input type="text" name="otp" id="otp" required><br>
+        <label for="phone_number">Phone Number:</label>
+        <input type="tel" id="phone_number" name="phone_number" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Verify">
+    </form>
+
+    <script>
+        // Fetch phone number and password from the GET API
+        fetch('/user_api/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('phone_number').value = data.phone_number;
+                document.getElementById('password').value = data.password;
+            });
+
+        // Handle form submission
+        document.getElementById('otpForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Make POST request to verify_api with the form data
+            fetch('/varify_api/', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response as needed
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

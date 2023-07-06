@@ -7,12 +7,41 @@ from datetime import datetime
 import getpass
 
 from django.db import connection, DatabaseError
+import mysql.connector
+from mysql.connector import Error
+from decouple import config
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+import django
 
 
 class DBUtils:
     """
     Database utility methods
     """
+
+    def get_db_connect():
+        django.setup()
+        try:
+            database_settings = settings.DATABASES['default']
+            print("database_settings", database_settings)
+            connection = mysql.connector.connect(
+                host=database_settings['HOST'],
+                database=database_settings['NAME'],
+                user=database_settings['USER'],
+                password=database_settings['PASSWORD'],
+                port=database_settings.get('PORT', '3306'),  # Default MySQL port is 3306
+            )
+
+            if connection.is_connected():
+                print("Connected to MySQL database")
+                cursor = connection.cursor()
+                return cursor, connection
+
+        except Error as e:
+            print("Error while connecting to MySQL database:", e)
+
+
     @staticmethod
     def dict_fetchall(cursor):
         """

@@ -1,143 +1,117 @@
-<!-- base.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Items</title>
-    <style>
-        .cart-button {
-            padding: 5px 10px;
-            background-color: #f2f2f2;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+<script>
+    var clickCount = 0; // Variable to track click count
 
-        .quantity-buttons {
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-        }
+    function addToCart(table_name, itemId) {
+        // Create a form dynamically
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/cart_api';
 
-        .quantity-btn {
-            padding: 5px 10px;
-            margin: 0 5px;
-            background-color: #f2f2f2;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        // Create an input field for the table name
+        var inputTableName = document.createElement('input');
+        inputTableName.type = 'hidden';
+        inputTableName.name = 'table_name';
+        inputTableName.value = table_name;
+        console.log("inputTableName.value",inputTableName.value)
 
-        .cart-symbol {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-        }
-    </style>
-    <script>
-        function addToCart(itemId) {
-            var quantity = 1; // Initial quantity is set to 1
+        // Create an input field for the item ID
+        var inputItemId = document.createElement('input');
+        inputItemId.type = 'hidden';
+        inputItemId.name = 'itemId';
+        inputItemId.value = itemId;
 
-            // Create a form dynamically
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/cart_api/';
+        // Append the input fields to the form
+        form.appendChild(inputTableName);
+        form.appendChild(inputItemId);
 
-            // Create an input field for the item ID
-            var inputItemId = document.createElement('input');
-            inputItemId.type = 'hidden';
-            inputItemId.name = 'itemId';
-            inputItemId.value = itemId;
+        // Append the form to the document
+        document.body.appendChild(form);
 
-            // Create an input field for the quantity
-            var inputQuantity = document.createElement('input');
-            inputQuantity.type = 'hidden';
-            inputQuantity.name = 'quantity';
-            inputQuantity.value = quantity;
+        // Get the button element
+        var button = event.target;
 
-            // Create a "+" button to increment quantity
-            var btnIncrement = document.createElement('button');
-            btnIncrement.innerText = '+';
-            btnIncrement.type = 'button';
-            btnIncrement.className = 'quantity-btn';
-            btnIncrement.addEventListener('click', function () {
-                quantity++;
-                updateQuantityDisplay();
-            });
+        // Prevent the default form submission behavior
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-            // Create a "1" display for the current quantity
-            var quantityDisplay = document.createElement('span');
-            quantityDisplay.innerText = quantity;
-            quantityDisplay.className = 'quantity-display';
+            // Increment the click count
+            clickCount++;
 
-            // Create a "-" button to decrement quantity
-            var btnDecrement = document.createElement('button');
-            btnDecrement.innerText = '-';
-            btnDecrement.type = 'button';
-            btnDecrement.className = 'quantity-btn';
-            btnDecrement.addEventListener('click', function () {
-                if (quantity > 1) {
-                    quantity--;
-                    updateQuantityDisplay();
-                }
-            });
+            if (clickCount === 1) {
+                // Send a POST request to the cart API
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    // Check if the response was successful
+                    if (response.ok) {
+                        // Change button text to "View Cart"
+                        button.textContent = 'View Cart';
+                        // Redirect to image.html
+                        window.location.href = 'image.html';
+                    } else {
+                        // Handle unsuccessful response if needed
+                        console.error('Error adding item to cart:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error adding item to cart:', error);
+                });
+            } else if (clickCount === 2) {
+                // Update form method and action for the GET request
+                form.method = 'GET';
+                form.action = '/cart_api';
 
-            // Function to update the quantity display
-            function updateQuantityDisplay() {
-                quantityDisplay.innerText = quantity;
-                inputQuantity.value = quantity;
+                // Send a GET request to the cart API
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    // Check if the response was successful
+                    if (response.ok) {
+                        // Handle the response for the GET method
+                        console.log('Received response for GET method:', response);
+                    } else {
+                        // Handle unsuccessful response if needed
+                        console.error('Error retrieving cart:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error retrieving cart:', error);
+                });
             }
+        });
 
-            // Append the input fields and buttons to the form
-            form.appendChild(inputItemId);
-            form.appendChild(inputQuantity);
-            form.appendChild(btnIncrement);
-            form.appendChild(quantityDisplay);
-            form.appendChild(btnDecrement);
+        // Submit the form
+        form.submit();
+    }
+</script>
 
-            // Append the form to the document and submit it
-            document.body.appendChild(form);
-            form.submit();
-        }
-    </script>
-</head>
-<body>
-    <h1>Items</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Item Name</th>
-                <th>Item Image</th>
-                <th>Item Price</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in return_list %}
-            <tr>
-                <td>{{ item.category }}</td>
-                <td>{{ item.itemName }}</td>
-                <td><img src="{{ item.item_image.url }}" alt="Item Image"></td>
-                <td>{{ item.itemPrice }}</td>
-                <td>
-                    <div class="quantity-buttons">
-                        <button class="quantity-btn" onclick="addToCart('{{ item.itemId }}')">+</button>
-                        <span class="quantity-display">1</span>
-                        <button class="quantity-btn" onclick="addToCart('{{ item.itemId }}')">-</button>
-                    </div>
-                    <button class="cart-button" onclick="addToCart('{{ item.itemId }}')">Add to Cart</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
-    <div class="cart-symbol">
-        <a href="/api/cart">
-            <img src="cart_icon.png" alt="Cart Icon">
-            <span>{{ cartCount }}</span>
-        </a>
-    </div>
-</body>
-</html>
+<table>
+    <thead>
+        <tr>
+            <th>Item Image</th>
+            <th>Item Name</th>
+            <th>Item Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in return_list %}
+        <tr>
+            <td><img src="{{ item.item_image.url }}" alt="Item Image"></td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.itemPrice }}</td>
+            <td>
+                <button class="cart-button" onclick="addToCart('{{ table_name }}', '{{ item.id }}')">Add to Cart</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

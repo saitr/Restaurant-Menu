@@ -16,6 +16,7 @@ LOGGER = logging.getLogger(__name__)
 class ItemAPIList(APIView):
 
     def get(self, request):
+        print("***", request.query_params)
         print("inside item get", request.query_params['category'])
         try:
             selected_category = Categories.objects.get(categoryName=request.query_params['category'])
@@ -26,7 +27,8 @@ class ItemAPIList(APIView):
 
         return_list = []
         for data in get_item:
-            return_dict = {'category':data.category,
+            return_dict = {'id':data.id,
+                           'category':data.category,
                            'itemName': data.itemName,
                            'itemPrice' : data.itemPrice,
                            'item_image': data.item_image,
@@ -37,8 +39,9 @@ class ItemAPIList(APIView):
         print("return_list", return_list)
 
         context = {
-            'return_list': return_list
+            'return_list': return_list,
+            'table_name': request.query_params['table_name']
         }
-
+        print("context",context)
         return render(request, 'item.html', context)
 

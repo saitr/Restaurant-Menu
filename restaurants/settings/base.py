@@ -68,9 +68,16 @@ INSTALLED_APPS = [
      'rest_framework_simplejwt',
     'cloudinary',
     'django_otp',
-    'django_celery_results'
+    'django_celery_results',
 
 ]
+
+LOGIN_URL = '/user_api/'
+
+# Media files (user-uploaded files) storage location
+MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'media'))
+MEDIA_URL = '/media/'
+
 
 AUTH_USER_MODEL = 'menu_app.CustomUser'
 # Twilio configurations
@@ -112,7 +119,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'restaurants.wsgi.application'
-
+SESSION_COOKIE_AGE = 86400
 SIMPLE_JWT: Any = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
 }
