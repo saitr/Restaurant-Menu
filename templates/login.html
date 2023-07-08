@@ -1,58 +1,24 @@
+<!-- login.html -->
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HTML/CSS Login Page</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Login</title>
 </head>
-<body style="background-color:#f5f5ef">
-<div class="form">
-    <div class="title">Chef Login</div>
-    <div class="subtitle">Login to view order detail</div>
-    <div class="input-container ic1">
-        <input id="phoneNumber" class="input" type="text" placeholder="">
-        <div class="cut"></div>
-        <label for="phoneNumber" class="placeholder">Phone Number</label>
-    </div>
-    <div class="input-container ic2">
-        <input id="password" class="input" type="password" placeholder="">
-        <div class="cut"></div>
-        <label for="password" class="placeholder">Password</label>
-    </div>
-    <button id="loginButton" type="button" class="submit">Login</button>
-</div>
-
-<script>
-    $(document).ready(function() {
-        // Handle click event of the login button
-        $('#loginButton').click(function() {
-            var phoneNumber = $('#phoneNumber').val();
-            var password = $('#password').val();
-
-            // Make a GET request to the order_item_api
-            $.ajax({
-                url: '/order_api/',
-                method: 'GET',
-                data: {
-                    phone_number: phoneNumber,
-                    password: password
-                },
-                success: function(response) {
-                    // Handle successful response
-                    console.log(response);
-                    // Redirect to the order detail page or perform any other action
-                },
-                error: function(error) {
-                    // Handle error response
-                    console.error(error);
-                }
-            });
-        });
-    });
-</script>
-
+<body>
+    <h2>Login</h2>
+    <form method="GET" action="{% url 'order_api' %}">
+        <div>
+            <label for="id_phone_number">Phone Number:</label>
+            <input type="text" id="id_phone_number" name="phone_number" required>
+        </div>
+        <div>
+            <label for="id_password">Password:</label>
+            <input type="password" id="id_password" name="password" required>
+        </div>
+        <div>
+            <input type="submit" value="Login">
+        </div>
+    </form>
 </body>
 </html>

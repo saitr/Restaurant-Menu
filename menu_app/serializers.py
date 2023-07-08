@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import CustomUser,Categories,Items,Cart,Order,Order_Items,Lodge,Owner_Utility
+from .models import CustomUser,Categories,Items,Cart,Order,Order_Items,Owner_Utility
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -55,15 +55,6 @@ class Order_ItemsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order_Items
-        fields = "__all__"
-
-class LodgeSerializer(serializers.ModelSerializer):
-    """
-    Lodge model serializer
-    """
-
-    class Meta:
-        model = Lodge
         fields = "__all__"
 
 class Owner_UtilitySerializer(serializers.ModelSerializer):

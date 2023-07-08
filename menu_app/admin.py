@@ -7,6 +7,5 @@ from .models import Categories,Items,Lodge,Owner_Utility,CustomUser
 
 admin.site.register(Categories)
 admin.site.register(Items)
-admin.site.register(Lodge)
 admin.site.register(Owner_Utility)
 admin.site.register(CustomUser)

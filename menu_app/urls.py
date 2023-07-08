@@ -6,6 +6,8 @@ from menu_app.api.views.cart_api import CartAPIList
 from menu_app.api.views.user_api import VerifyOTPView
 from menu_app.api.views.varify_api import ValidateOTPView
 from menu_app.api.views.order_item_api import OrderApiView
+from menu_app.api.views.index import indexAPIList
+from menu_app.api.views.home import HomeAPIList
 from menu_app.api.views.generatebarcode_api import GenerateBarcodeView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -13,15 +15,17 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
     path('items', ItemAPIList.as_view() , name='items'),
+    path('home', HomeAPIList.as_view() , name='home'),
     path('category_api/<int:variant>/', CategoryAPIList.as_view(),  name='category_api'),
     path('cart_api', CartAPIList.as_view(), name='cart_api'),
     path('user_api/', VerifyOTPView.as_view(),  name='user_api'),
-    path('varify_api/', ValidateOTPView.as_view(),  name='varify_api'),
+    path('varify/', ValidateOTPView.as_view(),  name='varify'),
     path('order_api/', OrderApiView.as_view(),  name='order_api'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('generate_barcode/', GenerateBarcodeView.as_view(), name='generate_barcode'),
     path('chef_api/', ChefAPIList.as_view(), name='chef_api'),
+    path('index/<int:variant>/', indexAPIList.as_view(), name='index'),
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

@@ -82,25 +82,26 @@ def generate_qr_code(sender, instance, **kwargs):
 models.signals.pre_save.connect(generate_qr_code, sender=Owner_Utility)
 
 
+class Order(models.Model):
+    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.IntegerField(null=False, blank=False)
+    order_deliverd = models.BooleanField(default=False)
+    class Meta:
+        managed = True
+        db_table = 'order'
+
+
 class Cart(models.Model):
     table_number = models.ForeignKey(Owner_Utility,on_delete=models.CASCADE)
     items = models.ForeignKey(Items, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True, blank=False, default=1)
-
+    orderid = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         managed = True
         db_table = 'cart'
 
 
-
-class Order(models.Model):
-    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    total_price = models.IntegerField(null=False, blank=False)
-
-    class Meta:
-        managed = True
-        db_table = 'order'
 
 class Order_Items(models.Model):
     quantity = models.IntegerField()

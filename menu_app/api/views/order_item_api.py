@@ -4,24 +4,29 @@ from rest_framework.views import APIView
 from ...models import CustomUser, Cart, Order_Items, Order,Owner_Utility
 from ...serializers import OrderSerializer
 from django.shortcuts import render, redirect
+from menu_app.api.views.utils.database_helper import DBUtils
+from rest_framework import status
+from rest_framework.response import Response
 
 class OrderApiView(APIView):
     def get(self,request):
         print("request.query_params",request.query_params)
-        cart_items = Cart.objects.all()
+        cart_items = Cart.objects.filter(orderid__order_deliverd=False)
         # Cart :- quantity,items,table_number
         # Order_Items: - quantity, order_item_price, item_id, orderid,
         # Items:- category, itemName, itemPrice, item_image, created_at, updated_at
         return_list = []
         for item in cart_items:
             print("cart_item.id", item.id)
+            print("Order id", item.orderid)
             # Assuming you have the cart item ID
-            return_dict = {
+            return_dict ={ item.orderid :{
             "item_name": item.items.itemName,
-            "table_name" : item.table_name,
+            "table_name" : item.table_number.table_number,
             "item" : item.items,
-            "quantity" : item.quantity
-            }
+            "quantity" : item.quantity,
+            }}
+
             return_list.append(return_dict)
 
         context = {
@@ -44,12 +49,12 @@ class OrderApiView(APIView):
         # Step 2: Retrieve the items from the cart and create Order_Items
         order_items = []
         total_price = 0
-
+        cursor, connection = DBUtils.get_db_connect()
         try:
             cart_items = Cart.objects.filter(table_number=table_name)
 
             for cart_item in cart_items:
-                print("cart_item.id", cart_item.id)
+                print("cart_item.id", cart_item)
                # Assuming you have the cart item ID
                 item_price = cart_item.items.itemPrice
                 print("item_price", item_price)
@@ -64,6 +69,9 @@ class OrderApiView(APIView):
                                          item_id=item, orderid=order)
                 order_items.append(order_item)
                 total_price += order_item_price
+
+                Cart.objects.filter(id=cart_item.id).update(orderid=order_item.orderid.id)
+
         except Cart.DoesNotExist:
             return JsonResponse({'message': 'Cart is empty'}, status=400)
 
@@ -73,5 +81,26 @@ class OrderApiView(APIView):
 
         for order_item in order_items:
             order_item.save()
+        context = {'table_name': table_name}
+        return render(request, 'sign_up.html',context)
 
-        return JsonResponse({'message': 'Order created successfully'}, status=200)
+    def patch(self, request):
+        print("Inside patch",request.data)
+
+        try:
+            data_dict = {"order_deliverd": True}
+            order_id = request.data.get('order_id')
+            print("Inside ***", order_id)
+            previous_record = Order.objects.get(id=order_id)
+            serializer = OrderSerializer(
+                previous_record,
+                data=data_dict,
+                partial=True
+            )
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'message': 'Order updated successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Order.DoesNotExist:
+            return Response({'message': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
