@@ -7,36 +7,59 @@ from django.shortcuts import render, redirect
 from menu_app.api.views.utils.database_helper import DBUtils
 from rest_framework import status
 from rest_framework.response import Response
+from django.contrib.auth import authenticate
 
 class OrderApiView(APIView):
     def get(self,request):
-        print("request.query_params",request.query_params)
-        cart_items = Cart.objects.filter(orderid__order_deliverd=False)
-        # Cart :- quantity,items,table_number
-        # Order_Items: - quantity, order_item_price, item_id, orderid,
-        # Items:- category, itemName, itemPrice, item_image, created_at, updated_at
-        return_list = []
-        for item in cart_items:
-            print("cart_item.id", item.id)
-            print("Order id", item.orderid)
-            # Assuming you have the cart item ID
-            return_dict ={ item.orderid :{
-            "item_name": item.items.itemName,
-            "table_name" : item.table_number.table_number,
-            "item" : item.items,
-            "quantity" : item.quantity,
-            }}
 
-            return_list.append(return_dict)
+        print("INSIDE GET OF ORDER ITEM for chef",request.query_params)
+        password = request.query_params['password']
+        phone_number = request.query_params['phone_number']
+        user = authenticate(request, username=phone_number, password=password)
+        if user is None:
+            # Invalid credentials
+            # Handle the error condition (e.g., return an error response)
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        else:
+            # CustomUser.objects.get()
+            cart_items = Cart.objects.filter(orderid__order_deliverd=False)
 
-        context = {
-            'return_list': return_list
-        }
-        print("context", context)
-        return render(request, 'chef.html', context)
+            return_list = []
+            order_dict = {}
+
+            for item in cart_items:
+                order_id = item.orderid.id
+                print("order_id *************", order_id)
+
+                if order_id not in order_dict:
+                    order_dict[order_id] = []
+
+                item_data = {
+                    "item_name": item.items.itemName,
+                    "table_name": item.table_number.table_number,
+                    "item": item.items,
+                    "quantity": item.quantity
+                }
+
+                order_dict[order_id].append(item_data)
+
+            # Convert order_dict into a list of dictionaries
+            for order_id, items in order_dict.items():
+                return_dict = {
+                    order_id: items
+                }
+                return_list.append(return_dict)
+
+            print(return_list)
+
+            context = {
+                'return_list': return_list
+            }
+            print("context", context)
+            return render(request, 'chef.html', context)
 
     def post(self, request):
-        print("Inside api OrderApiView", request.data)
+        print("Inside api OrderApiView post", request.data)
         table_name = request.data.get('table_name')
         print("table_name", table_name)
         owner_utility = Owner_Utility.objects.get(pk=table_name)  # Assuming table_name is the primary key
@@ -85,7 +108,7 @@ class OrderApiView(APIView):
         return render(request, 'sign_up.html',context)
 
     def patch(self, request):
-        print("Inside patch",request.data)
+        print("Inside patch ********************************",request.data)
 
         try:
             data_dict = {"order_deliverd": True}
@@ -99,6 +122,7 @@ class OrderApiView(APIView):
             )
             if serializer.is_valid():
                 serializer.save()
+                print("updated")
                 return Response({'message': 'Order updated successfully'}, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
