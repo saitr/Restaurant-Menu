@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+<!-- Modal dialog box -->
+<div class="modal" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bookModalLabel">Book Room</h5>
+        <a href="{% url 'room_list'%}" onclick="event.preventDefault(); closeModal();">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModalButton"></button>
+        </a>
+              </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'book_room' room.id %}" hx-post="{% url 'book_room' room.id %}" hx-swap="outerHTML">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="from_date" class="form-label">From Date</label>
+            <input type="date" class="form-control" id="from_date" name="from_date" required>
+          </div>
+          <div class="mb-3">
+            <label for="to_date" class="form-label">To Date</label>
+            <input type="date" class="form-control" id="to_date" name="to_date" required>
+          </div>          
+          <div class="mb-3">
+            <label for="number_of_people" class="form-label">Number Of People</label>
+            <select id="number_of_people" name="number_of_people" class="form-select" required>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          
+          <div class="modal-footer">
+            <h4 class="text-start"><strong>Price/Night: ${{room.room_price}}</strong></h4>
+            <a href="{% url 'room_list'%}" onclick="event.preventDefault(); closeModal();">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" id="closeModalButton">Close</button>
+            </a>
+            <button type="submit" class="btn btn-primary">Book Room</button>
+            
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript to handle the "Book Room" button -->
+<script>
+  // Get the date input elements
+  const fromDateInput = document.getElementById('from_date');
+  const toDateInput = document.getElementById('to_date');
+
+  // Get the current date
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  // Format the dates as YYYY-MM-DD
+  const formattedToday = today.toISOString().split('T')[0];
+  const formattedTomorrow = tomorrow.toISOString().split('T')[0];
+
+  // Set the minimum dates for the date picker inputs
+  fromDateInput.setAttribute('min', formattedToday);
+  toDateInput.setAttribute('min', formattedTomorrow);
+
+  // Function to close the modal
+  function closeModal() {
+    const modal = document.getElementById('bookModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+    window.location.reload()
+  }
+</script>
+{% endblock %}
