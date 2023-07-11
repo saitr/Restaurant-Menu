@@ -14,35 +14,12 @@ from django.contrib.auth.models import User, AbstractUser
 from django.conf import settings
 
 
-
-
-
-class Owner_Utility(models.Model):
-    table_number = models.IntegerField(default=False)
-    qr_code = models.ImageField(upload_to='qr_code',  blank=True)
-
-    class Meta:
-        managed = True
-        db_table = 'owner_utility'
-
-
-class Order(models.Model):
-    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    total_price = models.IntegerField(null=False, blank=False)
-    order_deliverd = models.BooleanField(default=False)
-    class Meta:
-        managed = True
-        db_table = 'order'
-
-
 class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, unique=True)
     is_verified = models.BooleanField(default=False)
     is_chef = models.BooleanField(default=False)
     otp = models.CharField(max_length=20)
     username = models.CharField(max_length=150, unique=True, null=True)
-    orderid = models.ForeignKey(Order, on_delete=models.CASCADE,null=True)
     objects = CustomUserManager()
 
     # Use 'phone_number' as the unique identifier for authentication
@@ -79,6 +56,13 @@ class Items(models.Model):
         managed = True
         db_table = 'items'
 
+class Owner_Utility(models.Model):
+    table_number = models.IntegerField(default=False)
+    qr_code = models.ImageField(upload_to='qr_code',  blank=True)
+
+    class Meta:
+        managed = True
+        db_table = 'owner_utility'
 
 
 def generate_qr_code(sender, instance, **kwargs):
@@ -99,12 +83,23 @@ def generate_qr_code(sender, instance, **kwargs):
 models.signals.pre_save.connect(generate_qr_code, sender=Owner_Utility)
 
 
+class Order(models.Model):
+    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.IntegerField(null=False, blank=False)
+    order_deliverd = models.BooleanField(default=False)
+    order_place = models.BooleanField(default=False)
+    class Meta:
+        managed = True
+        db_table = 'order'
+
 
 class Cart(models.Model):
     table_number = models.ForeignKey(Owner_Utility,on_delete=models.CASCADE)
     items = models.ForeignKey(Items, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True, blank=False, default=1)
     orderid = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    cart_created = models.BooleanField(default=False)
     class Meta:
         managed = True
         db_table = 'cart'

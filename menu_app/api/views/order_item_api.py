@@ -22,8 +22,8 @@ class OrderApiView(APIView):
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
         else:
             # CustomUser.objects.get()
-            cart_items = Cart.objects.filter(orderid__order_deliverd=False)
-
+            cart_items = Cart.objects.filter(orderid__order_place=True)
+            print("cart_items", cart_items)
             return_list = []
             order_dict = {}
 
@@ -62,7 +62,7 @@ class OrderApiView(APIView):
         print("Inside api OrderApiView post", request.data)
         table_name = request.data.get('table_name')
         print("table_name", table_name)
-        owner_utility = Owner_Utility.objects.get(pk=table_name)  # Assuming table_name is the primary key
+        owner_utility = Owner_Utility.objects.get(table_number=table_name)  # Assuming table_name is the primary key
         print("owner_utility", owner_utility)
         # Step 1: Create an Order object
         order = Order.objects.create(table_number=owner_utility, total_price=0)
@@ -72,9 +72,10 @@ class OrderApiView(APIView):
         # Step 2: Retrieve the items from the cart and create Order_Items
         order_items = []
         total_price = 0
-        cursor, connection = DBUtils.get_db_connect()
+
         try:
-            cart_items = Cart.objects.filter(table_number=table_name)
+            print("Inside try")
+            cart_items = Cart.objects.filter(table_number=owner_utility)
 
             for cart_item in cart_items:
                 print("cart_item.id", cart_item)
@@ -94,18 +95,24 @@ class OrderApiView(APIView):
                 total_price += order_item_price
 
                 Cart.objects.filter(id=cart_item.id).update(orderid=order_item.orderid.id)
+                # print("updating cartid", order_item.orderid.id)
+                # cart_item.orderid = order_item.orderid.id
+                # cart_item.save()
+                print("update",cart_item )
+                print("update",cart_item.orderid )
+
 
         except Cart.DoesNotExist:
             return JsonResponse({'message': 'Cart is empty'}, status=400)
 
         # Step 3: Save the order and order items
         order.total_price = total_price
+        order.order_place = True
+
         order.save()
 
         for order_item in order_items:
             order_item.save()
-
-        
         context = {'table_name': table_name}
         return render(request, 'sign_up.html',context)
 

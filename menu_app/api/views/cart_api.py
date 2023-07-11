@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Cart,Items
+from ...models import Cart,Items,Owner_Utility
 import os
 from ...serializers import CartSerializer
 from django.core import serializers
@@ -25,7 +25,10 @@ class CartAPIList(APIView):
 
         print("Inside get cart", request.query_params)
         table_number = request.query_params['table_name']
-        cart_detail = Cart.objects.filter(table_number=table_number)
+        table = Owner_Utility.objects.get(table_number=table_number)
+        print("table_number", table)
+
+        cart_detail = Cart.objects.filter(table_number=table, orderid__isnull=True)
         cart_list = []
         for data in cart_detail:
             print("data.items", data.items)
@@ -52,30 +55,51 @@ class CartAPIList(APIView):
 
     def post(self, request):
         print("inside  cart api post  ", request.data.get)
-
-        print("inside  cart api post  ", request.data.get('table_name'))
         table_name = request.data.get('table_name')  # Get the value of 'table_name'
         item_id = request.data.get('item_id')
         print("item_id", item_id)
 
-        post_set = {
-        "table_number" : table_name,
-        "items" : item_id,
+        # post_set = {
+        # "table_number" : table_name,
+        # "items" : item_id,
+        #
+        # }
+        table = Owner_Utility.objects.get(table_number=table_name)
+        cart_item = Cart.objects.filter(table_number=table, items=item_id, orderid__order_place=False).first()
+        print("cart_item", cart_item)
 
-        }
+        cart_created = Cart.objects.filter(table_number=table, items=item_id,cart_created = True).first()
+        print("cart_created", cart_created)
+        if cart_item is not None or  cart_created is not None:
 
-        try:
-            get_cart_items = Cart.objects.get(table_number=table_name, items=item_id)
+            print("Inside try cart post", table_name,item_id)
+            print("Inside try cart post", type(table_name),type(item_id))
+            table = Owner_Utility.objects.get(table_number=table_name)
+            print("table_number", table)
+            print("table_number id", table.id)
+
+            get_cart_items = Cart.objects.get(table_number_id=table.id, items=item_id)
             print("**", get_cart_items.quantity)
             cart_item = get_cart_items  # Assuming there's only one item per table
             cart_item.quantity += 1
             cart_item.save()
-        except Cart.DoesNotExist:
-            self.db_utils_obj = DBUtils()
-            self.db_utils_obj.set_serializer_object(
-                model_serializer=CartSerializer,
-                data_dict=post_set
-            )
+            print("add item to exist one")
+        else:
+            # self.db_utils_obj = DBUtils()
+            # self.db_utils_obj.set_serializer_object(
+            #     model_serializer=CartSerializer,
+            #     data_dict=post_set
+
+            # )
+            print("Inside exceptopn, create new one")
+            table_number = Owner_Utility.objects.get(table_number=table_name)
+            print("table_number", table_number)
+            item = Items.objects.get(id=item_id)
+            print("item_id", item_id)
+
+            Cart.objects.create(table_number=table_number,items=item,cart_created=True)
+
+            print("******created")
 
             # Assuming this saves the cart item
 
@@ -97,7 +121,10 @@ class CartAPIList(APIView):
         print("item_id", item_id)
 
         try:
-            cart_item = Cart.objects.get(table_number=table_number, items=item_id)
+            table = Owner_Utility.objects.get(table_number=table_number)
+            print("table_number", table)
+
+            cart_item = Cart.objects.get(table_number=table, items=item_id)
 
             # Decrease the quantity by 1 if it's greater than 1
             if cart_item.quantity > 1:
