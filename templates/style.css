@@ -298,7 +298,26 @@ nav {
     border-radius: 5px;
 }
 
+#cartContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+}
 
+#cartCountOverlay {
+  background-color: #ff0000;
+  color: #ffffff;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#cartIcon {
+  margin-right: 5px;
+}
 /* .btn-checkout{
     background: green;
 } */

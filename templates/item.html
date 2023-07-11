@@ -1,117 +1,162 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<style>
+.cart-items{
+  padding:20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cart-items div{
+box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+height: 100%;
+    padding: 20px;
+    border-radius: 7px;
+        min-width: 200px;
+    text-align: center;
+    margin: 0px 0px 12px 0px;
+}
+#cartContainer {
+  display: inline-block;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+#cartCountOverlay {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff0000;
+  color: #ffffff;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#cartIcon {
+  font-size: 24px;
+}
+
+.cartAnimation {
+  animation: cartBounce 0.5s;
+}
+
+@keyframes cartBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+</style>
+</head>
+
+<div class="cart-items">
+{% for item in return_list %}
+  <div>
+    <h3>{{ item.itemName }}</h3>
+    <p>Price: {{ item.itemPrice }}</p>
+
+    <button class="addToCartButton" data-item-id="{{ item.item_id  }}">Add to cart</button>
+  </div>
+{% endfor %}
+
+</div>
+
+
+<div id="cartContainer">
+  <a id="cartLink" href="{% url 'cart_api' %}?table_name={{ table_name }}">
+    <h1><i id="cartIcon" class="fas fa-shopping-cart"></i></h1>
+    <span id="cartCountOverlay">0</span>
+  </a>
+</div>
+
+
+
+
 <script>
-    var clickCount = 0; // Variable to track click count
+// Get the buttons, count element, and cart image
+var addToCartButtons = document.getElementsByClassName("addToCartButton");
+var cartCount = document.getElementById("cartCountOverlay");
+var cartIcon = document.getElementById("cartIcon");
+var cartLink = document.getElementById("cartLink");
 
-    function addToCart(table_name, itemId) {
-        // Create a form dynamically
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/cart_api';
+// Set the initial count value
+var count = 0;
 
-        // Create an input field for the table name
-        var inputTableName = document.createElement('input');
-        inputTableName.type = 'hidden';
-        inputTableName.name = 'table_name';
-        inputTableName.value = table_name;
-        console.log("inputTableName.value",inputTableName.value)
+// Function to update the cart count element and cart image
+function updateCartCount() {
+  cartCount.textContent = count;
+  cartIcon.classList.add("cartAnimation");
+  setTimeout(function() {
+    cartIcon.classList.remove("cartAnimation");
+  }, 500);
+}
 
-        // Create an input field for the item ID
-        var inputItemId = document.createElement('input');
-        inputItemId.type = 'hidden';
-        inputItemId.name = 'itemId';
-        inputItemId.value = itemId;
+// Function to make a POST request to the cart API
+function callCartAPI(itemId, tableNumber) {
+  // Create a new XMLHttpRequest object
+  var xhr = new XMLHttpRequest();
 
-        // Append the input fields to the form
-        form.appendChild(inputTableName);
-        form.appendChild(inputItemId);
+  // Set the request URL
+  var url = "{% url 'cart_api' %}";
+  console.log("url",url)
+  // Create the payload
+  var payload = JSON.stringify({ item_id: itemId, table_name: tableNumber });
+  console.log("payload",payload)
+  // Open a POST request
+  xhr.open("POST", url, true);
 
-        // Append the form to the document
-        document.body.appendChild(form);
+  // Set the request headers
+  xhr.setRequestHeader("Content-Type", "application/json");
 
-        // Get the button element
-        var button = event.target;
-
-        // Prevent the default form submission behavior
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            // Increment the click count
-            clickCount++;
-
-            if (clickCount === 1) {
-                // Send a POST request to the cart API
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form)
-                })
-                .then(response => {
-                    // Check if the response was successful
-                    if (response.ok) {
-                        // Change button text to "View Cart"
-                        button.textContent = 'View Cart';
-                        // Redirect to image.html
-                        window.location.href = 'image.html';
-                    } else {
-                        // Handle unsuccessful response if needed
-                        console.error('Error adding item to cart:', response.statusText);
-                    }
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error('Error adding item to cart:', error);
-                });
-            } else if (clickCount === 2) {
-                // Update form method and action for the GET request
-                form.method = 'GET';
-                form.action = '/cart_api';
-
-                // Send a GET request to the cart API
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form)
-                })
-                .then(response => {
-                    // Check if the response was successful
-                    if (response.ok) {
-                        // Handle the response for the GET method
-                        console.log('Received response for GET method:', response);
-                    } else {
-                        // Handle unsuccessful response if needed
-                        console.error('Error retrieving cart:', response.statusText);
-                    }
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error('Error retrieving cart:', error);
-                });
-            }
-        });
-
-        // Submit the form
-        form.submit();
+  // Define the callback function for successful response
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      console.log("Cart API request successful");
+      // Handle the response here if needed
     }
+  };
+
+  // Define the callback function for error response
+  xhr.onerror = function() {
+    console.error("Error making Cart API request");
+  };
+
+  // Send the request with the payload
+  xhr.send(payload);
+}
+
+// Add event listeners to the "Add to Cart" buttons
+for (var i = 0; i < addToCartButtons.length; i++) {
+  addToCartButtons[i].addEventListener("click", function(event) {
+    if (!event.target.classList.contains("disabled")) {
+      event.target.classList.add("disabled"); // Disable the button
+      count++; // Increase the count
+      updateCartCount();
+
+      // Get the item id and table number from the data attributes
+      var itemId = event.target.getAttribute("data-item-id");
+      var tableNumber = "{{ table_name }}";
+
+      // Call the cart API with the item id and table number
+      callCartAPI(itemId, tableNumber);
+    }
+  });
+}
 </script>
 
-
-<table>
-    <thead>
-        <tr>
-            <th>Item Image</th>
-            <th>Item Name</th>
-            <th>Item Price</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in return_list %}
-        <tr>
-            <td><img src="{{ item.item_image.url }}" alt="Item Image"></td>
-            <td>{{ item.itemName }}</td>
-            <td>{{ item.itemPrice }}</td>
-            <td>
-                <button class="cart-button" onclick="addToCart('{{ table_name }}', '{{ item.id }}')">Add to Cart</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+<style>
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+</style>

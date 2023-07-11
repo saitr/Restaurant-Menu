@@ -1,28 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+     <div id="header">
+    <nav id="navbar">
+      <h1> Resturant </h1>
+      <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="#category-form">Menu</a></li>
+        <li><a href="">Chef</a></li>
+        <li><a href="">About</a></li>
+        <li><a href="">Contact</a></li>
+      </ul>
+      <div id="cart">
+          <a href="cart.html" class="cart-icon" onclick=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+      </div>
+    </nav>
+    <div id="mobile_menu">
+      <ul>
+        <li><a href="">Home</a></li>
+          <li><a href="category-form">Menu</a></li>
+          <li><a href="">Chef</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+      </ul>
+    </div>
+  </div>
     <title>Items</title>
-    <style>
-        .category-form {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<!--    <style>-->
+<!--        .category-form {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
 
-        .category-form select {
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 4px;
-        }
+<!--        .category-form select {-->
+<!--            padding: 10px;-->
+<!--            margin-right: 10px;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
 
-        .category-form button {
-            padding: 10px 20px;
-            background-color: #f2f2f2;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
+<!--        .category-form button {-->
+<!--            padding: 10px 20px;-->
+<!--            background-color: #f2f2f2;-->
+<!--            border: none;-->
+<!--            border-radius: 4px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--    </style>-->
 <!--    <script>-->
 <!--        function redirectToAPI(form) {-->
 <!--            var category = form.category.value;-->
@@ -50,21 +75,61 @@
     {% endif %}
 {% endfor %}
 
-</head>
+<!--</head>-->
+
+<!--<body>-->
+<!--    <h1>Items</h1>-->
+<!--    <div class="category-form">-->
+<!--        <form onsubmit="event.preventDefault(); redirectToAPI(this);">-->
+<!--            <select name="category">-->
+<!--                console.log("return_list",return_list)-->
+<!--                {% for item in return_list %}-->
+<!--                    <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>-->
+
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--            <button type="submit">Go</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
+
 
 <body>
-    <h1>Items</h1>
-    <div class="category-form">
-        <form onsubmit="event.preventDefault(); redirectToAPI(this);">
-            <select name="category">
-                console.log("return_list",return_list)
-                {% for item in return_list %}
-                    <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>
 
-                {% endfor %}
-            </select>
-            <button type="submit">Go</button>
-        </form>
+      <div id=menu">
+        <h1 id="section">Menu Category</h1>
+          <div id="menu_row">
+            <div id="menu_col">
+                <div class="box">
+                    <div class="category-form">
+                        <form onsubmit="event.preventDefault(); redirectToAPI(this);">
+                            {% for item in return_list %}
+<!--                                console.log("item",{{item}})-->
+                                <label>
+                                     <div id="image">
+                                    <img src="{{ item.category_img.url }}">
+                                    </div>
+                                    <span>{{ item.categoryName }}</span> </label>
+                                    <input type="radio" name="category" value="{{ item.categoryName }}">
+
+
+                            {% endfor %}
+                            <h4><button type="submit">Go</button></h4>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+<div id="footer">
+    <div>
+        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>
     </div>
+    <div id=""top>
+        <a href="#header"><i class="fa fa-chevron-circle-up"></i></a>
+    </div>
+</div>
 </body>
 </html>

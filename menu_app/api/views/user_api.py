@@ -77,7 +77,8 @@ class VerifyOTPView(APIView):
 
 
     def post(self, request):
-        print("inside post USER_API")
+        print("inside post USER_API", request.data )
+        print("inside post USER_API", request )
         phone_number = request.POST.get('phone_number')
         print("phone_number", phone_number)
         table_name = request.POST.get('table_name')
@@ -114,8 +115,16 @@ class VerifyOTPView(APIView):
                 print("verification_status", verification_status)
                 return render(request, 'new.html', {"phone_number": phone_number})
             else:
-                print("customer already created and verify", request)
-                return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
+                # url = 'http://127.0.0.1:8000/items?category={0}&table_name={1}'.format(
+                #     category_name['category__categoryName'], table_name)
+                # # return redirect(url)
+                print("url*************** else")
+                url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
+                print("url", url)
+                return redirect(url)
+
+                # print("customer already created and verify", request)
+                # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
 
                 # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
 

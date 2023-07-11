@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Items,Categories
+from ...models import Items,Categories,Cart
 import os
 from ...serializers import ItemsSerializer
 from django.core import serializers
@@ -27,7 +27,7 @@ class ItemAPIList(APIView):
 
         return_list = []
         for data in get_item:
-            return_dict = {'id':data.id,
+            return_dict = {'item_id':data.id,
                            'category':data.category,
                            'itemName': data.itemName,
                            'itemPrice' : data.itemPrice,
@@ -44,4 +44,37 @@ class ItemAPIList(APIView):
         }
         print("context",context)
         return render(request, 'item.html', context)
+
+
+    def patch(self, request):
+        # Check if user is authenticated
+
+        print("data in request", request.data)
+        print("data in request", request.data.get('cart_id'))
+        cart_id = request.data.get('cart_id')
+        # Retrieve the cart item from the database
+        cart_item = Cart.objects.get(pk=cart_id, user=request.user)
+
+        # Update the quantity based on the action parameter
+        action = request.POST.get('action')
+        if action == 'increase':
+            cart_item.quantity += 1
+        elif action == 'decrease':
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+            else:
+                # If the quantity reaches 0, remove the item from the cart
+                cart_item.delete()
+                return redirect('cart_list')
+
+        # Save the updated cart item
+        cart_item.save()
+
+    def delete(self,request):
+        print("data in request", request.data)
+        cart_id = request.data.get('cart_id')
+        cart_delete = Cart.objects.filter(user=request.user)
+        cart_delete.delete()
+        return redirect('cart_list')
+
 

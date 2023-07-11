@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+      <div id=menu">
+                <h1 id="section">Menu</h1>
+                <div id="menu_row">
+                     {% for item in return_list %}
+                        <div id="menu_col">
+
+                                <h2>{{ item.itemName }}</h2>
+                                <div class="box">
+                                    <div id="image">
+                                        <img src="{{ item.item_image.url }}">
+                                    </div>
+                                </div>
+                                <div>
+
+                                    <h4>{{ item.itemPrice }}</h4>
+                                    <h1> <button class="cart-button" onclick="addToCart('{{ table_name }}', '{{ item.id }}')">Add to Cart</button></h1>
+                                </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+</head>
+<body>
+
+</body>
+</html>

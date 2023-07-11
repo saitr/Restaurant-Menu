@@ -12,6 +12,55 @@
 <!--  connect style.css-->
   <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   <title>Resturant</title>
+       <style>
+    .order-heading{
+    text-align:center;
+    }
+    .order{
+    padding: 20px;
+    background: bisque;
+    height:100vh;
+    }
+        .order-container{
+            display: flex;
+    flex-direction: row;
+flex-wrap:wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap:20px;
+    padding:20px;
+<!--    background: aliceblue;-->
+    }
+
+    table{
+     font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+    }
+
+
+.order-group{
+ box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+ min-height:242px;
+ padding:20px;
+ background: white;
+}
+.order-group input
+{
+padding: 10px;
+}
+.add-to-cart{
+display: flex;
+    justify-content: center;
+    margin: 30px 0px 0px 0px;
+}
+    td, th {
+<!--  border: 1px solid #dddddd;-->
+  text-align: left;
+  padding: 8px;
+}
+
+    </style>
 </head>
 <body>
 <!--hero section-->
@@ -27,7 +76,7 @@
       <h1> Resturant </h1>
       <ul>
         <li><a href="">Home</a></li>
-        <li><a href="http://127.0.0.1:8000/category_api/1/">Menu</a></li>
+        <li><a href="http://127.0.0.1:8000/category/1">Menu</a></li>
         <li><a href="">Chef</a></li>
         <li><a href="">About</a></li>
         <li><a href="">Contact</a></li>
@@ -39,7 +88,7 @@
     <div id="mobile_menu">
       <ul>
         <li><a href="">Home</a></li>
-          <li><a href="http://127.0.0.1:8000/category_api/1/">Menu</a></li>
+          <li><a href="category-form">Menu</a></li>
           <li><a href="">Chef</a></li>
           <li><a href="">About</a></li>
           <li><a href="">Contact</a></li>
@@ -76,5 +125,76 @@
 
 <!--Menu section-->
 
+
+<!--about us-->
+<div id="about">
+    <h1 id="section_about">About</h1>
+    <div id="about_row">
+        <div class="about_col">
+            <h1>About Us</h1>
+            <p>
+                Who are we?
+                Launched in 2010, Our technology platform connects customers, restaurant partners and delivery partners, serving their multiple needs. Customers use our platform to search and discover restaurants, read and write customer generated reviews and view and upload photos, order food delivery, book a table and make payments while dining-out at restaurants. On the other hand, we provide restaurant partners with industry-specific marketing tools which enable them to engage and acquire customers to grow their business while also providing a reliable and efficient last mile delivery service. We also operate a one-stop procurement solution, Hyperpure, which supplies high quality ingredients and kitchen products to restaurant partners. We also provide our delivery partners with transparent and flexible earning opportunities.
+            </p>
+        </div>
+        <div class="about_col">
+            <div id="about_img">
+                <img src="/static/img/about.png">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--fotter-->
+
+<div id="footer">
+    <div>
+        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>
+    </div>
+    <div id=""top>
+        <a href="#header"><i class="fa fa-chevron-circle-up"></i></a>
+    </div>
+</div>
+
+
+
+
+<!--catogory-->
+
+ {% for item in return_list %}
+    {% if forloop.last %}
+        <script>
+            function redirectToAPI(form) {
+                var table_name = '{{ item.table_number }}';
+                console.log("table_name", table_name);
+
+                var category = form.category.value;
+                // Redirect to the desired API endpoint with the selected category and table_name
+                var url = '/items?category=' + encodeURIComponent(category) + '&table_name=' + encodeURIComponent(table_name);
+                // Redirect to the desired API endpoint with the selected category and table_name
+                window.location.href = url;
+            }
+        </script>
+    {% endif %}
+{% endfor %}
+
+
+<div id="category-form">
+  <h1>Items</h1>
+  <div class="category-form">
+    <form onsubmit="event.preventDefault(); redirectToAPI(this);">
+      <select name="category">
+        {% for item in return_list %}
+        <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Go</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
+
+
+

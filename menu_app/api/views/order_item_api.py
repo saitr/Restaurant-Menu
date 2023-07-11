@@ -104,6 +104,8 @@ class OrderApiView(APIView):
 
         for order_item in order_items:
             order_item.save()
+
+        
         context = {'table_name': table_name}
         return render(request, 'sign_up.html',context)
 

@@ -1,70 +1,150 @@
+
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Cart Items</title>
+     <style>
+
+     .cart-container{
+     margin:80px 0px 0px 0px;
+
+     }
+    .order-heading{
+    text-align:center;
+    }
+    .order{
+    padding: 20px;
+    background: bisque;
+    height:100vh;
+    }
+        .order-container{
+            display: flex;
+    flex-direction: row;
+flex-wrap:wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap:20px;
+    padding:20px;
+<!--    background: aliceblue;-->
+    }
+
+    table{
+     font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+    }
+
+
+.order-group{
+ box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+ min-height:242px;
+ padding:20px;
+ background: white;
+}
+.order-group input
+{
+padding: 10px;
+}
+.add-to-cart{
+display: flex;
+    justify-content: center;
+    margin: 30px 0px 0px 0px;
+}
+tbody{
+text-align:center;
+}
+    td, th{
+<!--  border: 1px solid #dddddd;-->
+  text-align: center;
+  padding: 8px;
+}
+
+<!--#footer{-->
+<!-- -->
+<!--}-->
+    </style>
 </head>
 <body>
+ <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<div id="header">
+    <nav id="navbar">
+      <h1> Resturant </h1>
+      <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="http://127.0.0.1:8000/category_api/1/">Menu</a></li>
+        <li><a href="">Order</a></li>
+        <li><a href="">About</a></li>
+        <li><a href="">Contact</a></li>
+      </ul>
+      <div id="cart">
+          <a href="cart.html" class="cart-icon" onclick=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+      </div>
+    </nav>
+    <div id="mobile_menu">
+      <ul>
+        <li><a href="">Home</a></li>
+          <li><a href="category-form">Menu</a></li>
+          <li><a href="">Chef</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+<div class="cart-container">
     <h1>Cart Items</h1>
     <table>
         <thead>
             <tr>
                 <th>Item Name</th>
+<!--                <th>Quantity</th>-->
+                <th>item_price</th>
                 <th>Quantity</th>
             </tr>
         </thead>
         <tbody>
+
             <!-- Iterate over the cart items and display them -->
             {% for item in return_list %}
             <tr>
                 <td>{{ item.items.itemName }}</td>
-                <td>{{ item.quantity }}</td>
+                <td>{{ item.item_price}}</td>
+
+
+                <td style="display:flex;gap:5px">
+                    <button onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
+                    <p>{{ item.quantity }}</p>
+                    <button onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-
-    <button onclick="placeOrder({{ table_name }})">Place Order</button>
-<script>
-    function placeOrder(table_name, itemId) {
-        // Create a form dynamically
-
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/order_api/';
-
-        // Create an input field for the table name
-        var inputTableName = document.createElement('input');
-        inputTableName.type = 'hidden';
-        inputTableName.name = 'table_name';
-        inputTableName.value = table_name;
+    <div style="display:flex;justify-content:center;margin:10px 0px">
+        console.log("table_name", {{ table_name }})
+    <button style="padding:3px" onclick="placeOrder('{{ table_name }}')">Place Order</button>
+    </div>
 
 
-        // Append the input fields to the form
-        form.appendChild(inputTableName);
+</div>
 
-
-        // Append the form to the document
-        document.body.appendChild(form);
-
-        // Prevent the default form submission behavior
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            placeOrderAsync(form);
-        });
-
-        // Submit the form asynchronously
-        function placeOrderAsync(form) {
+    <script>
+        function addItem(table_name, item_id) {
             // Send a POST request to the cart API
-            fetch(form.action, {
-                method: form.method,
-                body: new FormData(form)
+            fetch('/cart_api', {
+                method: 'POST',
+                body: JSON.stringify({ table_name: table_name, item_id: item_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
                 // Check if the response was successful
                 if (response.ok) {
-                    // Redirect to image.html
-                    window.location.href = 'image.html';
+                    // Refresh the page to update the cart items
+                    window.location.reload();
                 } else {
                     // Handle unsuccessful response if needed
                     console.error('Error adding item to cart:', response.statusText);
@@ -76,10 +156,91 @@
             });
         }
 
-        // Submit the form
-        form.submit();
-    }
-</script>
+        function removeItem(table_name, item_id) {
+            // Send a DELETE request to the cart API
+            console.log("IN function",item_id)
+            fetch('/cart_api', {
+                method: 'DELETE',
+                body: JSON.stringify({ table_name: table_name, item_id: item_id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                // Check if the response was successful
+                if (response.ok) {
+                    // Refresh the page to update the cart items
+                    window.location.reload();
+                } else {
+                    // Handle unsuccessful response if needed
+                    console.error('Error removing item from cart:', response.statusText);
+                }
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error removing item from cart:', error);
+            });
+        }
 
+        function placeOrder(table_name) {
+            console.log("table_name",table_name)
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/order_api/';
+
+            // Create an input field for the table name
+            var inputTableName = document.createElement('input');
+            inputTableName.type = 'hidden';
+            inputTableName.name = 'table_name';
+            inputTableName.value = table_name;
+
+            // Append the input fields to the form
+            form.appendChild(inputTableName);
+
+            // Append the form to the document
+            document.body.appendChild(form);
+
+            // Prevent the default form submission behavior
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                placeOrderAsync(form);
+            });
+
+            // Submit the form asynchronously
+            function placeOrderAsync(form) {
+                // Send a POST request to the cart API
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    // Check if the response was successful
+                    if (response.ok) {
+                        // Redirect to image.html
+                        window.location.href = 'image.html';
+                    } else {
+                        // Handle unsuccessful response if needed
+                        console.error('Error placing order:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error placing order:', error);
+                });
+            }
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
+<div id="footer">
+    <div>
+        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>
+    </div>
+    <div id=""top>
+        <a href="#header"><i class="fa fa-chevron-circle-up"></i></a>
+    </div>
+</div>
 </body>
 </html>
