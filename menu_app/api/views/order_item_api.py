@@ -13,8 +13,13 @@ class OrderApiView(APIView):
     def get(self,request):
 
         print("INSIDE GET OF ORDER ITEM for chef",request.query_params)
+
+        # try:
         password = request.query_params['password']
         phone_number = request.query_params['phone_number']
+        # except CustomUser.DoesNotExist:
+        #     # return(None, 'Incorrect phone_number or password')
+        #     return Response(status=status.HTTP_403_FORBIDDEN)
         user = authenticate(request, username=phone_number, password=password)
         if user is None:
             # Invalid credentials
@@ -66,7 +71,7 @@ class OrderApiView(APIView):
         print("owner_utility", owner_utility)
         # Step 1: Create an Order object
         order = Order.objects.create(table_number=owner_utility, total_price=0)
-        print("order", order)
+        print("Create an Order object", order)
 
 
         # Step 2: Retrieve the items from the cart and create Order_Items
@@ -75,7 +80,7 @@ class OrderApiView(APIView):
 
         try:
             print("Inside try")
-            cart_items = Cart.objects.filter(table_number=owner_utility)
+            cart_items = Cart.objects.filter(table_number=owner_utility,orderid_id__isnull=True)
 
             for cart_item in cart_items:
                 print("cart_item.id", cart_item)
@@ -94,7 +99,7 @@ class OrderApiView(APIView):
                 order_items.append(order_item)
                 total_price += order_item_price
 
-                Cart.objects.filter(id=cart_item.id).update(orderid=order_item.orderid.id)
+                Cart.objects.filter(id=cart_item.id,orderid_id__isnull=True).update(orderid=order_item.orderid.id)
                 # print("updating cartid", order_item.orderid.id)
                 # cart_item.orderid = order_item.orderid.id
                 # cart_item.save()

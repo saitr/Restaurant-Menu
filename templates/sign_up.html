@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,19 +11,29 @@
     <title>Sign Up</title>
 </head>
 <body>
-    <h1>Sign Up</h1>
-    <form method="post" action="{% url 'user_api' %}">
-        {% csrf_token %}
-        <label for="phone_number">Phone Number:</label>
-        <input type="tel" id="phone_number" name="phone_number" required><br><br>
+ <div class="col-sm-8">
+     <div class="card-block">
 
-       <label for="table_name">Table Number:</label>
-        <input type="tel" id="table_name" name="table_name" required><br><br>
+            <h1 class="m-b-20 p-b-5 b-b-default f-w-600 fs-2">Sign Up</h1>
+            <form method="post" action="{% url 'user_api' %}">
+                {% csrf_token %}
+                <div class="row">
+
+                <label style="font-size: 18px;font-weight: bold;" for="phone_number">Phone Number:</label>
+                <input style="width: 300px;height: 50px"  type="tel" id="phone_number" name="phone_number" required><br><br>
+
+               <label style="font-size: 18px;font-weight: bold;" for="table_name">Table Number:</label>
+                <input style="width: 300px;height: 50px" type="tel" id="table_name" name="table_name" required><br><br>
 
 
-        <br>
-        <button type="submit">Send OTP</button>
-    </form>
+                <br>
+                <button style="font-size: 18px;color: white;font-weight: bold;background-color: black;width: 200px;height: 50px;" type="submit">Send OTP</button>
+                </div>
+            </form></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
 </body>
 </html>

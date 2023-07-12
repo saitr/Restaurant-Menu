@@ -23,12 +23,13 @@ class CartAPIList(APIView):
 
     def get(self,request):
 
-        print("Inside get cart", request.query_params)
+        print("Inside get cart")
         table_number = request.query_params['table_name']
         table = Owner_Utility.objects.get(table_number=table_number)
         print("table_number", table)
 
-        cart_detail = Cart.objects.filter(table_number=table, orderid__isnull=True)
+        cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True)
+        print("cart_detail count", cart_detail)
         cart_list = []
         for data in cart_detail:
             print("data.items", data.items)
@@ -54,54 +55,25 @@ class CartAPIList(APIView):
 
 
     def post(self, request):
-        print("inside  cart api post  ", request.data.get)
+        print("inside  cart api post  ")
         table_name = request.data.get('table_name')  # Get the value of 'table_name'
         item_id = request.data.get('item_id')
         print("item_id", item_id)
 
-        # post_set = {
-        # "table_number" : table_name,
-        # "items" : item_id,
-        #
-        # }
         table = Owner_Utility.objects.get(table_number=table_name)
-        cart_item = Cart.objects.filter(table_number=table, items=item_id, orderid__order_place=False).first()
-        print("cart_item", cart_item)
 
-        cart_created = Cart.objects.filter(table_number=table, items=item_id,cart_created = True).first()
+        cart_created = Cart.objects.filter(table_number=table, items=item_id, orderid__order_place=False,cart_created=False).first()
         print("cart_created", cart_created)
-        if cart_item is not None or  cart_created is not None:
 
-            print("Inside try cart post", table_name,item_id)
-            print("Inside try cart post", type(table_name),type(item_id))
-            table = Owner_Utility.objects.get(table_number=table_name)
-            print("table_number", table)
-            print("table_number id", table.id)
-
-            get_cart_items = Cart.objects.get(table_number_id=table.id, items=item_id)
-            print("**", get_cart_items.quantity)
-            cart_item = get_cart_items  # Assuming there's only one item per table
-            cart_item.quantity += 1
-            cart_item.save()
-            print("add item to exist one")
-        else:
-            # self.db_utils_obj = DBUtils()
-            # self.db_utils_obj.set_serializer_object(
-            #     model_serializer=CartSerializer,
-            #     data_dict=post_set
-
-            # )
-            print("Inside exceptopn, create new one")
+        if cart_created is None:
+            print("Inside create new one for first time")
             table_number = Owner_Utility.objects.get(table_number=table_name)
             print("table_number", table_number)
             item = Items.objects.get(id=item_id)
             print("item_id", item_id)
 
-            Cart.objects.create(table_number=table_number,items=item,cart_created=True)
+            Cart.objects.create(table_number=table_number, items=item, cart_created=True)
 
-            print("******created")
-
-            # Assuming this saves the cart item
 
         category_name = Items.objects.filter(id=item_id).values('category__categoryName').first()
         print("category", category_name['category__categoryName'])
@@ -124,7 +96,7 @@ class CartAPIList(APIView):
             table = Owner_Utility.objects.get(table_number=table_number)
             print("table_number", table)
 
-            cart_item = Cart.objects.get(table_number=table, items=item_id)
+            cart_item = Cart.objects.filter(table_number=table, items=item_id,orderid=None).first()
 
             # Decrease the quantity by 1 if it's greater than 1
             if cart_item.quantity > 1:
@@ -137,4 +109,40 @@ class CartAPIList(APIView):
 
         except Cart.DoesNotExist:
             return HttpResponseBadRequest("Order item not found.")
+
+    def patch(self, request):
+
+        try:
+            print("cart patch request", request.data)
+            print("cart patch request", request.data.get)
+            item_id =  request.data.get('item_id')
+            print("item_id", item_id)
+            table_number = request.data.get('table_name')
+            print("table_number",table_number)
+            table = Owner_Utility.objects.get(table_number=table_number)
+            print("table", table)
+            cart_items = Cart.objects.filter(table_number_id=table, items=item_id, orderid=None, cart_created=True).first()
+            get_cart_items = cart_items.orderid_id
+            print("get_cart_items", get_cart_items)
+            # cursor, connection = DBUtils.get_db_connect()
+            # query = "select * from cart where table_number_id={0} and items_id={1} and orderid_id  is null  and cart_created=True ".format(table.id,item_id)
+            # print("query", query)
+            # get_existing_data = cursor.execute(query)
+            # rows = cursor.fetchall()
+            # data_list = []
+            # print("row", rows)
+            # for row in rows:
+            #     data_list.append(row)
+            #     print(row)
+
+            if cart_items:
+                print("Inside if ")
+                cart_item = cart_items  # Assuming there's only one item per table
+                cart_item.quantity += 1
+                cart_item.save()
+                print("updated")
+            return JsonResponse({'message': 'Cart quantity updated successfully'})
+        except Cart.DoesNotExist:
+                return JsonResponse({'error': 'Cart not found'}, status=404)
+
 

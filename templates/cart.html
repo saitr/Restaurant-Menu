@@ -67,74 +67,77 @@ text-align:center;
 </head>
 <body>
  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-<div id="header">
-    <nav id="navbar">
-      <h1> Resturant </h1>
-      <ul>
-        <li><a href="">Home</a></li>
-        <li><a href="http://127.0.0.1:8000/category_api/1/">Menu</a></li>
-        <li><a href="">Order</a></li>
-        <li><a href="">About</a></li>
-        <li><a href="">Contact</a></li>
-      </ul>
-      <div id="cart">
-          <a href="cart.html" class="cart-icon" onclick=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
-      </div>
-    </nav>
-    <div id="mobile_menu">
-      <ul>
-        <li><a href="">Home</a></li>
-          <li><a href="category-form">Menu</a></li>
-          <li><a href="">Chef</a></li>
-          <li><a href="">About</a></li>
-          <li><a href="">Contact</a></li>
-      </ul>
+<!--<div id="header">-->
+<!--    <nav id="navbar">-->
+<!--      <h1> Resturant </h1>-->
+<!--      <ul>-->
+<!--        <li><a href="">Home</a></li>-->
+<!--        <li><a href="http://127.0.0.1:8000/category_api/1/">Menu</a></li>-->
+<!--        <li><a href="">Order</a></li>-->
+<!--        <li><a href="">About</a></li>-->
+<!--        <li><a href="">Contact</a></li>-->
+<!--      </ul>-->
+<!--      <div id="cart">-->
+<!--          <a href="cart.html" class="cart-icon" onclick=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>-->
+<!--      </div>-->
+<!--    </nav>-->
+<!--    <div id="mobile_menu">-->
+<!--      <ul>-->
+<!--        <li><a href="">Home</a></li>-->
+<!--          <li><a href="category-form">Menu</a></li>-->
+<!--          <li><a href="">Chef</a></li>-->
+<!--          <li><a href="">About</a></li>-->
+<!--          <li><a href="">Contact</a></li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1 class="text-center text-decoration-underline">Cart Items</h1>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordere">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+
+                    <th>item_price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- Iterate over the cart items and display them -->
+                {% for item in return_list %}
+                <tr>
+                    <td>{{ item.items.itemName }}</td>
+                    <td>{{ item.item_price}}</td>
+
+
+                    <td style="display:flex;gap:5px">
+                        <button onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
+                        <p>{{ item.quantity }}</p>
+                        <button onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
-
-<div class="cart-container">
-    <h1>Cart Items</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Item Name</th>
-<!--                <th>Quantity</th>-->
-                <th>item_price</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            <!-- Iterate over the cart items and display them -->
-            {% for item in return_list %}
-            <tr>
-                <td>{{ item.items.itemName }}</td>
-                <td>{{ item.item_price}}</td>
-
-
-                <td style="display:flex;gap:5px">
-                    <button onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
-                    <p>{{ item.quantity }}</p>
-                    <button onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
     <div style="display:flex;justify-content:center;margin:10px 0px">
 
-    <button style="padding:3px" onclick="placeOrder('{{ table_name }}')">Place Order</button>
+    <button style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;padding:3px" onclick="placeOrder('{{ table_name }}')">Place Order</button>
     </div>
 
 
-</div>
 
     <script>
         function addItem(table_name, item_id) {
             // Send a POST request to the cart API
             fetch('/cart_api', {
-                method: 'POST',
+                method: 'PATCH',
                 body: JSON.stringify({ table_name: table_name, item_id: item_id }),
                 headers: {
                     'Content-Type': 'application/json'
@@ -234,13 +237,6 @@ text-align:center;
             form.submit();
         }
     </script>
-<div id="footer">
-    <div>
-        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>
-    </div>
-    <div id=""top>
-        <a href="#header"><i class="fa fa-chevron-circle-up"></i></a>
-    </div>
-</div>
+ {% endblock %}
 </body>
 </html>
