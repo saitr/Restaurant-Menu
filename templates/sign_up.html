@@ -11,27 +11,33 @@
     <title>Sign Up</title>
 </head>
 <body>
- <div class="col-sm-8">
-     <div class="card-block">
+<div class="row" style="display:flex;justify-content:center">
+ <div class="col">
+     <div class="card-block" style="
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;">
 
-            <h1 class="m-b-20 p-b-5 b-b-default f-w-600 fs-2">Sign Up</h1>
+
             <form method="post" action="{% url 'user_api' %}">
+                  <h1 style="text-align:center;margin:10px 0px 10px 0px">Sign Up</h1>
                 {% csrf_token %}
-                <div class="row">
+                <div class="row" style="display:block;">
 
                 <label style="font-size: 18px;font-weight: bold;" for="phone_number">Phone Number:</label>
-                <input style="width: 300px;height: 50px"  type="tel" id="phone_number" name="phone_number" required><br><br>
+                <input style="width: 300px;height: 50px;border:1px solid;"  type="tel" id="phone_number" name="phone_number" required><br><br>
 
-               <label style="font-size: 18px;font-weight: bold;" for="table_name">Table Number:</label>
-                <input style="width: 300px;height: 50px" type="tel" id="table_name" name="table_name" required><br><br>
-
+                <input type="hidden" name="table_number" value="{{table_name}}">
 
                 <br>
+
                 <button style="font-size: 18px;color: white;font-weight: bold;background-color: black;width: 200px;height: 50px;" type="submit">Send OTP</button>
                 </div>
             </form></div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
 

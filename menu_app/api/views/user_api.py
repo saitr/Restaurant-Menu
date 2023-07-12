@@ -81,7 +81,7 @@ class VerifyOTPView(APIView):
         print("inside post USER_API", request )
         phone_number = request.POST.get('phone_number')
         print("phone_number", phone_number)
-        table_name = request.POST.get('table_name')
+        table_name = request.POST.get('table_number')
         print("table_name", table_name)
         entered_otp = request.POST.get('otp')
         print("entered_otp", entered_otp)
@@ -100,8 +100,7 @@ class VerifyOTPView(APIView):
                 data_list.append(row)
                 print(row)
 
-            # get_existing_number = CustomUser.objects.get(phone_number=phone_number)
-            # print("get_existing_number", get_existing_number)
+
             if len(data_list) == 0:
                 print("create entry in database")
                 CustomUser.objects.get_or_create(**user_dict)
@@ -113,7 +112,7 @@ class VerifyOTPView(APIView):
             if user.is_verified == False:
                 verification_status = send_otp_to_user(phone_number)
                 print("verification_status", verification_status)
-                return render(request, 'new.html', {"phone_number": phone_number})
+                return render(request, 'new.html', {"phone_number": phone_number,"table_name": table_name})
             else:
                 # url = 'http://127.0.0.1:8000/items?category={0}&table_name={1}'.format(
                 #     category_name['category__categoryName'], table_name)
@@ -123,12 +122,7 @@ class VerifyOTPView(APIView):
                 print("url", url)
                 return redirect(url)
 
-                # print("customer already created and verify", request)
-                # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
 
-                # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
-
-             # Handle the case where OTP sending failed
 
         if phone_number and entered_otp:
             # If OTP is provided, verify it
@@ -148,15 +142,21 @@ class VerifyOTPView(APIView):
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
                     print("updated", request)
-                    return JsonResponse({'success': True})  # Return a JSON response indicating success
+                    response_data = {
+                        'success': True,
+                        'table_name': table_name
+                    }
+                    print("response_data", response_data)
+                    return JsonResponse(response_data)  # Return a JSON response indicating success
                 else:
                     return JsonResponse({'success': False})
-                # return redirect((request.META.get('HTTP_REFERER', 'home')))
-                # return JsonResponse({'message': 'OTP verification successful'})
 
-        # print("out")
-        return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
 
+
+        # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
+        url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
+        print("url", url)
+        return redirect(url)
 
 
             # else:

@@ -113,3 +113,17 @@ class DBUtils:
         if serializer.is_valid(raise_exception=True):
             return serializer.save()
 
+    @staticmethod
+    def get_table_data(query, cursor):
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        data_list = []
+        column_names = [desc[0] for desc in cursor.description]  # Get column names from cursor
+
+        for row in rows:
+            data_dict = dict(zip(column_names, row))  # Create a dictionary mapping column names to row values
+            data_list.append(data_dict)
+            print(data_dict)
+        return data_list
+

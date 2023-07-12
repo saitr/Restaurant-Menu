@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 
+
 class OrderApiView(APIView):
     def get(self,request):
 
@@ -26,8 +27,30 @@ class OrderApiView(APIView):
             # Handle the error condition (e.g., return an error response)
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
         else:
+
+            # query = """SELECT
+            #     c.items_id,
+            #     c.quantity - COALESCE(SUM(o.quantity), 0) AS quantity_not_delivered
+            # FROM
+            #     cart c
+            #     LEFT JOIN order_items o ON c.orderid_id = o.orderid_id AND c.items_id = o.item_id
+            #     LEFT JOIN order ord ON c.orderid_id = ord.id
+            # WHERE
+            #     c.cart_created = True
+            #     AND c.orderid_id IS NOT NULL
+            #     AND o.orderid_id IS NULL
+            #     AND ord.order_delivered = False
+            #     AND ord.generate_bill = False
+            # GROUP BY
+            #     c.items_id;
+            # ;"""
+            # cursor, connection = DBUtils.get_db_connect()
+            # return_data = DBUtils.get_table_data(query, cursor)
+            #
+            # print("return_data", return_data)
+
             # CustomUser.objects.get()
-            cart_items = Cart.objects.filter(orderid__order_place=True)
+            cart_items = Cart.objects.filter(orderid__generate_bill=True)
             print("cart_items", cart_items)
             return_list = []
             order_dict = {}
@@ -69,9 +92,26 @@ class OrderApiView(APIView):
         print("table_name", table_name)
         owner_utility = Owner_Utility.objects.get(table_number=table_name)  # Assuming table_name is the primary key
         print("owner_utility", owner_utility)
-        # Step 1: Create an Order object
-        order = Order.objects.create(table_number=owner_utility, total_price=0)
-        print("Create an Order object", order)
+        cursor, connection = DBUtils.get_db_connect()
+        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(owner_utility.id)
+        print("query", query)
+        get_existing_data = cursor.execute(query)
+        rows = cursor.fetchall()
+        data_list = []
+        print("row", rows)
+        for row in rows:
+            data_list.append(row)
+            print(row)
+        if len(data_list):
+            order_existing_check = Order.objects.get(table_number=owner_utility, generate_bill=False)
+            print("order_existing_check", order_existing_check)
+            print("already exist")
+            order = order_existing_check
+        else:
+            # Step 1: Create an Order object
+            print("Create order")
+            order = Order.objects.create(table_number=owner_utility, total_price=0)
+            print("Create an Order object", order)
 
 
         # Step 2: Retrieve the items from the cart and create Order_Items
@@ -119,6 +159,7 @@ class OrderApiView(APIView):
         for order_item in order_items:
             order_item.save()
         context = {'table_name': table_name}
+        print("context", context)
         return render(request, 'sign_up.html',context)
 
     def patch(self, request):

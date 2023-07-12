@@ -10,6 +10,17 @@ from django.utils.html import format_html
 class Categories_UtilityAdmin(admin.ModelAdmin):
     list_display = ('categoryName', 'category_img')
 
+
+    def save_model(self, request, obj, form, change):
+        # Check if the field values are repetitive
+        if Categories.objects.filter(categoryName=obj.categoryName).exists():
+            # Display an error message and prevent saving the object
+            self.message_user(request, "Field value is already repetitive.", level='ERROR')
+        else:
+            # Save the object
+            super().save_model(request, obj, form, change)
+
+
 @admin.register(CustomUser)
 class CustomUser_UtilityAdmin(admin.ModelAdmin):
     list_display = ('phone_number', 'is_verified', 'is_chef', 'otp','username')
@@ -21,17 +32,32 @@ class CustomUser_UtilityAdmin(admin.ModelAdmin):
 class Items_UtilityAdmin(admin.ModelAdmin):
     list_display = ('category', 'itemName', 'itemPrice','item_image','created_at', 'updated_at')
 
+
+    def save_model(self, request, obj, form, change):
+        # Check if the field values are repetitive
+        if Items.objects.filter(itemName=obj.itemName).exists():
+            # Display an error message and prevent saving the object
+            self.message_user(request, "Field value is already repetitive.", level='ERROR')
+        else:
+            # Save the object
+            super().save_model(request, obj, form, change)
+
+
 class Owner_UtilityAdmin(admin.ModelAdmin):
     list_display = ('table_number', 'qr_code','delete_button')
-    # delete_confirmation_template = 'owner_utiliti_delete.html'
 
-    # def delete_button(self, obj):
-    #     return '<a href="{}">Delete</a>'.format(
-    #         reverse('admin_utiliti', args=[obj.pk])
-    #     )
-    # delete_button.short_description = 'Delete'
+    def save_model(self, request, obj, form, change):
+        # Check if the field values are repetitive
+        if Owner_Utility.objects.filter(table_number=obj.table_number).exists():
+            # Display an error message and prevent saving the object
+            self.message_user(request, "Field value is already repetitive.", level='ERROR')
+        else:
+            # Save the object
+            super().save_model(request, obj, form, change)
+
 
     def delete_button(self, obj):
+
         if obj.pk:
             url = reverse('admin_utiliti', args=[obj.pk])
             button_html = '<a href="{}">Delete</a>'.format(url)

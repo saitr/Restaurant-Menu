@@ -89,6 +89,7 @@ class Order(models.Model):
     total_price = models.IntegerField(null=False, blank=False)
     order_deliverd = models.BooleanField(default=False)
     order_place = models.BooleanField(default=False)
+    generate_bill = models.BooleanField(default=False)
     class Meta:
         managed = True
         db_table = 'order'
@@ -112,9 +113,6 @@ class Order_Items(models.Model):
     item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
     orderid = models.ForeignKey(Order, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.item_id
 
     class Meta:
         managed = True

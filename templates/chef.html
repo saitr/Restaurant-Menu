@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
 <html>
 <head>
     <title>Order Items</title>
@@ -72,9 +75,38 @@ display: flex;
             // Handle any errors that occur during the request
         });
     }
+    function generateBill(orderID, tableName) {
+    var url = "/generate_bill";
+    var method = 'GET';
+
+    var params = new URLSearchParams();
+    params.append('order_id', orderID);
+    params.append('table_number', tableName);
+
+    fetch(url + '?' + params.toString(), {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.text())  // Convert response to text
+    .then(html => {
+        // Render the HTML response
+        var billWindow = window.open('', '_blank');
+        billWindow.document.open();
+        billWindow.document.write(html);
+        billWindow.document.close();
+    })
+    .catch(error => {
+        // Handle any errors that occur during the request
+    });
+}
+
 </script>
 
 </head>
+
 <body>
 <div class="order">
 <h1 class="order-heading">Cart Items</h1>
@@ -105,6 +137,11 @@ display: flex;
         </table>
         <div class="add-to-cart">
             <input type="button" value="Order Delivered" onclick="submitForm('{{ order_id }}')">
+
+        </div>
+         <div class="add-to-cart">
+
+            <input style="" type="button" value="Generate Bill" onclick="generateBill('{{ order_id }}', '{{ items.0.table_name }}')">
         </div>
     </div>
     {% endfor %}
@@ -119,3 +156,4 @@ display: flex;
 
 </body>
 </html>
+{% endblock %}

@@ -29,11 +29,8 @@ class CategoryAPIList(APIView):
 
             return_list.append(return_dict)
 
-
-
         context = {
             'return_list': return_list
-
         }
         print("context", context)
         # return Response(context, status=status.HTTP_200_OK)

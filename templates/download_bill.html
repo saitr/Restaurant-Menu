@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% block content %}
+{% load static %}
+<html>
+<head>
+    <title>Order Slip</title>
+    <!-- Add your CSS styling and other necessary HTML head elements -->
+</head>
+<body>
+<div class="row" style="display:flex;justify-content:center">
+ <div class="col">
+     <div class="card-block" style="
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;">
+        <h1 id="section" style="font-size: 70px; font-weight: 400;font-family: cursive;">*Order Delivery*</h1>
+        <h1>Bill Details</h1>
+        <h2>Order ID: {{ order_id }}</h2>
+        <h3>Table Name: {{ table_name }}</h3>
+
+        <h4>Order Details</h4>
+        <p>Total Price: ${{ order_details.total_price }}</p>
+        <p>Order Delivered: {{ order_details.order_deliverd }}</p>
+
+        <h4>Items</h4>
+        <table  style="border-collapse: collapse; width: 100%; border: 1px solid black;">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Item Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.Item }}</td>
+                    <td>${{ item.ItemPrice }}</td>
+                    <td>{{ item.Quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Add any additional content or formatting as needed -->
+
+        <button onclick="window.print()">Print Bill</button>
+             </div>
+</div>
+</div>
+    </body>
+
+</html>
+{% endblock %}
