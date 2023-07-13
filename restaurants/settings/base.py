@@ -69,6 +69,8 @@ INSTALLED_APPS = [
     'cloudinary',
     'django_otp',
     'django_celery_results',
+    'django.contrib.humanize',
+'mathfilters',
 
 ]
 

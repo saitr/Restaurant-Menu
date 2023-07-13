@@ -26,6 +26,7 @@ class GenerateBillAPIList(APIView):
         order_obj = Order.objects.get(id=order_id)
         print("order_obj", order_obj)
         order_obj.generate_bill = True
+        order_obj.order_deliverd = True
         order_obj.save()
 
         return_dict = {

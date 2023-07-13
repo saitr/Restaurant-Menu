@@ -63,7 +63,7 @@ height: 100%;
 {% for item in return_list %}
   <div>
     <h3>{{ item.itemName }}</h3>
-    <p>Price: {{ item.itemPrice }}</p>
+    <p>Price: {{ item.itemPrice }}$</p>
      <p>{{cart_item_count}}</p>
       <div class="carousel-item active" data-bs-interval="5000">
         <img src="{{ item.item_image.url }}" class="d-block w-100 carousel-image" style="width: 550px; height: 400px;" alt="...">

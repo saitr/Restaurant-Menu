@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
 from ...models import Cart,Items,Owner_Utility
+from django.db.models import Q
 import os
 from ...serializers import CartSerializer
 from django.core import serializers
@@ -28,17 +29,17 @@ class CartAPIList(APIView):
         table = Owner_Utility.objects.get(table_number=table_number)
         print("table_number", table)
         cursor, connection = DBUtils.get_db_connect()
-        # query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
-        #     table.id)
+        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
+            table.id)
 
-        query = """
-            SELECT c.items_id, c.quantity, oi.quantity AS delivered_quantity, (c.quantity - oi.quantity) AS quantity_difference
-            FROM cart c
-            LEFT JOIN order_Items oi ON c.orderid_id = oi.orderid_id AND c.items_id = oi.item_id_id
-            JOIN `order` o ON c.orderid_id = o.id
-            WHERE o.order_deliverd = 0 AND o.generate_bill = 0;
-            """
-        print("query", query)
+        # query = """
+        #     SELECT c.items_id, c.quantity, oi.quantity AS delivered_quantity, (c.quantity - oi.quantity) AS quantity_difference
+        #     FROM cart c
+        #     LEFT JOIN order_Items oi ON c.orderid_id = oi.orderid_id AND c.items_id = oi.item_id_id
+        #     JOIN `order` o ON c.orderid_id = o.id
+        #     WHERE o.order_deliverd = 0 AND o.generate_bill = 0 table_number_id={0} ;
+        #     """
+        # print("query", query)
         get_existing_data = cursor.execute(query)
         rows = cursor.fetchall()
         data_list = []
@@ -50,7 +51,11 @@ class CartAPIList(APIView):
         cart_detail = None
 
         if len(data_list):
-            cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False)
+
+            cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False) | Cart.objects.filter(
+                table_number=table, orderid__generate_bill=None)
+
+            # cart_detail.extend(cart_detail_2)
             print("Order already exist")
         else:
             cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True)
@@ -94,8 +99,8 @@ class CartAPIList(APIView):
         owner_utility = Owner_Utility.objects.get(table_number=table_name)  # Assuming table_name is the primary key
         print("owner_utility", owner_utility)
         cursor, connection = DBUtils.get_db_connect()
-        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
-            owner_utility.id)
+        query = "select * from restaurants.order o join order_Items ot on (ot.orderid_id=o.id) where table_number_id={0}  and generate_bill  is False and ot.item_id_id = {1}; ".format(
+            owner_utility.id,item_id)
         print("query", query)
         return_data = DBUtils.get_table_data(query, cursor)
 
@@ -105,8 +110,7 @@ class CartAPIList(APIView):
             cart_items = Cart.objects.filter(table_number_id=table, items=item_id,
                                              cart_created=True,orderid__generate_bill=False).first()
 
-            get_cart_items = cart_items.orderid_id
-            print("get_cart_items", get_cart_items)
+
             cart_item = cart_items  # Assuming there's only one item per table
             cart_item.quantity += 1
             cart_item.save()
@@ -171,7 +175,11 @@ class CartAPIList(APIView):
             print("table_number",table_number)
             table = Owner_Utility.objects.get(table_number=table_number)
             print("table", table)
-            cart_items = Cart.objects.filter(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=False).first()
+            # cart_items = Cart.objects.filter(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None).first()
+            cart_items = Cart.objects.filter(
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None) |
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=0)
+            ).first()
             print("cart_items", cart_items)
             # cursor, connection = DBUtils.get_db_connect()
             # query = "select * from cart where table_number_id={0} and items_id={1} and orderid_id  is null  and cart_created=True ".format(table.id,item_id)

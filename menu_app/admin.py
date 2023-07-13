@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories,Items,Lodge,Owner_Utility,CustomUser
+from .models import Categories,Items,Lodge,Owner_Utility,CustomUser,Order
 # Register your models here.
 from django.urls import reverse
 from django.utils.html import format_html
@@ -26,6 +26,9 @@ class CustomUser_UtilityAdmin(admin.ModelAdmin):
     list_display = ('phone_number', 'is_verified', 'is_chef', 'otp','username')
 
 
+@admin.register(Order)
+class CustomUser_UtilityAdmin(admin.ModelAdmin):
+    list_display = ('table_number', 'created_at', 'total_price', 'order_deliverd','order_place','generate_bill')
 
 
 @admin.register(Items)

@@ -1,6 +1,9 @@
 
 <!DOCTYPE html>
-
+{% extends 'base.html' %}
+{% load humanize %}
+{% load mathfilters %}
+{% load static %}
 <html>
 <head>
     <title>Cart Items</title>
@@ -91,7 +94,7 @@ text-align:center;
 <!--      </ul>-->
 <!--    </div>-->
 <!--  </div>-->
-{% extends 'base.html' %}
+
 
 {% block content %}
 
@@ -104,6 +107,9 @@ text-align:center;
 
                     <th style="text-align:center;">item_price</th>
                     <th style="text-align:center;">Quantity</th>
+                    <th style="text-align:center;">Item Total Price</th>
+<!--                    <th style="text-align:center;">Total Amount</th>-->
+
                 </tr>
             </thead>
             <tbody>
@@ -118,10 +124,21 @@ text-align:center;
                     <td style="display:flex;gap:5px;justify-content: center;">
                         <button onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
                         <p>{{ item.quantity }}</p>
+
+
+
                         <button onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
+<!--                          total_price +=  {{ item.quantity|mul:item.item_price }}-->
+                          <p >{{ item.quantity|mul:item.item_price }}</p>
+                        <p>{{total_price}}</p>
+
                     </td>
                 </tr>
                 {% endfor %}
+            <tr>
+        <td colspan="2">Total:</td>
+        <td>{{ total_price }}</td>
+    </tr>
             </tbody>
         </table>
     </div>
@@ -134,6 +151,7 @@ text-align:center;
 
 
     <script>
+        var total_price = 0;
         function addItem(table_name, item_id) {
             // Send a POST request to the cart API
             fetch('/cart_api', {
