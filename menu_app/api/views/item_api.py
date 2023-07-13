@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render, redirect
-from ...models import Items,Categories,Cart
+from ...models import Items,Categories,Cart,Owner_Utility
 import os
 from ...serializers import ItemsSerializer
 from django.core import serializers
@@ -18,12 +18,21 @@ class ItemAPIList(APIView):
     def get(self, request):
         print("***", request.query_params)
         print("inside item get", request.query_params['category'])
+        table_name = request.query_params['table_name']
+        print("table_name", table_name)
+
         try:
             selected_category = Categories.objects.get(categoryName=request.query_params['category'])
             get_item = Items.objects.filter(category=selected_category)
         except Categories.DoesNotExist:
             get_item = []  #
 
+
+        table = Owner_Utility.objects.get(table_number=table_name)
+        print("table_number", table)
+
+        cart_item_count = Cart.objects.filter(table_number=table, orderid=None).first()
+        print("cart_item_count", cart_item_count)
 
         return_list = []
         for data in get_item:

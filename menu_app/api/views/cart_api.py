@@ -28,8 +28,16 @@ class CartAPIList(APIView):
         table = Owner_Utility.objects.get(table_number=table_number)
         print("table_number", table)
         cursor, connection = DBUtils.get_db_connect()
-        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
-            table.id)
+        # query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
+        #     table.id)
+
+        query = """
+            SELECT c.items_id, c.quantity, oi.quantity AS delivered_quantity, (c.quantity - oi.quantity) AS quantity_difference
+            FROM cart c
+            LEFT JOIN order_Items oi ON c.orderid_id = oi.orderid_id AND c.items_id = oi.item_id_id
+            JOIN `order` o ON c.orderid_id = o.id
+            WHERE o.order_deliverd = 0 AND o.generate_bill = 0;
+            """
         print("query", query)
         get_existing_data = cursor.execute(query)
         rows = cursor.fetchall()
@@ -163,9 +171,8 @@ class CartAPIList(APIView):
             print("table_number",table_number)
             table = Owner_Utility.objects.get(table_number=table_number)
             print("table", table)
-            cart_items = Cart.objects.filter(table_number_id=table, items=item_id, orderid=None, cart_created=True, orderid__generate_bill=False).first()
-            get_cart_items = cart_items.orderid_id
-            print("get_cart_items", get_cart_items)
+            cart_items = Cart.objects.filter(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=False).first()
+            print("cart_items", cart_items)
             # cursor, connection = DBUtils.get_db_connect()
             # query = "select * from cart where table_number_id={0} and items_id={1} and orderid_id  is null  and cart_created=True ".format(table.id,item_id)
             # print("query", query)

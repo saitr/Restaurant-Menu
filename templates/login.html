@@ -1,4 +1,8 @@
 <!doctype html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
 <html lang="en">
 <head>
   <!-- Required meta tags -->
@@ -34,7 +38,7 @@
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" id="exampleInputPassword1">
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button style="background-color: green; color: white;" type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>
     </div>
@@ -50,3 +54,4 @@
   -->
 </body>
 </html>
+{% endblock %}

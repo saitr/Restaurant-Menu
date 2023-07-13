@@ -50,7 +50,7 @@ class OrderApiView(APIView):
             # print("return_data", return_data)
 
             # CustomUser.objects.get()
-            cart_items = Cart.objects.filter(orderid__generate_bill=True)
+            cart_items = Cart.objects.filter(orderid__generate_bill=False)
             print("cart_items", cart_items)
             return_list = []
             order_dict = {}

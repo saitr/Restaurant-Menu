@@ -1,20 +1,33 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
 <html>
 <head>
     <title>Verify OTP</title>
 </head>
 <body>
-    <h2>Verify OTP</h2>
-    <form id="otpForm">
-        {% csrf_token %}
-        <label for="otp">Enter OTP:</label>
-        <input type="text" name="otp" id="otp" required><br>
-        <input type="hidden" name="phone_number" id="phone_number" value="{{ phone_number }}">
-        console.log("table_name", {{table_name}})
-        <input type="hidden" name="table_number" value="{{table_name}}">
-        <input type="submit" value="Verify">
-    </form>
+   <div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+    <div class="wrapper wrapper--w960">
+        <div class="card card-2">
+            <div class="card-heading"></div>
+            <div class="card-body">
+            <h2  class="title text-center">Verify OTP</h2>
+                <form id="otpForm">
+                    {% csrf_token %}
+                    <label for="otp" style="font-weight: bold; font-size: 18px;" >Enter OTP:</label>
+                    <input type="text" style="width: 300px;height: 40px;border:1px solid;font-size: 18px;" name="otp" id="otp" required><br>
+                    <input type="hidden" name="phone_number" id="phone_number"   value="{{ phone_number }}">
 
+                    <input type="hidden" name="table_number" value="{{table_name}}">
+                    <input type="submit" style="background-color: green; color: white;width: 140px; height: 35px;font-weight: bold;" value="Verify">
+                </form>
+          </div>
+        </div>
+    </div>
+    </div>
+    </div>
     <script>
         // Handle form submission
         document.getElementById('otpForm').addEventListener('submit', (event) => {
@@ -62,5 +75,7 @@ let tableName
             xhr.send(formData);
         });
     </script>
+
 </body>
 </html>
+{% endblock %}

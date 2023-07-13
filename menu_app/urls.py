@@ -1,5 +1,6 @@
 from django.urls import path
 from menu_app.api.views.item_api import ItemAPIList
+from menu_app.api.views.first_page import FirstPageAPIList
 from menu_app.api.views.chef_api import ChefAPIList
 from menu_app.api.views.category_api import CategoryAPIList
 from menu_app.api.views.cart_api import CartAPIList
@@ -18,6 +19,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,TokenRefreshView
 urlpatterns = [
     path('items', ItemAPIList.as_view() , name='items'),
     path('home', HomeAPIList.as_view() , name='home'),
+    path('first_page/<int:variant>/', FirstPageAPIList.as_view() , name='home'),
     path('generate_bill', GenerateBillAPIList.as_view() , name='generate_bill'),
     path('admin_utiliti/<int:pk>/', Owner_UtilityView.as_view() , name='admin_utiliti'),
     path('category_api/<int:variant>/', CategoryAPIList.as_view(),  name='category_api'),
