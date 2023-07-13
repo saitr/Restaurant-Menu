@@ -32,12 +32,13 @@ flex-wrap:wrap;
   width: 100%;
     }
 
-
-.order-group{
- box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
- min-height:242px;
- padding:20px;
- background: white;
+.order-group {
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    padding: 20px;
+    background: white;
+    width: 35%;
+    text-align: center;
+    font-size: xx-large;
 }
 .order-group input
 {
@@ -136,12 +137,14 @@ display: flex;
             </tbody>
         </table>
         <div class="add-to-cart">
-            <input type="button" value="Order Delivered" onclick="submitForm('{{ order_id }}')">
+<!--            <input type="button" value="Order Delivered" onclick="submitForm('{{ order_id }}')">-->
+            <button class="btn btn-dark w-25" onclick="submitForm('{{ order_id }}')">Order Delivered</button>
 
         </div>
          <div class="add-to-cart">
 
-            <input style="" type="button" value="Generate Bill" onclick="generateBill('{{ order_id }}', '{{ items.0.table_name }}')">
+             <button style="" class="btn btn-dark w-25" value="Generate Bill" onclick="generateBill('{{ order_id }}', '{{ items.0.table_name }}')">Generate Bill</button>
+
         </div>
     </div>
     {% endfor %}

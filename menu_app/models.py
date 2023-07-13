@@ -12,7 +12,7 @@ from cloudinary.models import CloudinaryField
 from .manager import CustomUserManager
 from django.contrib.auth.models import User, AbstractUser
 from django.conf import settings
-
+from urllib.parse import urlencode
 
 class CustomUser(AbstractUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, unique=True)
@@ -64,35 +64,66 @@ class Owner_Utility(models.Model):
         managed = True
         db_table = 'owner_utility'
 
+#
+# def generate_qr_code(sender, instance, **kwargs):
+#     if not instance.qr_code:
+#         # Assuming 'table_number' is already set on the instance
+#         url = f'http://127.0.0.1:8000/category_api/{instance.table_number}'
+#
+#         qr_code_img = qrcode.make(url)
+#         canvas = Image.new('RGB', (350, 350), 'white')
+#         draw = ImageDraw.Draw(canvas)
+#         canvas.paste(qr_code_img)
+#
+#         buffer = BytesIO()
+#         canvas.save(buffer, format='PNG')
+#
+#         instance.qr_code.save(f'{instance.table_number}.png', File(buffer), save=False)
+#
+# models.signals.pre_save.connect(generate_qr_code, sender=Owner_Utility)
+
+# import qrcode
+# from io import BytesIO
+# from django.core.files import File
+
 
 def generate_qr_code(sender, instance, **kwargs):
     if not instance.qr_code:
         # Assuming 'table_number' is already set on the instance
         url = f'http://127.0.0.1:8000/category_api/{instance.table_number}'
-
-        qr_code_img = qrcode.make(url)
-        canvas = Image.new('RGB', (350, 350), 'white')
-        draw = ImageDraw.Draw(canvas)
-        canvas.paste(qr_code_img)
+        params = {'url': url}
+        url_encoded = urlencode(params)
+        qr_code_img = qrcode.make(f'URL:{url_encoded}')
 
         buffer = BytesIO()
-        canvas.save(buffer, format='PNG')
+        qr_code_img.save(buffer, format='PNG')
 
         instance.qr_code.save(f'{instance.table_number}.png', File(buffer), save=False)
+        instance.save()
 
 models.signals.pre_save.connect(generate_qr_code, sender=Owner_Utility)
-
 
 class Order(models.Model):
     table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.IntegerField(null=False, blank=False)
-    order_deliverd = models.BooleanField(default=False)
-    order_place = models.BooleanField(default=False)
     generate_bill = models.BooleanField(default=False)
     class Meta:
         managed = True
         db_table = 'order'
+
+
+class SubOrder(models.Model):
+    table_number = models.ForeignKey(Owner_Utility, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.IntegerField(null=False, blank=False)
+    order_deliverd = models.BooleanField(default=False)
+    order_place = models.BooleanField(default=False)
+    main_orderid = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    class Meta:
+        managed = True
+        db_table = 'suborder'
+
 
 
 class Cart(models.Model):
@@ -101,6 +132,7 @@ class Cart(models.Model):
     quantity = models.IntegerField(null=True, blank=False, default=1)
     orderid = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
     cart_created = models.BooleanField(default=False)
+    sub_order_id = models.ForeignKey(SubOrder, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         managed = True
         db_table = 'cart'
@@ -113,6 +145,7 @@ class Order_Items(models.Model):
     item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
     orderid = models.ForeignKey(Order, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    sub_order_id = models.ForeignKey(SubOrder, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         managed = True

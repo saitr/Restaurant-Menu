@@ -29,36 +29,22 @@ class CartAPIList(APIView):
         table = Owner_Utility.objects.get(table_number=table_number)
         print("table_number", table)
         cursor, connection = DBUtils.get_db_connect()
-        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(
-            table.id)
+        query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(table.id)
 
-        # query = """
-        #     SELECT c.items_id, c.quantity, oi.quantity AS delivered_quantity, (c.quantity - oi.quantity) AS quantity_difference
-        #     FROM cart c
-        #     LEFT JOIN order_Items oi ON c.orderid_id = oi.orderid_id AND c.items_id = oi.item_id_id
-        #     JOIN `order` o ON c.orderid_id = o.id
-        #     WHERE o.order_deliverd = 0 AND o.generate_bill = 0 table_number_id={0} ;
-        #     """
-        # print("query", query)
-        get_existing_data = cursor.execute(query)
-        rows = cursor.fetchall()
-        data_list = []
-        print("row", rows)
-        for row in rows:
-            data_list.append(row)
-            print(row)
+        data_list = DBUtils.get_table_data(query, cursor)
+        print("data_list", data_list)
 
         cart_detail = None
 
         if len(data_list):
 
-            cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False) | Cart.objects.filter(
+            cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False,sub_order_id_id__order_place=False) | Cart.objects.filter(
                 table_number=table, orderid__generate_bill=None)
 
             # cart_detail.extend(cart_detail_2)
             print("Order already exist")
         else:
-            cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True)
+            cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True,sub_order_id_id__order_place=None)
             print("Order not exist")
 
         # cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True)
@@ -99,7 +85,13 @@ class CartAPIList(APIView):
         owner_utility = Owner_Utility.objects.get(table_number=table_name)  # Assuming table_name is the primary key
         print("owner_utility", owner_utility)
         cursor, connection = DBUtils.get_db_connect()
-        query = "select * from restaurants.order o join order_Items ot on (ot.orderid_id=o.id) where table_number_id={0}  and generate_bill  is False and ot.item_id_id = {1}; ".format(
+        # check if bill generate for suborder
+        query = "select c.id AS cart_id from restaurants.order o " \
+                "join restaurants.suborder so on (so.main_orderid_id=o.id) " \
+                "join order_Items ot on (ot.sub_order_id_id=so.id) " \
+                "join cart c on(c.items_id = ot.item_id_id)" \
+                "where c.table_number_id={0} and so.order_place=True" \
+                " and generate_bill  is False and ot.item_id_id = {1}; ".format(
             owner_utility.id,item_id)
         print("query", query)
         return_data = DBUtils.get_table_data(query, cursor)
@@ -107,16 +99,18 @@ class CartAPIList(APIView):
         print("return_data", return_data)
 
         if  len(return_data):
-            cart_items = Cart.objects.filter(table_number_id=table, items=item_id,
-                                             cart_created=True,orderid__generate_bill=False).first()
+            for data in return_data:
+                print("sub order exist")
+
+                cart_items = Cart.objects.filter(id=data.cart_id)
 
 
-            cart_item = cart_items  # Assuming there's only one item per table
-            cart_item.quantity += 1
-            cart_item.save()
-            print("updated")
+                cart_item = cart_items  # Assuming there's only one item per table
+                cart_item.quantity += 1
+                cart_item.save()
+                print("updated")
         else:
-            cart_created = Cart.objects.filter(table_number=table, items=item_id, orderid__order_place=False,cart_created=False,orderid__generate_bill=True).first()
+            cart_created = Cart.objects.filter(table_number=table, items=item_id, sub_order_id_id__order_place=False,cart_created=False,orderid__generate_bill=True).first()
             print("cart_created", cart_created)
 
             if cart_created is None:
@@ -150,14 +144,22 @@ class CartAPIList(APIView):
             table = Owner_Utility.objects.get(table_number=table_number)
             print("table_number", table)
 
-            cart_item = Cart.objects.filter(table_number=table, items=item_id,orderid=None).first()
+            cart_item = Cart.objects.filter(
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None,
+                  sub_order_id_id__order_place=None) |
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=0,
+                  sub_order_id_id__order_place=None)
+            ).first()
 
-            # Decrease the quantity by 1 if it's greater than 1
-            if cart_item.quantity > 1:
-                cart_item.quantity -= 1
-                cart_item.save()
-            else:
-                cart_item.delete()
+            print("cart_item", cart_item)
+
+            if cart_item:
+                # Decrease the quantity by 1 if it's greater than 1
+                if cart_item.quantity > 1:
+                    cart_item.quantity -= 1
+                    cart_item.save()
+                else:
+                    cart_item.delete()
 
             return HttpResponse("Order item deleted successfully.")
 
@@ -177,20 +179,11 @@ class CartAPIList(APIView):
             print("table", table)
             # cart_items = Cart.objects.filter(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None).first()
             cart_items = Cart.objects.filter(
-                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None) |
-                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=0)
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=None,sub_order_id_id__order_place=None) |
+                Q(table_number_id=table, items=item_id, cart_created=True, orderid__generate_bill=0,sub_order_id_id__order_place=None)
             ).first()
             print("cart_items", cart_items)
-            # cursor, connection = DBUtils.get_db_connect()
-            # query = "select * from cart where table_number_id={0} and items_id={1} and orderid_id  is null  and cart_created=True ".format(table.id,item_id)
-            # print("query", query)
-            # get_existing_data = cursor.execute(query)
-            # rows = cursor.fetchall()
-            # data_list = []
-            # print("row", rows)
-            # for row in rows:
-            #     data_list.append(row)
-            #     print(row)
+
 
             if cart_items:
                 print("Inside if ")

@@ -1,67 +1,10 @@
-<!DOCTYPE html>
+
 {% extends 'base.html' %}
 
 {% block content %}
 {% load static %}
-<html>
-<head>
-<!--     <div id="header">-->
-<!--    <nav id="navbar">-->
-<!--      <h1> Resturant </h1>-->
-<!--      <ul>-->
-<!--        <li><a href="">Home</a></li>-->
-<!--        <li><a href="#category-form">Menu</a></li>-->
-<!--        <li><a href="">Chef</a></li>-->
-<!--        <li><a href="">About</a></li>-->
-<!--        <li><a href="">Contact</a></li>-->
-<!--      </ul>-->
-<!--      <div id="cart">-->
-<!--          <a href="cart.html" class="cart-icon" onclick=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>-->
-<!--      </div>-->
-<!--    </nav>-->
-<!--    <div id="mobile_menu">-->
-<!--      <ul>-->
-<!--        <li><a href="">Home</a></li>-->
-<!--          <li><a href="category-form">Menu</a></li>-->
-<!--          <li><a href="">Chef</a></li>-->
-<!--          <li><a href="">About</a></li>-->
-<!--          <li><a href="">Contact</a></li>-->
-<!--      </ul>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--    <title>Items</title>-->
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-<!--    <style>-->
-<!--        .category-form {-->
-<!--            display: flex;-->
-<!--            justify-content: center;-->
-<!--            margin-top: 20px;-->
-<!--        }-->
 
-<!--        .category-form select {-->
-<!--            padding: 10px;-->
-<!--            margin-right: 10px;-->
-<!--            border-radius: 4px;-->
-<!--        }-->
 
-<!--        .category-form button {-->
-<!--            padding: 10px 20px;-->
-<!--            background-color: #f2f2f2;-->
-<!--            border: none;-->
-<!--            border-radius: 4px;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--    </style>-->
-<!--    <script>-->
-<!--        function redirectToAPI(form) {-->
-<!--            var category = form.category.value;-->
-<!--             var table_name = form.table_name.value;-->
-<!--            // Redirect to the desired API endpoint with the selected category-->
-<!--            var url = '/items?category=' + encodeURIComponent(category) + '&table_name=' + encodeURIComponent(table_name);-->
-<!--            // Redirect to the desired API endpoint with the selected category and table_name-->
-<!--            window.location.href = url;-->
-<!--        }-->
-<!--    </script>-->
  {% for item in return_list %}
     {% if forloop.last %}
         <script>
@@ -79,58 +22,37 @@
     {% endif %}
 {% endfor %}
 
-<!--</head>-->
-
-<!--<body>-->
-<!--    <h1>Items</h1>-->
-<!--    <div class="category-form">-->
-<!--        <form onsubmit="event.preventDefault(); redirectToAPI(this);">-->
-<!--            <select name="category">-->
-<!--                console.log("return_list",return_list)-->
-<!--                {% for item in return_list %}-->
-<!--                    <option value="{{ item.categoryName }}">{{ item.categoryName }}</option>-->
-
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--            <button type="submit">Go</button>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
 
 
 
-<body>
-
-      <div id=menu">
-        <h1 id="section" style="font-size: 70px; font-weight: 400;font-family: cursive;">Menu Category</h1>
-          <div id="menu_row">
-            <div id="menu_col">
-                <div class="box">
-                    <div class="category-form">
-                        <form onsubmit="event.preventDefault(); redirectToAPI(this);">
-                            {% for item in return_list %}
-<!--                                console.log("item",{{item}})-->
-                                <label>
-                                     <div id="image">
-                                        <img src="{{ item.category_img.url }}">
-                                    </div>
-                                    <span style="font-weight: bold;font-size: 24px;">{{ item.categoryName }}</span> </label>
-                                    <input style=" border-width: 20px;" type="radio" name="category" value="{{ item.categoryName }}">
 
 
-                            {% endfor %}
-                            <div class="text-center p-3">
+    
 
+<h1 class="display-1 text-center text-decoration-underline">Categories</h1>
 
-                                <button type="submit" style="background-color: black; color: white;width: 150px; height: 40px;font-weight: bold;" >Go</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+      <div class="menu">
+
+        <form class="menu-flex-form" onsubmit="event.preventDefault(); redirectToAPI(this);">
+            {% for item in return_list %}
+        <div class="item">
+            <div class="item-image"><img src="{{ item.category_img.url }}" alt="" class="food_item_image"></div>
+            <div class="item-name">
+                <h6 class="item-price">{{ item.categoryName }}</h6>
+            <input style=" border-width: 20px;" type="radio" name="category" value="{{ item.categoryName }}" required>
             </div>
-          </div>
+            
+
+        </div>
+        {% endfor %}
+            <div class="text-center">
+    <button type="submit" class="btn btn-dark m-3">Go</button>
+</div>
+        </form>
       </div>
+
+
+
 <!--<div id="footer">-->
 <!--    <div>-->
 <!--        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>-->

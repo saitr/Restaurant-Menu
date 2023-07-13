@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from rest_framework.views import APIView
-from ...models import CustomUser, Cart, Order_Items, Order,Owner_Utility
+from ...models import CustomUser, Cart, Order_Items, Order,Owner_Utility,SubOrder
 from ...serializers import OrderSerializer
 from django.shortcuts import render, redirect
 from menu_app.api.views.utils.database_helper import DBUtils
@@ -28,29 +28,9 @@ class OrderApiView(APIView):
             return JsonResponse({'error': 'Invalid credentials'}, status=401)
         else:
 
-            # query = """SELECT
-            #     c.items_id,
-            #     c.quantity - COALESCE(SUM(o.quantity), 0) AS quantity_not_delivered
-            # FROM
-            #     cart c
-            #     LEFT JOIN order_items o ON c.orderid_id = o.orderid_id AND c.items_id = o.item_id
-            #     LEFT JOIN order ord ON c.orderid_id = ord.id
-            # WHERE
-            #     c.cart_created = True
-            #     AND c.orderid_id IS NOT NULL
-            #     AND o.orderid_id IS NULL
-            #     AND ord.order_delivered = False
-            #     AND ord.generate_bill = False
-            # GROUP BY
-            #     c.items_id;
-            # ;"""
-            # cursor, connection = DBUtils.get_db_connect()
-            # return_data = DBUtils.get_table_data(query, cursor)
-            #
-            # print("return_data", return_data)
 
             # CustomUser.objects.get()
-            cart_items = Cart.objects.filter(orderid__generate_bill=False)
+            cart_items = Cart.objects.filter(orderid__generate_bill=False,)
             print("cart_items", cart_items)
             return_list = []
             order_dict = {}
@@ -90,8 +70,10 @@ class OrderApiView(APIView):
         print("Inside api OrderApiView post", request.data)
         table_name = request.data.get('table_name')
         print("table_name", table_name)
+
         owner_utility = Owner_Utility.objects.get(table_number=table_name)  # Assuming table_name is the primary key
         print("owner_utility", owner_utility)
+
         cursor, connection = DBUtils.get_db_connect()
         query = "select * from restaurants.order where table_number_id={0}  and generate_bill  is False ; ".format(owner_utility.id)
         print("query", query)
@@ -107,11 +89,25 @@ class OrderApiView(APIView):
             print("order_existing_check", order_existing_check)
             print("already exist")
             order = order_existing_check
+            if order_existing_check:
+                # check suborder existence
+                sub_order_exist = SubOrder.objects.filter(table_number=owner_utility,order_place=True).first()
+                print("sub_order_exist", sub_order_exist)
+                if sub_order_exist:
+                    sub_order_exist = SubOrder.objects.create(table_number=owner_utility, total_price=0)
+                    print("Create suborder", sub_order_exist)
+                else:
+                    sub_order_exist = SubOrder.objects.filter(table_number=owner_utility, order_place=False).first()
+                    print("SubOrder already exist")
+
         else:
             # Step 1: Create an Order object
             print("Create order")
             order = Order.objects.create(table_number=owner_utility, total_price=0)
             print("Create an Order object", order)
+
+            sub_order_exist = SubOrder.objects.create(table_number=owner_utility, total_price=0)
+            print("Create suborder", sub_order_exist)
 
 
         # Step 2: Retrieve the items from the cart and create Order_Items
@@ -120,7 +116,8 @@ class OrderApiView(APIView):
 
         try:
             print("Inside try")
-            cart_items = Cart.objects.filter(table_number=owner_utility,orderid_id__isnull=True)
+            cart_items = Cart.objects.filter(table_number=owner_utility,sub_order_id_id__isnull=True)
+            print("cart_items", cart_items)
 
             for cart_item in cart_items:
                 print("cart_item.id", cart_item)
@@ -135,11 +132,14 @@ class OrderApiView(APIView):
 
                 # Create an Order_Items object
                 order_item = Order_Items.objects.create(quantity=quantity, order_item_price=order_item_price,
-                                         item_id=item, orderid=order)
+                                         item_id=item, orderid=order,sub_order_id_id=sub_order_exist.id)
+
+                print("order_item",order_item)
+
                 order_items.append(order_item)
                 total_price += order_item_price
 
-                Cart.objects.filter(id=cart_item.id,orderid_id__isnull=True).update(orderid=order_item.orderid.id)
+                Cart.objects.filter(id=cart_item.id,orderid_id__isnull=True).update(orderid=order_item.orderid.id,sub_order_id_id=order_item.sub_order_id_id)
                 # print("updating cartid", order_item.orderid.id)
                 # cart_item.orderid = order_item.orderid.id
                 # cart_item.save()
@@ -151,10 +151,10 @@ class OrderApiView(APIView):
             return JsonResponse({'message': 'Cart is empty'}, status=400)
 
         # Step 3: Save the order and order items
-        order.total_price = total_price
-        order.order_place = True
-
-        order.save()
+        sub_order_exist.total_price = total_price
+        sub_order_exist.order_place = True
+        sub_order_exist.main_orderid_id
+        sub_order_exist.save()
 
         for order_item in order_items:
             order_item.save()

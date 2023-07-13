@@ -121,18 +121,17 @@ text-align:center;
                     <td style="text-align:center;">{{ item.item_price}}</td>
 
 
-                    <td style="display:flex;gap:5px;justify-content: center;">
-                        <button onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
+                    <td style="display:flex;gap:5px;justify-content: center; align-items:center;">
+                        <button class="btn btn-primary" onclick="addItem('{{ table_name }}', '{{ item.item_id }}')">+</button>
                         <p>{{ item.quantity }}</p>
 
 
 
-                        <button onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
+                        <button class="btn btn-primary" onclick="removeItem('{{ table_name }}', '{{ item.item_id }}')">-</button>
 <!--                          total_price +=  {{ item.quantity|mul:item.item_price }}-->
-                          <p >{{ item.quantity|mul:item.item_price }}</p>
-                        <p>{{total_price}}</p>
 
                     </td>
+                    <td style='text-align:center'> <p >{{ item.quantity|mul:item.item_price }}</p></td>
                 </tr>
                 {% endfor %}
             <tr>
