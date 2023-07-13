@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from ...models import CustomUser, Cart, Order_Items, Order,Owner_Utility,SubOrder
-from ...serializers import OrderSerializer
+from ...serializers import SubOrderSerializer
 from django.shortcuts import render, redirect
 from menu_app.api.views.utils.database_helper import DBUtils
 from rest_framework import status
@@ -30,40 +30,40 @@ class OrderApiView(APIView):
 
 
             # CustomUser.objects.get()
-            cart_items = Cart.objects.filter(orderid__generate_bill=False,)
+            cart_items = Cart.objects.filter(orderid__generate_bill=False)
             print("cart_items", cart_items)
             return_list = []
             order_dict = {}
+            list_item = []
+            #
+            # item_data = {
+            #     "item_name": item.items.itemName,
+            #     "table_name": item.table_number.table_number,
+            #     "item": item.items,
+            #     "quantity": item.quantity
+            # }
 
             for item in cart_items:
-                order_id = item.orderid.id
-                print("order_id *************", order_id)
+                item_data = {
+                        "item_name": item.items.itemName,
+                        "table_name": item.table_number.table_number,
+                        "item": item.items,
+                        "quantity": item.quantity
+                    }
+                list_item.append(item_data)
 
+            order_dict = {}
+            for order in list_item:
+                order_id = order['table_name']
                 if order_id not in order_dict:
                     order_dict[order_id] = []
-
-                item_data = {
-                    "item_name": item.items.itemName,
-                    "table_name": item.table_number.table_number,
-                    "item": item.items,
-                    "quantity": item.quantity
-                }
-
-                order_dict[order_id].append(item_data)
-
-            # Convert order_dict into a list of dictionaries
-            for order_id, items in order_dict.items():
-                return_dict = {
-                    order_id: items
-                }
-                return_list.append(return_dict)
-
-            print(return_list)
+                order_dict[order_id].append(order)
 
             context = {
-                'return_list': return_list
+                'return_list': order_dict
             }
             print("context", context)
+           
             return render(request, 'chef.html', context)
 
     def post(self, request):
@@ -153,7 +153,7 @@ class OrderApiView(APIView):
         # Step 3: Save the order and order items
         sub_order_exist.total_price = total_price
         sub_order_exist.order_place = True
-        sub_order_exist.main_orderid_id
+        sub_order_exist.main_orderid_id = order
         sub_order_exist.save()
 
         for order_item in order_items:
@@ -167,10 +167,10 @@ class OrderApiView(APIView):
 
         try:
             data_dict = {"order_deliverd": True}
-            order_id = request.data.get('order_id')
-            print("Inside ***", order_id)
-            previous_record = Order.objects.get(id=order_id)
-            serializer = OrderSerializer(
+            sub_order_id = request.data.get('sub_order_id')
+            print("Inside ***", sub_order_id)
+            previous_record = SubOrder.objects.get(id=sub_order_id)
+            serializer = SubOrderSerializer(
                 previous_record,
                 data=data_dict,
                 partial=True

@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import CustomUser,Categories,Items,Cart,Order,Order_Items,Owner_Utility
+from .models import CustomUser,Categories,Items,Cart,Order,Order_Items,Owner_Utility,SubOrder
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -46,6 +46,15 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
+        fields = "__all__"
+
+class SubOrderSerializer(serializers.ModelSerializer):
+    """
+    Order model serializer
+    """
+
+    class Meta:
+        model = SubOrder
         fields = "__all__"
 
 class Order_ItemsSerializer(serializers.ModelSerializer):
