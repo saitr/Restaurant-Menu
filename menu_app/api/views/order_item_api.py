@@ -8,62 +8,67 @@ from menu_app.api.views.utils.database_helper import DBUtils
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+import json
+from menu_app.api.views.utils import api_utils
 
 
 class OrderApiView(APIView):
     def get(self,request):
 
         print("INSIDE GET OF ORDER ITEM for chef",request.query_params)
-
-        # try:
         password = request.query_params['password']
         phone_number = request.query_params['phone_number']
-        # except CustomUser.DoesNotExist:
-        #     # return(None, 'Incorrect phone_number or password')
-        #     return Response(status=status.HTTP_403_FORBIDDEN)
         user = authenticate(request, username=phone_number, password=password)
+        print("user", user)
+
         if user is None:
-            # Invalid credentials
-            # Handle the error condition (e.g., return an error response)
-            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+            print("invalid")
+            return render(request, 'chef.html', {'error_message': 'Invalid credentials'})
         else:
-
-
-            # CustomUser.objects.get()
+            print("valid")
             cart_items = Cart.objects.filter(orderid__generate_bill=False)
             print("cart_items", cart_items)
             return_list = []
             order_dict = {}
             list_item = []
-            #
-            # item_data = {
-            #     "item_name": item.items.itemName,
-            #     "table_name": item.table_number.table_number,
-            #     "item": item.items,
-            #     "quantity": item.quantity
-            # }
+
 
             for item in cart_items:
                 item_data = {
+                        "sub_order_id": item.sub_order_id_id,
                         "item_name": item.items.itemName,
                         "table_name": item.table_number.table_number,
                         "item": item.items,
-                        "quantity": item.quantity
+                        "quantity": item.quantity,
+                        "order_id":item.orderid_id
                     }
                 list_item.append(item_data)
 
             order_dict = {}
-            for order in list_item:
-                order_id = order['table_name']
+
+            for item in list_item:
+                print("****************************", item['order_id'])
+                order_id = item['order_id']
+                sub_order_id = item['sub_order_id']
                 if order_id not in order_dict:
-                    order_dict[order_id] = []
-                order_dict[order_id].append(order)
+                    order_dict[order_id] = {}
+                if sub_order_id not in order_dict[order_id]:
+                    order_dict[order_id][sub_order_id] = []
+                order_dict[order_id][sub_order_id].append(item)
+
+            grouped_data = []
+            for order_id, sub_orders in order_dict.items():
+                order_data = {'order_id': order_id, 'sub_orders': []}
+                for sub_order_id, sub_order_items in sub_orders.items():
+                    sub_order_data = {'sub_order_id': sub_order_id, 'items': sub_order_items}
+                    order_data['sub_orders'].append(sub_order_data)
+                grouped_data.append(order_data)
 
             context = {
-                'return_list': order_dict
+                'return_list': grouped_data
             }
             print("context", context)
-           
+
             return render(request, 'chef.html', context)
 
     def post(self, request):
@@ -167,7 +172,7 @@ class OrderApiView(APIView):
 
         try:
             data_dict = {"order_deliverd": True}
-            sub_order_id = request.data.get('sub_order_id')
+            sub_order_id = request.data.get('subOrderId')
             print("Inside ***", sub_order_id)
             previous_record = SubOrder.objects.get(id=sub_order_id)
             serializer = SubOrderSerializer(
@@ -178,7 +183,8 @@ class OrderApiView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 print("updated")
-                return Response({'message': 'Order updated successfully'}, status=status.HTTP_200_OK)
+                return Response({'message': 'Order updated successfully',
+                                 'updated_sub_order_id': sub_order_id}, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Order.DoesNotExist:

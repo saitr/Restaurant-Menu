@@ -17,6 +17,7 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 
 
+
 LOGGER = logging.getLogger(__name__)
 
 # Item api
@@ -90,27 +91,29 @@ class CartAPIList(APIView):
                 "join restaurants.suborder so on (so.main_orderid_id=o.id) " \
                 "join order_Items ot on (ot.sub_order_id_id=so.id) " \
                 "join cart c on(c.items_id = ot.item_id_id)" \
-                "where c.table_number_id={0} and so.order_place=True" \
-                " and generate_bill  is False and ot.item_id_id = {1}; ".format(
+                "where c.table_number_id={0} and so.order_place=True and " \
+                "ot.item_id_id = {1}; ".format(
             owner_utility.id,item_id)
         print("query", query)
         return_data = DBUtils.get_table_data(query, cursor)
 
         print("return_data", return_data)
 
-        if  len(return_data):
+        if len(return_data) == 0:
             for data in return_data:
                 print("sub order exist")
+                cart_items = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=False,
+                                    cart_created=True, orderid__generate_bill=False).first()
 
-                cart_items = Cart.objects.filter(id=data.cart_id)
+                # cart_items = Cart.objects.filter(id=data.cart_id)
 
-
+                print("cart_items",cart_items)
                 cart_item = cart_items  # Assuming there's only one item per table
                 cart_item.quantity += 1
                 cart_item.save()
                 print("updated")
         else:
-            cart_created = Cart.objects.filter(table_number=table, items=item_id, sub_order_id_id__order_place=False,cart_created=False,orderid__generate_bill=True).first()
+            cart_created = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=True,cart_created=False,orderid__generate_bill=True).first()
             print("cart_created", cart_created)
 
             if cart_created is None:

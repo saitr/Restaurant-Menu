@@ -5,8 +5,10 @@ from menu_app.api.views.chef_api import ChefAPIList
 from menu_app.api.views.category_api import CategoryAPIList
 from menu_app.api.views.cart_api import CartAPIList
 from menu_app.api.views.user_api import VerifyOTPView
+from menu_app.api.views.admin_login_api import AdminLoginDetailAPIList
 from menu_app.api.views.varify_api import ValidateOTPView
 from menu_app.api.views.order_item_api import OrderApiView
+from menu_app.api.views.admin_view_page import AdminDetailAPIList
 from menu_app.api.views.index import indexAPIList
 from menu_app.api.views.home import HomeAPIList
 from menu_app.api.views.owner_utility import Owner_UtilityView
@@ -20,6 +22,8 @@ urlpatterns = [
     path('items', ItemAPIList.as_view() , name='items'),
     path('home', HomeAPIList.as_view() , name='home'),
     path('first_page/<int:variant>/', FirstPageAPIList.as_view() , name='home'),
+    path('admin_view_page', AdminDetailAPIList.as_view() , name='admin_view_page'),
+    path('admin_login_api', AdminLoginDetailAPIList.as_view() , name='admin_login_api'),
     path('generate_bill', GenerateBillAPIList.as_view() , name='generate_bill'),
     path('admin_utiliti/<int:pk>/', Owner_UtilityView.as_view() , name='admin_utiliti'),
     path('category_api/<int:variant>/', CategoryAPIList.as_view(),  name='category_api'),

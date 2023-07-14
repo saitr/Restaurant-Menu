@@ -174,3 +174,5 @@ class Lodge(models.Model):
 
 
 
+
+

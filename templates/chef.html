@@ -4,60 +4,132 @@
 {% block content %}
 <html>
 <head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
     <title>Order Items</title>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <style>
-    .order-heading{
-    text-align:center;
-    }
-    .order{
-    padding: 20px;
-    background: bisque;
-    height:100vh;
-    }
-        .order-container{
+        .order-heading {
+            text-align: center;
+        }
+
+        .order {
+            padding: 20px;
+            background: bisque;
+            height: 100vh;
+        }
+
+        .order-container {
             display: flex;
-    flex-direction: row;
-flex-wrap:wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap:20px;
-    padding:20px;
-<!--    background: aliceblue;-->
-    }
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
 
-    table{
-     font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-    }
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-.order-group {
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    padding: 20px;
-    background: white;
-    width: 35%;
-    text-align: center;
-    font-size: xx-large;
-}
-.order-group input
-{
-padding: 10px;
-}
-.add-to-cart{
-display: flex;
-    justify-content: center;
-    margin: 30px 0px 0px 0px;
-}
-    td, th {
-<!--  border: 1px solid #dddddd;-->
-  text-align: left;
-  padding: 8px;
-}
+        .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 35%;
+            text-align: center;
+            font-size: xx-large;
+        }
+
+        .order-group input {
+            padding: 10px;
+        }
+
+        .add-to-cart {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0px 0px 0px;
+        }
+        .add-to-cart button {
+            height: 80px; /* Adjust the height as needed */
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        td, th {
+            text-align: left;
+            padding: 8px;
+        }
+  .order-id {
+            background-color: lightgray;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+
+        .sub-order-id {
+            background-color: lightblue;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid black;
+        }
+
+        .sub-order-items {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        .order-delivered-btn {
+            background-color: green;
+            color: white;
+        }
+
+        .order-delivered-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+
+
 
     </style>
-   <script>
-    function submitForm(orderID) {
+    <script>
+<!--     function submitForm(orderID, subOrderId, button) {-->
+<!--     console.log("Button:", button);-->
+<!--    var url = "{% url 'order_api' %}";-->
+<!--    var method = 'PATCH';-->
+
+<!--    fetch(url, {-->
+<!--        method: method,-->
+<!--        headers: {-->
+<!--            'Content-Type': 'application/json',-->
+<!--            'X-CSRFToken': '{{ csrf_token }}'-->
+<!--        },-->
+<!--        body: JSON.stringify({order_id: orderID, subOrderId: subOrderId})-->
+<!--    })-->
+<!--        .then(response => {-->
+<!--            // Handle the response as needed-->
+<!--            console.log("response",response)-->
+<!--            if (response.ok) {-->
+<!--                console.log("Inside")-->
+<!--                button.disabled = true; // Disable the button after successful submission-->
+<!--                console.log("***", button.disabled)-->
+<!--                button.textContent = "Order Delivered Completed"; // Update button text-->
+<!--                console.log("***", button.textContent)-->
+<!--                console.log("***", button)-->
+<!--                button.classList.add("order-delivered-btn"); // Add a CSS class for styling-->
+<!--                showOrderDeliveredMessage(button.parentNode);-->
+<!--            }-->
+<!--        })-->
+<!--        .catch(error => {-->
+<!--            // Handle any errors that occur during the request-->
+<!--        });-->
+<!--}-->
+      function submitForm(orderID, subOrderId, button) {
         var url = "{% url 'order_api' %}";
         var method = 'PATCH';
 
@@ -67,96 +139,123 @@ display: flex;
                 'Content-Type': 'application/json',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: JSON.stringify({ order_id: orderID })
+            body: JSON.stringify({ order_id: orderID, subOrderId: subOrderId })
         })
-        .then(response => {
-            // Handle the response as needed
-        })
-        .catch(error => {
-            // Handle any errors that occur during the request
-        });
+            .then(response => {
+                if (response.ok) {
+                    button.disabled = true;
+                    button.textContent = "Order Delivered Completed";
+                    button.classList.add("order-delivered-btn");
+                    showOrderDeliveredMessage(button.parentNode);
+
+                    // Store button state in local storage
+                    localStorage.setItem('buttonState_' + subOrderId, 'disabled');
+                    localStorage.setItem('buttonText_' + subOrderId, 'Order Delivered Completed');
+                    localStorage.setItem('buttonClass_' + subOrderId, 'order-delivered-btn');
+                    console.log("Button state stored in local storage.");
+                }
+            })
+            .catch(error => {
+                // Handle any errors that occur during the request
+            });
     }
-    function generateBill(orderID, tableName) {
-    var url = "/generate_bill";
-    var method = 'GET';
 
-    var params = new URLSearchParams();
-    params.append('order_id', orderID);
-    params.append('table_number', tableName);
+    // Retrieve button state from local storage on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        var buttons = document.querySelectorAll('.add-to-cart button');
+        buttons.forEach(button => {
+            var subOrderId = button.dataset.subOrderId;
+            var buttonState = localStorage.getItem('buttonState_' + subOrderId);
+            var buttonText = localStorage.getItem('buttonText_' + subOrderId);
+            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);
 
-    fetch(url + '?' + params.toString(), {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    })
-    .then(response => response.text())  // Convert response to text
-    .then(html => {
-        // Render the HTML response
-        var billWindow = window.open('', '_blank');
-        billWindow.document.open();
-        billWindow.document.write(html);
-        billWindow.document.close();
-    })
-    .catch(error => {
-        // Handle any errors that occur during the request
+            if (buttonState === 'disabled') {
+                button.disabled = true;
+                button.textContent = buttonText;
+                button.classList.add(buttonClass);
+                console.log("Button state applied from local storage.");
+            }
+        });
     });
-}
 
-</script>
+
+        function generateBill(orderID, tableName) {
+            var url = "/generate_bill";
+            var method = 'GET';
+
+            var params = new URLSearchParams();
+            params.append('order_id', orderID);
+            params.append('table_number', tableName);
+
+            fetch(url + '?' + params.toString(), {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+                .then(response => response.text())  // Convert response to text
+                .then(html => {
+                    // Render the HTML response
+                    var billWindow = window.open('', '_blank');
+                    billWindow.document.open();
+                    billWindow.document.write(html);
+                    billWindow.document.close();
+                })
+                .catch(error => {
+                    // Handle any errors that occur during the request
+                });
+        }
+
+    </script>
 
 </head>
-
 <body>
 <div class="order">
-<h1 class="order-heading">Cart Items</h1>
-<div class="order-container">
+    <h1 class="order-heading">Cart Items</h1>
+    <div class="order-container">
+        {% for order_data in return_list %}
+        <div class="order-group">
+            <div class="order-id">Order ID: {{ order_data.order_id }}</div>
+            {% for sub_order_data in order_data.sub_orders %}
+            <div class="sub-order-id">Sub Order ID: {{ sub_order_data.sub_order_id }}</div>
+            <div class="sub-order-items">
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Table Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in sub_order_data.items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                     <div class="add-to-cart">
+<!--                <button class="btn btn-dark w-25" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}')">Order Delivered</button>-->
+            <button class="btn btn-dark w-25" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
 
+                     </div>
+            </div>
 
-    {% for item_dict in return_list %}
-    {% for order_id, items in item_dict.items %}
-    <div class="order-group">
-        <h2>Order ID: {{ order_id }}</h2>
-        <table class="order-table">
-            <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Table Name</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.item_name }}</td>
-                    <td>{{ item.table_name }}</td>
-                    <td>{{ item.quantity }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="add-to-cart">
-<!--            <input type="button" value="Order Delivered" onclick="submitForm('{{ order_id }}')">-->
-            <button class="btn btn-dark w-25" onclick="submitForm('{{ order_id }}')">Order Delivered</button>
+            {% endfor %}
 
+            <div class="add-to-cart">
+                <button class="btn btn-dark w-25" value="Generate Bill"
+                        onclick="generateBill('{{ order_data.order_id }}', '{{ order_data.sub_orders.0.items.0.table_name }}')">Generate Bill</button>
+            </div>
         </div>
-         <div class="add-to-cart">
-
-             <button style="" class="btn btn-dark w-25" value="Generate Bill" onclick="generateBill('{{ order_id }}', '{{ items.0.table_name }}')">Generate Bill</button>
-
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-    {% endfor %}
-
-    <form id="orderForm">
-        {% csrf_token %}
-    </form>
 </div>
-
-</div>
-
 </body>
+
 </html>
 {% endblock %}
