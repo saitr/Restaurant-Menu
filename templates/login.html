@@ -1,76 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block content %}
 {% load static %}
-<html lang="en">
+<html>
 <head>
-  <style>
+    <title>Admin Login</title>
+    <style>
         .error-message {
             color: red;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'js/login.js' %}"></script>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <style>
-    .login-wrapper {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-  </style>
-  <title>Login chef!</title>
+    <script>
+        $(document).ready(function(){
+            $('.alert-error').fadeOut(2000);
+        });
+    </script>
 </head>
 <body>
-  <div class="background-">
-    <div class="banner-background">
-      <div class="login-wrapper">
-            <div class="banner-backgroud-image">
-                   <img src="/static/img/chef_img.jpeg" height="200" width="200" alt="chef image">
-            </div>
+<div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+    <div class="wrapper wrapper--w960">
+        <div class="card card-2">
+            <div class="card-heading"></div>
+            <div class="card-body">
 
-        <p id="error-message" class="error-message alert-error">{% if error_message %}
-          {{ error_message }}
-          {% endif %}</p>  <!-- Add id attribute to the error message element -->
-        <form method="GET" action="{% url 'order_api' %}">
-          <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Phone number</label>
-            <input type="text" name="phone_number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-          </div>
-          <button style="background-color: green; color: white;" type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
+                    <h1>Chef Login</h1>
+
+                    <form method="get" action="{% url 'order_api' %}">
+                          <div class="row" style="display:block;">
+                                {% csrf_token %}
+                                <label for="phone_number">Phone Number:</label>
+                                <input style="width: 300px;height: 50px;border:1px solid;"  type="text" name="phone_number" id="phone_number" required>
+                                <br>
+                                <label for="password">Password:</label>
+                                <input style="width: 300px;height: 50px;border:1px solid;"  type="password" name="password" id="password" required>
+                                <br>
+                                <input style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit" value="Login">
+                          </div>
+                    </form>
+                 {% if error_message %}
+                        <p class="error-message alert-error" style="color: red;">{{ error_message }}</p>
+<!--                        <p class="error-message alert-error">{{ error_message }}</p>-->
+                    {% endif %}
+
+        </div>
+        </div>
     </div>
-  </div>
-
-  <!-- Optional JavaScript; choose one of the two! -->
-  <!-- Option 1: Bootstrap Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <!-- Option 2: Separate Popper and Bootstrap JS -->
-  <!--
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-  -->
-
-  <script>
-    $(document).ready(function() {
-      setTimeout(function() {
-        $('#error-message').fadeOut(2000);
-      }, 500); // Add a delay of 500 milliseconds (adjust if needed)
-    });
-  </script>
+</div>
 </body>
 </html>
 {% endblock %}

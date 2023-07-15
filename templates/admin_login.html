@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
 <html>
 <head>
     <title>Admin Login</title>
@@ -15,19 +19,30 @@
     </script>
 </head>
 <body>
-    <h1>Login</h1>
-    {% if error_message %}
-        <p class="error-message alert-error">{{ error_message }}</p>
-    {% endif %}
+<div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+    <div class="wrapper wrapper--w960">
+        <div class="card card-2">
+            <div class="card-heading"></div>
+            <div class="card-body">
+    <h1>Admin Login</h1>
+
     <form method="get" action="{% url 'admin_view_page' %}">
         {% csrf_token %}
-        <label for="phone_number">Phone Number:</label>
-        <input type="text" name="phone_number" id="phone_number" required>
+        <label style="font-size: 18px;" for="phone_number">Phone Number:</label>
+        <input style="width: 300px;height: 50px;border:1px solid;" type="text" name="phone_number" id="phone_number" required>
         <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
+        <label style="font-size: 18px;" for="password">Password:</label>
+        <input style="width: 300px;height: 50px;border:1px solid;" type="password" name="password" id="password" required>
         <br>
-        <input type="submit" value="Login">
+        <input style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit" value="Login">
     </form>
+                  {% if error_message %}
+        <p class="error-message alert-error">{{ error_message }}</p>
+    {% endif %}
+                </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+{% endblock %}

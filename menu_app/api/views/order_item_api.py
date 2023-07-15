@@ -23,7 +23,8 @@ class OrderApiView(APIView):
 
         if user is None:
             print("invalid")
-            return render(request, 'chef.html', {'error_message': 'Invalid credentials'})
+
+            return render(request, 'login.html', {'error_message': 'Invalid credentials'})
         else:
             print("valid")
             cart_items = Cart.objects.filter(orderid__generate_bill=False)
