@@ -49,6 +49,9 @@ flex-wrap:wrap;
 {
 padding: 10px;
 }
+.right-align {
+text-align: right;
+ }
 .add-to-cart{
 display: flex;
     justify-content: center;
@@ -135,7 +138,7 @@ text-align:center;
                 </tr>
                 {% endfor %}
             <tr>
-        <td colspan="2">Total:</td>
+        <td colspan="1" class="right-align" >Total:</td>
         <td>{{ total_price }}</td>
     </tr>
             </tbody>
@@ -144,7 +147,7 @@ text-align:center;
 
     <div style="display:flex;justify-content:center;margin:10px 0px">
 
-    <button style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;padding:3px" onclick="placeOrder('{{ table_name }}')">Place Order</button>
+    <button style="background-color: black; color: white;width: 140px; height: 35px;font-weight: bold;padding:3px" onclick="placeOrderVerify('{{ table_name }}')">Place Order</button>
     </div>
 
 
@@ -202,57 +205,32 @@ text-align:center;
             });
         }
 
-        function placeOrder(table_name) {
-            console.log("table_name",table_name)
-            // Create a form dynamically
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/order_api/';
+     function placeOrderVerify(table_name) {
+    console.log("table_name", table_name);
 
-            // Create an input field for the table name
-            var inputTableName = document.createElement('input');
-            inputTableName.type = 'hidden';
-            inputTableName.name = 'table_name';
-            inputTableName.value = table_name;
+    // Prevent the default form submission behavior
+    event.preventDefault();
 
-            // Append the input fields to the form
-            form.appendChild(inputTableName);
+    // Make an AJAX GET request to the user_api endpoint
+    fetch("/user_api/?table_name=" + table_name)
+        .then(response => {
+            // Check if the response was successful
+            if (response.ok) {
+                // Redirect or handle the response as needed
+                // For example, redirect to another page
+                window.location.href = '/user_api/?table_name=' + encodeURIComponent(table_name);
 
-            // Append the form to the document
-            document.body.appendChild(form);
-
-            // Prevent the default form submission behavior
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                placeOrderAsync(form);
-            });
-
-            // Submit the form asynchronously
-            function placeOrderAsync(form) {
-                // Send a POST request to the cart API
-                fetch(form.action, {
-                    method: form.method,
-                    body: new FormData(form)
-                })
-                .then(response => {
-                    // Check if the response was successful
-                    if (response.ok) {
-                        // Redirect to image.html
-                        window.location.href = 'image.html';
-                    } else {
-                        // Handle unsuccessful response if needed
-                        console.error('Error placing order:', response.statusText);
-                    }
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error('Error placing order:', error);
-                });
+            } else {
+                // Handle unsuccessful response if needed
+                console.error('Error placing order:', response.statusText);
             }
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error('Error placing order:', error);
+        });
+}
 
-            // Submit the form
-            form.submit();
-        }
     </script>
  {% endblock %}
 </body>

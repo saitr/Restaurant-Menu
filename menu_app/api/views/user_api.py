@@ -8,6 +8,10 @@ from rest_framework.response import Response
 from ...models import CustomUser
 from ...serializers import CustomUserSerializer
 from django.http import JsonResponse
+import random
+import string
+from django.http import HttpResponseRedirect
+import requests
 # views.py
 
 from django.views import View
@@ -23,10 +27,14 @@ from rest_framework.authentication import SessionAuthentication
 class VerifyOTPView(APIView):
 
     def get(self, request):
-        print("Inside get")
+        print("Inside get user api",request)
+        print("Inside get api",request.GET.get('table_name'))
+        table_name = request.GET.get('table_name')
+        print("table_name", table_name)
         phone_number = request.session.get('phone_number')
 
-        return render(request, 'sign_up.html', {"phone_number": phone_number})
+        return render(request, 'sign_up.html', {"phone_number": phone_number,
+                                                "table_number": table_name})
 
 
     #
@@ -73,7 +81,11 @@ class VerifyOTPView(APIView):
     #
     #         # Handle the case where phone number is not provided
     #         return render(request, 'new.html', {'error': 'Please enter a valid phone number.'})
-
+    def generate_otp(self):
+        length = 6
+        characters = string.digits
+        otp = ''.join(random.choice(characters) for _ in range(length))
+        return otp
 
 
     def post(self, request):
@@ -110,28 +122,44 @@ class VerifyOTPView(APIView):
             user = CustomUser.objects.get(phone_number=phone_number)
             print("user.is_verified", user.is_verified)
             if user.is_verified == False:
-                verification_status = send_otp_to_user(phone_number)
-                print("verification_status", verification_status)
+                # verification_status = send_otp_to_user(phone_number)
+                otp = self.generate_otp()
+                print("otp", otp)
+                user.otp = otp
+                user.save()
+                print("Saved otp")
                 return render(request, 'new.html', {"phone_number": phone_number,"table_name": table_name})
             else:
-                # url = 'http://127.0.0.1:8000/items?category={0}&table_name={1}'.format(
-                #     category_name['category__categoryName'], table_name)
-                # # return redirect(url)
                 print("url*************** else")
-                url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
-                print("url", url)
-                return redirect(url)
+                order_api_url = 'http://127.0.0.1:8000/order_api/'
+                payload = {
+                    'table_name': table_name,
+                }
+                response = requests.post(order_api_url, data=payload)
+                if response.status_code == 200:
+                    # Handle successful response from the order_api
+                    # Redirect or perform any other necessary action
+                    url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
+                    return HttpResponseRedirect(url)
+                else:
+                    # Handle unsuccessful response from the order_api
+                    return render('error_page.html')
+                # url = ('http://127.0.0.1:8000/order_api/{0}/').format(table_name)
+                # print("url", url)
+                # return redirect(url)
 
 
 
         if phone_number and entered_otp:
             # If OTP is provided, verify it
-            verification_status = verify_otp(phone_number, entered_otp)
-            print("verification_status", verification_status)
-            if verification_status:
+            previous_record = CustomUser.objects.get(phone_number=phone_number)
 
-                previous_record = CustomUser.objects.get(phone_number=phone_number)
-                print("Updating")
+            # verification_status = verify_otp(phone_number, entered_otp)
+            # print("verification_status", verification_status)
+            if entered_otp == previous_record.otp:
+
+
+                print("verification_status  Updating")
                 data_dict = {"is_verified": True}
 
                 serializer = CustomUserSerializer(

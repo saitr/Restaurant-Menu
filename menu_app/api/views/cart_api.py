@@ -39,23 +39,25 @@ class CartAPIList(APIView):
 
         if len(data_list):
 
-            cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False,sub_order_id_id__order_place=False) | Cart.objects.filter(
+            cart_detail = Cart.objects.filter(table_number_id=table, orderid__generate_bill=False,sub_order_id_id__order_place=False) | Cart.objects.filter(
                 table_number=table, orderid__generate_bill=None)
 
             # cart_detail.extend(cart_detail_2)
             print("Order already exist")
         else:
-            cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True,sub_order_id_id__order_place=None)
+            cart_detail = Cart.objects.filter(table_number_id=table, orderid_id__isnull=True,sub_order_id_id__order_place=None,cart_created=True)
             print("Order not exist")
 
         # cart_detail = Cart.objects.filter(table_number=table, orderid_id__isnull=True)
         # cart_detail = Cart.objects.filter(table_number=table, orderid__generate_bill=False)
         print("cart_detail count", cart_detail)
         cart_list = []
+        total_price = 0
         for data in cart_detail:
             print("data.items", data.items)
-
             item_price = data.items.itemPrice
+            total_price += data.quantity * item_price
+
             return_dict = {'id': data.id,
                            'table_number': data.table_number,
                            'items': data.items,
@@ -68,7 +70,8 @@ class CartAPIList(APIView):
 
         context = {
             'return_list': cart_list,
-            'table_name':table_number
+            'table_name':table_number,
+            'total_price': total_price
         }
         print("context", context)
         # return Response(context, status=status.HTTP_200_OK)
@@ -98,32 +101,32 @@ class CartAPIList(APIView):
         return_data = DBUtils.get_table_data(query, cursor)
 
         print("return_data", return_data)
+        print("return_data", len(return_data))
 
-        if len(return_data) == 0:
-            for data in return_data:
-                print("sub order exist")
-                cart_items = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=False,
-                                    cart_created=True, orderid__generate_bill=False).first()
+        # if len(return_data) == 0:
+        #     print("sub order exist")
+        #     cart_items = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=False,
+        #                         cart_created=True, orderid__generate_bill=False).first()
+        #
+        #     # cart_items = Cart.objects.filter(id=data.cart_id)
+        #
+        #     print("cart_items",cart_items)
+        #     cart_item = cart_items  # Assuming there's only one item per table
+        #     cart_item.quantity += 1
+        #     cart_item.save()
+        #     print("updated")
+        # else:
+        cart_created = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=True,cart_created=False,orderid__generate_bill=True).first()
+        print("cart_created", cart_created)
 
-                # cart_items = Cart.objects.filter(id=data.cart_id)
+        if cart_created is None:
+            print("Inside create new one for first time")
+            table_number = Owner_Utility.objects.get(table_number=table_name)
+            print("table_number", table_number)
+            item = Items.objects.get(id=item_id)
+            print("item_id", item_id)
 
-                print("cart_items",cart_items)
-                cart_item = cart_items  # Assuming there's only one item per table
-                cart_item.quantity += 1
-                cart_item.save()
-                print("updated")
-        else:
-            cart_created = Cart.objects.filter(table_number_id=table, items_id=item_id, sub_order_id_id__order_place=True,cart_created=False,orderid__generate_bill=True).first()
-            print("cart_created", cart_created)
-
-            if cart_created is None:
-                print("Inside create new one for first time")
-                table_number = Owner_Utility.objects.get(table_number=table_name)
-                print("table_number", table_number)
-                item = Items.objects.get(id=item_id)
-                print("item_id", item_id)
-
-                Cart.objects.create(table_number=table_number, items=item, cart_created=True)
+            Cart.objects.create(table_number=table_number, items=item, cart_created=True)
 
 
         category_name = Items.objects.filter(id=item_id).values('category__categoryName').first()
