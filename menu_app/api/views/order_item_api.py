@@ -8,6 +8,9 @@ from menu_app.api.views.utils.database_helper import DBUtils
 from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+from django.db.models import Q
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponse
 import json
 from menu_app.api.views.utils import api_utils
 
@@ -190,3 +193,37 @@ class OrderApiView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Order.DoesNotExist:
             return Response({'message': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+
+        print("inside delete sub order item", request.data)
+
+        sub_order_id = request.data['subOrderId']
+        order_id = request.data['order_id']
+
+        print("sub_order_id", sub_order_id)
+
+        try:
+
+            sub_order_item = SubOrder.objects.filter(
+                Q(id=sub_order_id,
+                  order_deliverd=False)
+
+            ).first()
+
+            print("sub_order_item", sub_order_item)
+
+            if sub_order_item:
+                sub_order_item.delete()
+
+            suborder_count = SubOrder.objects.filter(main_orderid_id=order_id).count()
+
+            if suborder_count == 0:
+                # No suborders found, delete the order
+                print("delete order")
+                Order.objects.filter(id=order_id).delete()
+
+            return HttpResponse("Order item deleted successfully.")
+
+        except Cart.DoesNotExist:
+            return HttpResponseBadRequest("Order item not found.")

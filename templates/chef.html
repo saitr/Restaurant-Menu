@@ -53,6 +53,9 @@
             display: flex;
             justify-content: center;
             margin: 30px 0px 0px 0px;
+            
+  justify-content: space-between;
+
         }
         .add-to-cart button {
             height: 80px; /* Adjust the height as needed */
@@ -131,7 +134,8 @@
                 </table>
                      <div class="add-to-cart">
 
-            <button class="btn btn-dark w-100" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
+            <button class="btn btn-dark w-50" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
+             <button class="btn btn-dark w-50" onclick="deleteForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Delete Sub Order</button>
 
 
                      </div>
@@ -139,11 +143,17 @@
 
             {% endfor %}
 
+<!--            <div class="add-to-cart">-->
+
+<!--                <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name  }}')">Send Notification</button>-->
+
+<!--            </div>-->
             <div class="add-to-cart">
-
-                <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name  }}')">Send Notification</button>
-
-            </div>
+    <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name }}', this)" data-sub-order-id="{{ sub_order_data.sub_order_id }}">
+                        Send Notification
+                    </button>
+<p class="notification-msg" style="display: none;"></p>
+</div>
         </div>
         {% endfor %}
     </div>
@@ -151,10 +161,63 @@
 </body>
  <script>
 
-     function sendPushbulletNotification(orderID, tableNumber) {
-        // Construct the URL for sending the notification
+<!--     function sendPushbulletNotification(orderID, tableNumber) {-->
+<!--        // Construct the URL for sending the notification-->
 
+<!--        var url = "{% url 'notification_api' %}" + "?order_id=" + orderID + "&table_number=" + tableNumber;-->
+
+<!--        // Make a GET request to the server to send the notification-->
+<!--        fetch(url, {-->
+<!--            method: 'GET',-->
+<!--            headers: {-->
+<!--                'X-CSRFToken': '{{ csrf_token }}'-->
+<!--            }-->
+<!--        })-->
+<!--        .then(response => {-->
+<!--            if (response.ok) {-->
+<!--                console.log("Notification sent successfully.");-->
+<!--            } else {-->
+<!--                console.log("Failed to send notification.");-->
+<!--            }-->
+<!--        })-->
+<!--        .catch(error => {-->
+<!--            console.log("Error sending notification:", error);-->
+<!--        });-->
+<!--    }-->// Retrieve button state from local storage on page load
+
+    // Retrieve button state from local storage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        var buttons = document.querySelectorAll('.add-to-cart button');
+        buttons.forEach(button => {
+            var subOrderId = button.dataset.subOrderId;
+            var buttonState = localStorage.getItem('buttonState_' + subOrderId);
+            var buttonText = localStorage.getItem('buttonText_' + subOrderId);
+            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);
+
+            if (buttonState === 'disabled') {
+                button.disabled = true;
+                button.textContent = buttonText;
+                button.classList.add(buttonClass);
+                console.log("Button state applied from local storage.");
+            }
+        });
+    });
+
+    function sendPushbulletNotification(orderID, tableNumber, button) {
+        // Construct the URL for sending the notification
         var url = "{% url 'notification_api' %}" + "?order_id=" + orderID + "&table_number=" + tableNumber;
+
+        // Disable the button and change its color
+        button.disabled = true;
+        button.classList.add("order-delivered-btn");
+
+        // Change button text to "Notification Sent"
+        button.textContent = "Notification Sent";
+
+        // Display notification sent message
+        var notificationMsg = button.parentNode.querySelector(".notification-msg");
+        notificationMsg.textContent = "Notification sent.";
+        notificationMsg.style.display = "block";
 
         // Make a GET request to the server to send the notification
         fetch(url, {
@@ -174,16 +237,6 @@
             console.log("Error sending notification:", error);
         });
     }
-
-
-<!--document.getElementById("notificationButton").addEventListener("click", function() {-->
-<!--    var orderID = "{{ order_data.order_id }}";-->
-<!--    var tableNumber = "{{ sub_order_data.table_number }}";-->
-<!--    console.log("tableNumber",tableNumber)-->
-<!--    console.log("orderID",orderID)-->
-<!--    sendNotification(orderID, tableNumber);-->
-<!--});-->
-
 
 
       function submitForm(orderID, subOrderId, button) {
@@ -235,11 +288,43 @@
         });
     });
 
+function deleteForm(orderID, subOrderId, button) {
+        var url = "{% url 'order_api' %}";
+        var method = 'DELETE';
 
-setTimeout(function() {
-        console.log("**** settime")
-        location.reload();
-    }, 300000);
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ order_id: orderID, subOrderId: subOrderId })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Remove the suborder HTML element from the DOM
+                var subOrderElement = button.closest('.sub-order-items');
+                subOrderElement.parentNode.removeChild(subOrderElement);
+                console.log("Suborder deleted successfully.");
+
+                // Update local storage to reflect the deleted suborder
+                localStorage.removeItem('buttonState_' + subOrderId);
+                localStorage.removeItem('buttonText_' + subOrderId);
+                localStorage.removeItem('buttonClass_' + subOrderId);
+                console.log("Button state removed from local storage.");
+            } else {
+                console.log("Failed to delete suborder.");
+            }
+        })
+        .catch(error => {
+            console.log("Error deleting suborder:", error);
+        });
+    }
+
+<!--setTimeout(function() {-->
+<!--        console.log("**** settime")-->
+<!--        location.reload();-->
+<!--    }, 300000);-->
 
     </script>
 </html>
