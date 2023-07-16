@@ -30,13 +30,13 @@
                     <form method="get" action="{% url 'order_api' %}">
                           <div class="row" style="display:block;">
                                 {% csrf_token %}
-                                <label for="phone_number">Phone Number:</label>
+                                <label style="font-size: 18px;" for="phone_number">Phone Number:</label>
                                 <input style="width: 300px;height: 50px;border:1px solid;"  type="text" name="phone_number" id="phone_number" required>
                                 <br>
-                                <label for="password">Password:</label>
+                                <label style="font-size: 18px;" for="password">Password:</label>
                                 <input style="width: 300px;height: 50px;border:1px solid;"  type="password" name="password" id="password" required>
                                 <br>
-                                <input style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit" value="Login">
+                                <input style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;margin: 50px;" type="submit" value="Login">
                           </div>
                     </form>
                  {% if error_message %}

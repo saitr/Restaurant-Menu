@@ -13,7 +13,8 @@ from decouple import config
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 import django
-
+import pushbullet
+from decouple import config
 
 class DBUtils:
     """
@@ -127,3 +128,11 @@ class DBUtils:
             print(data_dict)
         return data_list
 
+
+
+    def send_pushbullet_notification(title, message, endpoint):
+        api_key = config('pushbullot_notification_accesstoken')
+        pb = pushbullet.Pushbullet(api_key)
+        push = pb.push_note(title, message)
+        push = pb.push_note(title, message, device=endpoint)
+        return push

@@ -11,6 +11,7 @@ from menu_app.api.views.order_item_api import OrderApiView
 from menu_app.api.views.admin_view_page import AdminDetailAPIList
 from menu_app.api.views.index import indexAPIList
 from menu_app.api.views.home import HomeAPIList
+from menu_app.api.views.notification_api import NotificationAPIList
 from menu_app.api.views.owner_utility import Owner_UtilityView
 from menu_app.api.views.generate_bill import GenerateBillAPIList
 from menu_app.api.views.generatebarcode_api import GenerateBarcodeView
@@ -23,6 +24,7 @@ urlpatterns = [
     path('home', HomeAPIList.as_view() , name='home'),
     path('first_page/<int:variant>/', FirstPageAPIList.as_view() , name='home'),
     path('admin_view_page', AdminDetailAPIList.as_view() , name='admin_view_page'),
+    path('notification_api', NotificationAPIList.as_view() , name='notification_api'),
     path('admin_login_api', AdminLoginDetailAPIList.as_view() , name='admin_login_api'),
     path('generate_bill', GenerateBillAPIList.as_view() , name='generate_bill'),
     path('admin_utiliti/<int:pk>/', Owner_UtilityView.as_view() , name='admin_utiliti'),

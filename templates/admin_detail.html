@@ -15,7 +15,7 @@
 
         .order {
             padding: 20px;
-            background: bisque;
+            background: #f8f9fa;
             height: 100vh;
         }
 
@@ -127,6 +127,26 @@
                     // Handle any errors that occur during the request
                 });
         }
+
+
+        function handleNotification(data) {
+        console.log("Inside notify")
+        console.log(data);  // Display the notification data in the browser console
+
+        // Modify the DOM to show the notification message
+        var notificationDiv = document.createElement('div');
+        notificationDiv.textContent = data.message;
+        notificationDiv.classList.add('notification');
+        document.body.appendChild(notificationDiv);
+    }
+
+    // Call the handleNotification function with the initial notification data
+    handleNotification(notificationData);
+    
+    setTimeout(function() {
+        console.log("**** settime")
+        location.reload();
+    }, 300000);
 
     </script>
 

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-{% extends 'base.html' %}
+<!--{% extends 'base.html' %}-->
 
-{% block content %}
+<!--{% block content %}-->
 <html>
 <head>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<script src="https://cdn.pushbullet.com/libs/pushbullet.js"></script>
 
     <title>Order Items</title>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
@@ -15,7 +16,7 @@
 
         .order {
             padding: 20px;
-            background: bisque;
+            background: #f8f9fa;
             height: 100vh;
         }
 
@@ -97,38 +98,94 @@
 
 
     </style>
-    <script>
-<!--     function submitForm(orderID, subOrderId, button) {-->
-<!--     console.log("Button:", button);-->
-<!--    var url = "{% url 'order_api' %}";-->
-<!--    var method = 'PATCH';-->
 
-<!--    fetch(url, {-->
-<!--        method: method,-->
-<!--        headers: {-->
-<!--            'Content-Type': 'application/json',-->
-<!--            'X-CSRFToken': '{{ csrf_token }}'-->
-<!--        },-->
-<!--        body: JSON.stringify({order_id: orderID, subOrderId: subOrderId})-->
-<!--    })-->
-<!--        .then(response => {-->
-<!--            // Handle the response as needed-->
-<!--            console.log("response",response)-->
-<!--            if (response.ok) {-->
-<!--                console.log("Inside")-->
-<!--                button.disabled = true; // Disable the button after successful submission-->
-<!--                console.log("***", button.disabled)-->
-<!--                button.textContent = "Order Delivered Completed"; // Update button text-->
-<!--                console.log("***", button.textContent)-->
-<!--                console.log("***", button)-->
-<!--                button.classList.add("order-delivered-btn"); // Add a CSS class for styling-->
-<!--                showOrderDeliveredMessage(button.parentNode);-->
-<!--            }-->
-<!--        })-->
-<!--        .catch(error => {-->
-<!--            // Handle any errors that occur during the request-->
-<!--        });-->
-<!--}-->
+
+</head>
+<body>
+<div class="order">
+    <h1 class="order-heading">Chef view order Items</h1>
+    <div class="order-container">
+        {% for order_data in return_list %}
+        <div class="order-group">
+            <div class="order-id">Order ID: {{ order_data.order_id }}</div>
+            {% for sub_order_data in order_data.sub_orders %}
+            <div class="sub-order-id">Sub Order ID: {{ sub_order_data.sub_order_id }}</div>
+            <div class="sub-order-items">
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Table Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in sub_order_data.items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                     <div class="add-to-cart">
+
+            <button class="btn btn-dark w-100" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
+
+
+                     </div>
+            </div>
+
+            {% endfor %}
+
+            <div class="add-to-cart">
+
+                <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name  }}')">Send Notification</button>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+ <script>
+
+     function sendPushbulletNotification(orderID, tableNumber) {
+        // Construct the URL for sending the notification
+
+        var url = "{% url 'notification_api' %}" + "?order_id=" + orderID + "&table_number=" + tableNumber;
+
+        // Make a GET request to the server to send the notification
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Notification sent successfully.");
+            } else {
+                console.log("Failed to send notification.");
+            }
+        })
+        .catch(error => {
+            console.log("Error sending notification:", error);
+        });
+    }
+
+
+<!--document.getElementById("notificationButton").addEventListener("click", function() {-->
+<!--    var orderID = "{{ order_data.order_id }}";-->
+<!--    var tableNumber = "{{ sub_order_data.table_number }}";-->
+<!--    console.log("tableNumber",tableNumber)-->
+<!--    console.log("orderID",orderID)-->
+<!--    sendNotification(orderID, tableNumber);-->
+<!--});-->
+
+
+
       function submitForm(orderID, subOrderId, button) {
         var url = "{% url 'order_api' %}";
         var method = 'PATCH';
@@ -179,83 +236,11 @@
     });
 
 
-        function generateBill(orderID, tableName) {
-            var url = "/generate_bill";
-            var method = 'GET';
-
-            var params = new URLSearchParams();
-            params.append('order_id', orderID);
-            params.append('table_number', tableName);
-
-            fetch(url + '?' + params.toString(), {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-                .then(response => response.text())  // Convert response to text
-                .then(html => {
-                    // Render the HTML response
-                    var billWindow = window.open('', '_blank');
-                    billWindow.document.open();
-                    billWindow.document.write(html);
-                    billWindow.document.close();
-                })
-                .catch(error => {
-                    // Handle any errors that occur during the request
-                });
-        }
+setTimeout(function() {
+        console.log("**** settime")
+        location.reload();
+    }, 300000);
 
     </script>
-
-</head>
-<body>
-<div class="order">
-    <h1 class="order-heading">Cart Items</h1>
-    <div class="order-container">
-        {% for order_data in return_list %}
-        <div class="order-group">
-            <div class="order-id">Order ID: {{ order_data.order_id }}</div>
-            {% for sub_order_data in order_data.sub_orders %}
-            <div class="sub-order-id">Sub Order ID: {{ sub_order_data.sub_order_id }}</div>
-            <div class="sub-order-items">
-                <table class="order-table">
-                    <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Table Name</th>
-                        <th>Quantity</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in sub_order_data.items %}
-                    <tr>
-                        <td>{{ item.item_name }}</td>
-                        <td>{{ item.table_name }}</td>
-                        <td>{{ item.quantity }}</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                     <div class="add-to-cart">
-<!--                <button class="btn btn-dark w-25" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}')">Order Delivered</button>-->
-            <button class="btn btn-dark w-25" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
-
-                     </div>
-            </div>
-
-            {% endfor %}
-
-            <div class="add-to-cart">
-                <button class="btn btn-dark w-25" value="Generate Bill"
-                        onclick="generateBill('{{ order_data.order_id }}', '{{ order_data.sub_orders.0.items.0.table_name }}')">Generate Bill</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-</body>
-
 </html>
-{% endblock %}
+<!--{% endblock %}-->
