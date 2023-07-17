@@ -53,7 +53,7 @@
             display: flex;
             justify-content: center;
             margin: 30px 0px 0px 0px;
-            
+
   justify-content: space-between;
 
         }
@@ -134,8 +134,10 @@
                 </table>
                      <div class="add-to-cart">
 
-            <button class="btn btn-dark w-50" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
-             <button class="btn btn-dark w-50" onclick="deleteForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Delete Sub Order</button>
+<!--            <button  id="orderDeliveredButton_{{ sub_order_data.sub_order_id }}" class="btn btn-dark w-50" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>-->
+             <button class="btn btn-dark w-50" id="orderDeliveredButton_{{ sub_order_data.sub_order_id }}" data-sub-order-id="{{ sub_order_data.sub_order_id }}" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
+
+<!--                         <button class="btn btn-dark w-50" onclick="deleteForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Delete Sub Order</button>-->
 
 
                      </div>
@@ -185,23 +187,51 @@
 <!--        });-->
 <!--    }-->// Retrieve button state from local storage on page load
 
-    // Retrieve button state from local storage on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        var buttons = document.querySelectorAll('.add-to-cart button');
-        buttons.forEach(button => {
-            var subOrderId = button.dataset.subOrderId;
-            var buttonState = localStorage.getItem('buttonState_' + subOrderId);
-            var buttonText = localStorage.getItem('buttonText_' + subOrderId);
-            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);
+<!--    // Retrieve button state from local storage on page load-->
+<!--    document.addEventListener('DOMContentLoaded', () => {-->
+<!--        var buttons = document.querySelectorAll('.add-to-cart button');-->
+<!--        buttons.forEach(button => {-->
+<!--            var subOrderId = button.dataset.subOrderId;-->
+<!--            var buttonState = localStorage.getItem('buttonState_' + subOrderId);-->
+<!--            var buttonText = localStorage.getItem('buttonText_' + subOrderId);-->
+<!--            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);-->
 
-            if (buttonState === 'disabled') {
-                button.disabled = true;
-                button.textContent = buttonText;
-                button.classList.add(buttonClass);
-                console.log("Button state applied from local storage.");
-            }
-        });
-    });
+<!--            if (buttonState === 'disabled') {-->
+<!--                button.disabled = true;-->
+<!--                button.textContent = buttonText;-->
+<!--                button.classList.add(buttonClass);-->
+<!--                console.log("Button state applied from local storage.");-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+    var buttons = document.querySelectorAll('.add-to-cart button');
+  buttons.forEach(button => {
+    var subOrderId = button.dataset.subOrderId;
+    console.log("subOrderId",subOrderId)
+    console.log("***********",'buttonState_' + subOrderId)
+    var buttonState = localStorage.getItem('buttonState_' + subOrderId);
+    console.log("buttonState",buttonState)
+
+    if (buttonState === 'enabled') {
+      button.disabled = true;
+      console.log("Button state applied from local storage.");
+    }
+  });
+});
+
+// Store the button state in localStorage
+var subOrderId = button.data-sub-order-id.subOrderId;
+var button = document.getElementById('orderDeliveredButton_'+ subOrderId);
+var subOrderId = button.dataset.subOrderId;
+
+button.addEventListener('click', () => {
+    localStorage.setItem('buttonState_' + subOrderId, 'enabled');
+});
+
 
     function sendPushbulletNotification(orderID, tableNumber, button) {
         // Construct the URL for sending the notification
@@ -242,6 +272,12 @@
       function submitForm(orderID, subOrderId, button) {
         var url = "{% url 'order_api' %}";
         var method = 'PATCH';
+         var buttonState = button.disabled ? 'disabled' : 'enabled';
+console.log("buttonState",buttonState)
+
+        localStorage.setItem('buttonState_' + subOrderId, buttonState);
+
+
 
         fetch(url, {
             method: method,

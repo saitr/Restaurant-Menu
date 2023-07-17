@@ -44,7 +44,8 @@ class OrderApiView(APIView):
                         "table_name": item.table_number.table_number,
                         "item": item.items,
                         "quantity": item.quantity,
-                        "order_id":item.orderid_id
+                        "order_id":item.orderid_id,
+                        "order_deliverd":item.sub_order_id.order_deliverd
                     }
                 list_item.append(item_data)
 
