@@ -6,9 +6,35 @@
 <html>
 <head>
     <title>Admin Login</title>
-    <style>
+
+    <style><style>
+        .submit-button {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            background-color: green;
+            width: 200px;
+            height: 50px;
+            margin-top: 100px;
+            float: left;
+            padding: 10px 10px 10px 10px;
+        }
+
         .error-message {
             color: red;
+        }
+
+        .admin_card {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .admin_card {
+                align-items: stretch;
+            }
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -25,25 +51,25 @@
             <div class="card-heading"></div>
             <div class="card-body">
     <h1>Admin Login</h1>
-
+    <div class="admin_card" style="{display:flex;flex-direction:column}" >
     <form method="get" action="{% url 'admin_view_page' %}">
         {% csrf_token %}
         <label style="font-size: 18px;" for="phone_number">Phone Number:</label>
-        <input style="width: 300px;height: 50px;border:1px solid;" type="text" name="phone_number" id="phone_number" required>
+        <input style="height: 50px;border:1px solid;" type="text" name="phone_number" id="phone_number" required>
         <br>
         <label style="font-size: 18px;" for="password">Password:</label>
-        <input style="width: 300px;height: 50px;border:1px solid;margin: 2px;" type="password" name="password" id="password" required>
+        <input style="height: 50px;border:1px solid;margin-top: 10px;" type="password" name="password" id="password" required>
         <br>
-        <input style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;margin: 50px;" type="submit" value="Login">
+        <input class="submit-button" style="font-size: 18px;color: white;font-weight: bold;background-color: green;height: 50px;width:150px;display: flex ;align-item: center;justify-content: center;margin-top: 20px; " type="submit" value="Login">
     </form>
                   {% if error_message %}
         <p class="error-message alert-error">{{ error_message }}</p>
     {% endif %}
                 </div>
         </div>
+            </div>
     </div>
 </div>
 </body>
-
 </html>
 {% endblock %}
