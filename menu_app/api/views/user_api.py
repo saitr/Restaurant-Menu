@@ -139,7 +139,7 @@ class VerifyOTPView(APIView):
                 if response.status_code == 200:
                     # Handle successful response from the order_api
                     # Redirect or perform any other necessary action
-                    url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
+                    url = ('http://127.0.0.1:8000/first_page/{0}/').format(table_name)
                     return HttpResponseRedirect(url)
                 else:
                     # Handle unsuccessful response from the order_api
@@ -182,7 +182,7 @@ class VerifyOTPView(APIView):
 
 
         # return render(request, 'home.html', {'error': 'Failed to send OTP. Please try again.'})
-        url = ('http://127.0.0.1:8000/category_api/{0}/').format(table_name)
+        url = ('http://127.0.0.1:8000/first_page/{0}/').format(table_name)
         print("url", url)
         return redirect(url)
 
