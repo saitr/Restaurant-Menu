@@ -15,6 +15,9 @@ class FirstPageAPIList(APIView):
         table_name = variant
         print("table_name", table_name)
         context = {"table_name": table_name}
+        print("context", context)
+
         return render(request, 'room_list.html', context)
+
 
 

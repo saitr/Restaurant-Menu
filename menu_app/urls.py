@@ -27,6 +27,7 @@ urlpatterns = [
     path('notification_api', NotificationAPIList.as_view() , name='notification_api'),
     path('admin_login_api', AdminLoginDetailAPIList.as_view() , name='admin_login_api'),
     path('generate_bill', GenerateBillAPIList.as_view() , name='generate_bill'),
+    path('admin_utiliti', Owner_UtilityView.as_view(), name='admin_utiliti_without_pk'),
     path('admin_utiliti/<int:pk>/', Owner_UtilityView.as_view() , name='admin_utiliti'),
     path('category_api/<int:variant>/', CategoryAPIList.as_view(),  name='category_api'),
     path('cart_api', CartAPIList.as_view(), name='cart_api'),

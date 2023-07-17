@@ -33,17 +33,43 @@ class GenerateBillAPIList(APIView):
             total_price = 0
 
             order_item_obj = Order_Items.objects.filter(orderid=order_id)
+            price_dict = {}
             for item in order_item_obj:
+                print("item price", item.order_item_price)
+                print("item quantity", item.quantity)
+                print("item name", item.item_id.itemName)
                 items_dict[item.item_id.itemName] += item.quantity  # Aggregate quantities by item name
                 total_price += item.order_item_price * item.quantity
+                price_dict.update({"item.item_id.itemName": item.order_item_price})
 
             items = []
             for item_name, quantity in items_dict.items():
+
                 items.append({
                     "Item": item_name,
-                    "ItemPrice": order_item_obj[0].order_item_price,  # Use any price from the order_item_obj
                     "Quantity": quantity,
                 })
+            print("items_dict", items_dict)
+            print("items", items)
+
+
+            items_with_price = []
+
+            for item in items:
+                item_name = item['Item']
+                quantity = item['Quantity']
+
+                # Find the corresponding item in order_item_obj
+                item_obj = Order_Items.objects.filter(item_id__itemName=item_name, orderid=order_id).first()
+
+                if item_obj:
+                    item_price = item_obj.order_item_price
+                    item['ItemPrice'] = item_price
+                else:
+                    item['ItemPrice'] = None
+
+
+
 
             return_dict = {
                 "table_number": order_obj.table_number,

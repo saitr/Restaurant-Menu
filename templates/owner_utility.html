@@ -1,0 +1,99 @@
+<!-- your_template.html -->
+
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<html>
+<head>
+    <title>Table Number Selection</title>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .wrapper--w960 {
+    max-width: 1000px;
+    max-height: 1000px;}
+
+.page-wrapper {
+    min-height: 100vh;
+    background: #FAEBD7;
+}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+ <section class="highlighted-amenities-heading mt-15 mb-8">
+      <h5 class="highlighted-amenites-heading text-center pt-3 text-light" style="background-color: #3d3931;">
+          WAITERS FACILITIES</h5>
+      <h1 class="highlighted-luxury_text text-center pt-3 display-2 text-light"
+          style="font-size: 70px; font-weight: 400; font-family: cursive; background-color: #3d3931;">Select
+          Table Number</h1>
+      <p class="text-center text-light" style="font-family: cursive;background-color: #3d3931;">Aenean sed rutrum
+          purus. Nunc nec magna laoreet, sodales nisi at, co rutrum viverra. Nunc nec magna aculis metus libero
+          vehiculaNullam iaculis metus nehicula.<br>Nunc nec magna laoreet, sodales nisi at, co rutrum viverra.<br>
+      </p>
+      </section>
+<!--  <div class="page-wrapper p-t-190 p-b-50 font-robo">-->
+<!--    <div class="wrapper wrapper&#45;&#45;w960">-->
+<!--        <div class="card card-2">-->
+<!--            <div class="card-heading"></div>-->
+<!--            <div class="card-body">-->
+
+                 <div class="page-wrapper p-t-190 p-b-50 font-robo">
+                    <div class="wrapper wrapper--w960">
+                        <div class="card card-2">
+                            <div class="card-heading"></div>
+                            <div class="card-body">
+                                <form id="table-number-form">
+                                    {% csrf_token %}
+                                    <div class="select_option" style="font-size: 30px; font-weight: 200; font-family: cursive; background-color: white;">
+                                        <h2> Select Table Number:</h2>
+                                        <select style="font-size: 20px; font-weight: 200;" id="table-number" name="table_number">
+                                            <option value="">-- Select a Table Number --</option>
+                                            {% for option in table_data_set %}
+                                                <option value="{{ option.table_number }}">{{ option.table_number }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button style="margin:13px;font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+<!--            </div>-->
+<!--            </div>-->
+<!--            </div>-->
+<!--            </div>-->
+
+</body>
+ <script>
+       $(document).ready(function() {
+    $('form').on('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        var selectedTableNumber = $('#table-number').val(); // Get selected table number
+
+        // Send an AJAX request to the specified URL with the selected table number
+        $.ajax({
+            type: 'GET',
+            url: '/first_page/' + selectedTableNumber + '/',
+            success: function(response) {
+                 window.location.href = '/first_page/' + selectedTableNumber + '/';
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                // Handle any errors that occur during the request
+            }
+        });
+    });
+});
+    </script>
+</html>
+{% endblock %}

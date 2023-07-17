@@ -13,15 +13,15 @@ class NotificationAPIList(View):
         # ... Existing code ...
         print("inside get notification",request.GET.get)
         # Send SSE notification to the browser
-        # order_id = request.GET.get('order_id')
-        # print("order_id", order_id)
-        #
-        #
-        # title = "Generate Bill"
-        # message = "From chef"
-        # pb = pushbullet.Pushbullet("o.3NLZWA8Z2JyU2PgSVa959EEwcDrlrhN0")
-        # message = {'order_id': order_id}
-        # message_str = json.dumps(message)
-        # push = pb.push_note(title=title, body=message_str)
+        order_id = request.GET.get('order_id')
+        print("order_id", order_id)
+
+
+        title = "Generate Bill"
+        message = "From chef"
+        pb = pushbullet.Pushbullet("o.3NLZWA8Z2JyU2PgSVa959EEwcDrlrhN0")
+        message = {'order_id': order_id}
+        message_str = json.dumps(message)
+        push = pb.push_note(title=title, body=message_str)
         return HttpResponse('Notification sent successfully')
 
