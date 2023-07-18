@@ -3,7 +3,90 @@
 
 {% block content %}
 {% load static %}
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
+
+     @media (max-width: 375px) {
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+         }
+
+           @media (min-width: 376px) and (max-width: 768px) {
+            .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        }
+
+        /* Styles for screens between 769px and 1024px (laptop) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+           .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        }
+
+
+
+</style>
+</head>
 
  {% for item in return_list %}
     {% if forloop.last %}
@@ -45,9 +128,9 @@
 
         </div>
         {% endfor %}
-            <div class="text-center">
-    <button type="submit" class="btn btn-dark m-3">Go</button>
-</div>
+            <div class="button-container">
+    <button   type="submit" class="btn btn-dark m-3">Go</button>
+        </div>
         </form>
       </div>
 
