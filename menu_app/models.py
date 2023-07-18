@@ -20,11 +20,13 @@ class CustomUser(AbstractUser, PermissionsMixin):
     is_chef = models.BooleanField(default=False)
     otp = models.CharField(max_length=20)
     username = models.CharField(max_length=150, unique=True, null=True)
+    email = models.EmailField(unique=True, blank=True)
     objects = CustomUserManager()
 
     # Use 'phone_number' as the unique identifier for authentication
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+
+    REQUIRED_FIELDS = ['username', 'phone_number']
 
     class Meta:
         db_table = 'CustomUser'

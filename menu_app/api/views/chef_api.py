@@ -20,7 +20,9 @@ class ChefAPIList(APIView):
     def get(self,request):
         print("Inside chef get")
         return render(request, 'login.html')
-        # return render(request, 'download_bill.html')
-        # return render(request, 'room_list.html')
-        # return render(request, 'new.html')
+
+
+    def post(self,request):
+        print("inside post chef add ")
+        request.data("")
 

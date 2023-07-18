@@ -52,7 +52,7 @@
             <div class="card-body">
     <h1>Admin Login</h1>
     <div class="admin_card" style="{display:flex;flex-direction:column}" >
-    <form method="get" action="{% url 'admin_view_page' %}">
+    <form method="get" action="{% url 'add_chef_api' %}">
         {% csrf_token %}
         <label style="font-size: 18px;" for="phone_number">Phone Number:</label>
         <input style="height: 50px;border:1px solid;" type="text" name="phone_number" id="phone_number" required>
