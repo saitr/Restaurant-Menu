@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!--{% extends 'base.html' %}-->
+
+<!--{% block content %}-->
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.pushbullet.com/libs/pushbullet.js"></script>
+
+    <title>Order Items</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <style>
+        .order-heading {
+            text-align: center;
+        }
+
+        .order {
+            padding: 20px;
+            background: #f8f9fa;
+            height: 100vh;
+        }
+
+        .order-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 35%;
+            text-align: center;
+            font-size: xx-large;
+        }
+
+
+
+        .order-group input {
+            padding: 10px;
+        }
+
+        .add-to-cart {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0px 0px 0px;
+
+  justify-content: space-between;
+
+        }
+        .add-to-cart button {
+            height: 80px; /* Adjust the height as needed */
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        td, th {
+            text-align: left;
+            padding: 8px;
+        }
+  .order-id {
+            background-color: lightgray;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+
+        .sub-order-id {
+            background-color: lightblue;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid black;
+        }
+
+        .sub-order-items {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        .order-delivered-btn {
+            background-color: green;
+            color: white;
+        }
+
+        .order-delivered-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+
+ /* Styles for screens up to 375px (mobile) */
+        @media (max-width: 375px) {
+          /* CSS rules for mobile view */
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 135%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+        /* Styles for screens between 376px and 768px (tablet) */
+        @media (min-width: 376px) and (max-width: 768px) {
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 59%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+        /* Styles for screens between 769px and 1024px (laptop) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 44%;
+            text-align: center;
+            font-size: xx-large;
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div class="order">
+    <h1 class="order-heading">Chef view order Items</h1>
+    <div class="order-container">
+        {% for order_data in return_list %}
+        <div class="order-group">
+            <div class="order-id">Order ID: {{ order_data.order_id }}</div>
+            {% for sub_order_data in order_data.sub_orders %}
+            <div class="sub-order-id">Sub Order ID: {{ sub_order_data.sub_order_id }}</div>
+            <div class="sub-order-items">
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Table Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in sub_order_data.items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                     <div class="add-to-cart">
+
+<!--            <button  id="orderDeliveredButton_{{ sub_order_data.sub_order_id }}" class="btn btn-dark w-50" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>-->
+             <button class="btn btn-dark w-50" id="orderDeliveredButton_{{ sub_order_data.sub_order_id }}" data-sub-order-id="{{ sub_order_data.sub_order_id }}" onclick="submitForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Order Delivered</button>
+
+<!--                         <button class="btn btn-dark w-50" onclick="deleteForm('{{ order_data.order_id }}','{{ sub_order_data.sub_order_id }}', this)">Delete Sub Order</button>-->
+
+
+                     </div>
+            </div>
+
+            {% endfor %}
+
+<!--            <div class="add-to-cart">-->
+
+<!--                <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name  }}')">Send Notification</button>-->
+
+<!--            </div>-->
+            <div class="add-to-cart">
+    <button class="btn btn-dark w-50" id="notificationButton" onclick="sendPushbulletNotification('{{ order_data.order_id }}', '{{ sub_order_data.items.0.table_name }}', this)" data-sub-order-id="{{ sub_order_data.sub_order_id }}">
+                        Send Notification
+                    </button>
+<p class="notification-msg" style="display: none;"></p>
+</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+ <script>
+
+<!--     function sendPushbulletNotification(orderID, tableNumber) {-->
+<!--        // Construct the URL for sending the notification-->
+
+<!--        var url = "{% url 'notification_api' %}" + "?order_id=" + orderID + "&table_number=" + tableNumber;-->
+
+<!--        // Make a GET request to the server to send the notification-->
+<!--        fetch(url, {-->
+<!--            method: 'GET',-->
+<!--            headers: {-->
+<!--                'X-CSRFToken': '{{ csrf_token }}'-->
+<!--            }-->
+<!--        })-->
+<!--        .then(response => {-->
+<!--            if (response.ok) {-->
+<!--                console.log("Notification sent successfully.");-->
+<!--            } else {-->
+<!--                console.log("Failed to send notification.");-->
+<!--            }-->
+<!--        })-->
+<!--        .catch(error => {-->
+<!--            console.log("Error sending notification:", error);-->
+<!--        });-->
+<!--    }-->// Retrieve button state from local storage on page load
+
+<!--    // Retrieve button state from local storage on page load-->
+<!--    document.addEventListener('DOMContentLoaded', () => {-->
+<!--        var buttons = document.querySelectorAll('.add-to-cart button');-->
+<!--        buttons.forEach(button => {-->
+<!--            var subOrderId = button.dataset.subOrderId;-->
+<!--            var buttonState = localStorage.getItem('buttonState_' + subOrderId);-->
+<!--            var buttonText = localStorage.getItem('buttonText_' + subOrderId);-->
+<!--            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);-->
+
+<!--            if (buttonState === 'disabled') {-->
+<!--                button.disabled = true;-->
+<!--                button.textContent = buttonText;-->
+<!--                button.classList.add(buttonClass);-->
+<!--                console.log("Button state applied from local storage.");-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+    var buttons = document.querySelectorAll('.add-to-cart button');
+  buttons.forEach(button => {
+    var subOrderId = button.dataset.subOrderId;
+    console.log("subOrderId",subOrderId)
+    console.log("***********",'buttonState_' + subOrderId)
+    var buttonState = localStorage.getItem('buttonState_' + subOrderId);
+    console.log("buttonState",buttonState)
+
+    if (buttonState === 'enabled') {
+      button.disabled = true;
+      console.log("Button state applied from local storage.");
+    }
+  });
+});
+
+// Store the button state in localStorage
+var subOrderId = button.data-sub-order-id.subOrderId;
+var button = document.getElementById('orderDeliveredButton_'+ subOrderId);
+var subOrderId = button.dataset.subOrderId;
+
+button.addEventListener('click', () => {
+    localStorage.setItem('buttonState_' + subOrderId, 'enabled');
+});
+
+
+    function sendPushbulletNotification(orderID, tableNumber, button) {
+        // Construct the URL for sending the notification
+        var url = "{% url 'notification_api' %}" + "?order_id=" + orderID + "&table_number=" + tableNumber;
+
+        // Disable the button and change its color
+        button.disabled = true;
+        button.classList.add("order-delivered-btn");
+
+        // Change button text to "Notification Sent"
+        button.textContent = "Notification Sent";
+
+        // Display notification sent message
+        var notificationMsg = button.parentNode.querySelector(".notification-msg");
+        notificationMsg.textContent = "Notification sent.";
+        notificationMsg.style.display = "block";
+
+        // Make a GET request to the server to send the notification
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Notification sent successfully.");
+            } else {
+                console.log("Failed to send notification.");
+            }
+        })
+        .catch(error => {
+            console.log("Error sending notification:", error);
+        });
+    }
+
+
+      function submitForm(orderID, subOrderId, button) {
+        var url = "{% url 'order_api' %}";
+        var method = 'PATCH';
+         var buttonState = button.disabled ? 'disabled' : 'enabled';
+console.log("buttonState",buttonState)
+
+        localStorage.setItem('buttonState_' + subOrderId, buttonState);
+
+
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ order_id: orderID, subOrderId: subOrderId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    button.disabled = true;
+                    button.textContent = "Order Delivered Completed";
+                    button.classList.add("order-delivered-btn");
+                    showOrderDeliveredMessage(button.parentNode);
+
+                    // Store button state in local storage
+                    localStorage.setItem('buttonState_' + subOrderId, 'disabled');
+                    localStorage.setItem('buttonText_' + subOrderId, 'Order Delivered Completed');
+                    localStorage.setItem('buttonClass_' + subOrderId, 'order-delivered-btn');
+                    console.log("Button state stored in local storage.");
+                }
+            })
+            .catch(error => {
+                // Handle any errors that occur during the request
+            });
+    }
+
+    // Retrieve button state from local storage on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        var buttons = document.querySelectorAll('.add-to-cart button');
+        buttons.forEach(button => {
+            var subOrderId = button.dataset.subOrderId;
+            var buttonState = localStorage.getItem('buttonState_' + subOrderId);
+            var buttonText = localStorage.getItem('buttonText_' + subOrderId);
+            var buttonClass = localStorage.getItem('buttonClass_' + subOrderId);
+
+            if (buttonState === 'disabled') {
+                button.disabled = true;
+                button.textContent = buttonText;
+                button.classList.add(buttonClass);
+                console.log("Button state applied from local storage.");
+            }
+        });
+    });
+
+function deleteForm(orderID, subOrderId, button) {
+        var url = "{% url 'order_api' %}";
+        var method = 'DELETE';
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ order_id: orderID, subOrderId: subOrderId })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Remove the suborder HTML element from the DOM
+                var subOrderElement = button.closest('.sub-order-items');
+                subOrderElement.parentNode.removeChild(subOrderElement);
+                console.log("Suborder deleted successfully.");
+
+                // Update local storage to reflect the deleted suborder
+                localStorage.removeItem('buttonState_' + subOrderId);
+                localStorage.removeItem('buttonText_' + subOrderId);
+                localStorage.removeItem('buttonClass_' + subOrderId);
+                console.log("Button state removed from local storage.");
+            } else {
+                console.log("Failed to delete suborder.");
+            }
+        })
+        .catch(error => {
+            console.log("Error deleting suborder:", error);
+        });
+    }
+
+setTimeout(function() {
+        console.log("**** settime")
+        location.reload();
+    }, 300000);
+
+    </script>
+</html>
+<!--{% endblock %}-->

@@ -1,0 +1,77 @@
+{% extends 'base_sai.html' %}
+
+{% block content %}
+  <h1 class="p-2 m-5 text-decoration-underline text-center">Billing Section</h1>
+
+  <div class="container">
+    {% if unpaid_bookings %}
+      {% regroup unpaid_bookings by user as user_bookings %}
+      {% for user_booking in user_bookings %}
+        {% with user=user_booking.grouper %}
+          <div class="card my-3">
+            <div class="card-header text-center">
+              <h3 class="card-title">Name: {{ user.username }}</h3>
+              <h3 class="card-text">Phone Number:{{ user.phone_number }}</h3>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Room Number</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for booking in user_booking.list %}
+                    <tr>
+                      <td>{{ booking.room_chosen.number_var }}</td>
+                      <td>
+                        {% if booking.check_in %}
+                          Checked In: {{ booking.check_in_date_time }}
+                        {% elif request.user.is_superuser %}
+                          <form action="{% url 'check_in' booking.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-primary" type="submit">Check In</button>
+                          </form>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if booking.check_out %}
+                          Checked Out: {{ booking.check_out_date_time }}
+                        {% elif request.user.is_superuser and booking.check_in %}
+                          <form action="{% url 'check_out' booking.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-success" type="submit">Check Out</button>
+                          </form>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-center">
+                {% if user_booking.list.0.bill %}
+                  <a href="{% url 'invoice_detail' user_booking.list.0.bill.id %}" class="btn btn-primary">View Invoice</a>
+                {% else %}
+                <form action="{% url 'generate_invoice' user.id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-dark" type="submit">Generate Bill</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endwith %}
+      {% endfor %}
+    {% else %}
+      <p class="display-6 text-center p-3">No Billings found.</p>
+    {% endif %}
+  </div>
+
+  <div class="text-center p-2">
+    <a href="{% url 'room_list' %}">
+      <button class="btn btn-dark">Back To Home</button>
+    </a>
+  </div>
+{% endblock %}

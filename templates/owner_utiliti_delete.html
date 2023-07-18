@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <h2>Delete Confirmation</h2>
+    <p>Are you sure you want to delete this object?</p>
+    <p>Object: {{ object }}</p>
+    <form method="POST" action="{% url 'admin_utiliti' pk=object.pk %}">
+      {% csrf_token %}
+      <input type="submit" value="Confirm" class="deletelink">
+      <a href="{% url 'admin_utiliti' %}" class="cancellink">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,563 @@
+2023-07-18 07:45:18.947 ERROR    django.request :241 Internal Server Error: /rooms/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such table: owner_utility
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 269, in room_list
+    return render(request, 'room_list_sai.html', {'rooms': rooms})
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/defaulttags.py", line 194, in render
+    len_values = len(values)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: owner_utility
+2023-07-18 07:45:18.968 ERROR    django.server  :212 "GET /rooms/ HTTP/1.1" 500 225401
+2023-07-18 07:45:20.097 ERROR    django.request :241 Internal Server Error: /rooms/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such table: owner_utility
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 269, in room_list
+    return render(request, 'room_list_sai.html', {'rooms': rooms})
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/template/defaulttags.py", line 194, in render
+    len_values = len(values)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/sql/compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: owner_utility
+2023-07-18 07:45:20.099 ERROR    django.server  :212 "GET /rooms/ HTTP/1.1" 500 224978
+2023-07-18 07:54:09.265 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 57, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:54:09.268 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 07:56:56.452 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:56:56.456 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 07:59:42.621 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:59:42.623 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 07:59:45.639 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:59:45.647 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 07:59:53.248 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:59:53.253 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 07:59:56.963 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 07:59:56.964 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 08:00:53.533 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 08:00:53.535 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 08:04:02.910 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 08:04:02.923 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114413
+2023-07-18 08:04:20.949 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 08:04:20.953 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114410
+2023-07-18 08:05:20.637 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 58, in signup
+    if form.is_valid():
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/models.py", line 387, in clean
+    self.email = self.__class__.objects.normalize_email(self.email)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 196, in __get__
+    raise AttributeError(
+AttributeError: Manager isn't available; 'auth.User' has been swapped for 'menu_app.CustomUser'
+2023-07-18 08:05:20.640 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 114410
+2023-07-18 08:08:45.601 ERROR    django.request :241 Internal Server Error: /verify/saithimmareddy13@gmail.com/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/__init__.py", line 121, in login
+    backend = backend or user.backend
+AttributeError: 'CustomUser' object has no attribute 'backend'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 146, in verify
+    login(request, user)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/__init__.py", line 127, in login
+    raise ValueError(
+ValueError: You have multiple authentication backends configured and therefore must provide the `backend` argument or set the `backend` attribute on the user.
+2023-07-18 08:08:45.602 ERROR    django.server  :212 "POST /verify/saithimmareddy13@gmail.com/ HTTP/1.1" 500 96476
+2023-07-18 08:20:34.555 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.IntegrityError: UNIQUE constraint failed: CustomUser.phone_number
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 80, in signup
+    user = CustomUser.objects.create_user(
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/menu_app/manager.py", line 26, in create_user
+    user.save()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/base_user.py", line 76, in save
+    super().save(*args, **kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.IntegrityError: UNIQUE constraint failed: CustomUser.phone_number
+2023-07-18 08:20:34.557 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 186715
+2023-07-18 08:23:51.160 ERROR    django.request :241 Internal Server Error: /signup/
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+sqlite3.IntegrityError: UNIQUE constraint failed: CustomUser.phone_number
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/local.py", line 182, in __call__
+    return self._get_current_object()(*a, **kw)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/celery/app/task.py", line 411, in __call__
+    return self.run(*args, **kwargs)
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/lodging_app/views.py", line 80, in signup
+    user = CustomUser.objects.create_user(
+  File "/home/dsaidthimmareddy/Documents/Restaurant-Menu-Rashmi/menu_app/manager.py", line 26, in create_user
+    user.save()
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/contrib/auth/base_user.py", line 76, in save
+    super().save(*args, **kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+django.db.utils.IntegrityError: UNIQUE constraint failed: CustomUser.phone_number
+2023-07-18 08:23:51.164 ERROR    django.server  :212 "POST /signup/ HTTP/1.1" 500 186715

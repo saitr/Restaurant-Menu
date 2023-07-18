@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+ <div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+    <div class="wrapper wrapper--w960">
+        <div class="card card-2">
+            <div class="card-heading"></div>
+            <div class="card-body">
+
+
+            <form method="post" action="{% url 'user_api' %}">
+                  <h1 style="text-align:center;margin:10px 0px 10px 0px">Sign Up</h1>
+                {% csrf_token %}
+                <div class="row" style="display:block;">
+
+                <label style="font-size: 18px;" for="phone_number">Phone Number</label>
+                <input style="width: 300px;height: 50px;border:1px solid;"  type="tel" id="phone_number" name="phone_number" required><br><br>
+
+                <input type="hidden" name="table_number" value="{{table_number}}">
+
+
+                <br>
+                    <input type="submit" style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit" value="Send OTP" onclick="{% if not user.is_verified %}sendPasswordAndTableNumber('{{ table_number }}'){% else %}placeOrder('{{ table_number }}'){% endif %}">
+
+<!--                <input type="submit" style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit" value="Send OTP" onclick="{% if user.is_verified %}placeOrder('{{ table_number }}'){% else %}window.location.href = '/user_api/{{ table_number }}/'{% endif %}">-->
+
+<!--                <button style="font-size: 18px;color: white;font-weight: bold;background-color: green;width: 200px;height: 50px;" type="submit">Send OTP</button>-->
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+<script>
+         function sendPasswordAndTableNumber(table_number) {
+            console.log("table_number", table_number);
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/user_api/';
+
+            // Create an input field for the table number
+            var inputTableName = document.createElement('input');
+            inputTableName.type = 'hidden';
+            inputTableName.name = 'table_number';
+            inputTableName.value = table_number;
+
+            // Create an input field for the password
+            var inputPassword = document.createElement('input');
+            inputPassword.type = 'password';
+            inputPassword.name = 'password';
+            inputPassword.required = true;
+
+            // Append the input fields to the form
+            form.appendChild(inputTableName);
+            form.appendChild(inputPassword);
+
+            // Append the form to the document
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
+
+        function placeOrder(table_name) {
+            console.log("table_name",table_name)
+            // Create a form dynamically
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/order_api/';
+
+            // Create an input field for the table name
+            var inputTableName = document.createElement('input');
+            inputTableName.type = 'hidden';
+            inputTableName.name = 'table_name';
+            inputTableName.value = table_name;
+
+            // Append the input fields to the form
+            form.appendChild(inputTableName);
+
+            // Append the form to the document
+            document.body.appendChild(form);
+
+            // Prevent the default form submission behavior
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                placeOrderAsync(form);
+            });
+
+            // Submit the form asynchronously
+            function placeOrderAsync(form) {
+                // Send a POST request to the cart API
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    // Check if the response was successful
+                    if (response.ok) {
+                        // Redirect to image.html
+                        window.location.href = 'image.html';
+                    } else {
+                        // Handle unsuccessful response if needed
+                        console.error('Error placing order:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error placing order:', error);
+                });
+            }
+
+            // Submit the form
+            form.submit();
+        }
+
+</script>
+</body>
+</html>

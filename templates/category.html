@@ -1,0 +1,149 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+
+     @media (max-width: 375px) {
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+         }
+
+           @media (min-width: 376px) and (max-width: 768px) {
+            .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        }
+
+        /* Styles for screens between 769px and 1024px (laptop) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+           .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 100px; /* Add margin at the bottom to prevent overlap */
+        }
+
+        .menu .item {
+            flex-basis: 200px;
+            margin: 10px;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        }
+
+
+
+</style>
+</head>
+
+ {% for item in return_list %}
+    {% if forloop.last %}
+        <script>
+            function redirectToAPI(form) {
+                var table_name = '{{ item.table_number }}';
+                console.log("table_name", table_name);
+
+                var category = form.category.value;
+                // Redirect to the desired API endpoint with the selected category and table_name
+                var url = '/items?category=' + encodeURIComponent(category) + '&table_name=' + encodeURIComponent(table_name);
+                // Redirect to the desired API endpoint with the selected category and table_name
+                window.location.href = url;
+            }
+        </script>
+    {% endif %}
+{% endfor %}
+
+
+
+
+
+
+    
+
+<h1 class="display-1 text-center text-decoration-underline">Categories</h1>
+
+      <div class="menu">
+
+        <form class="menu-flex-form" onsubmit="event.preventDefault(); redirectToAPI(this);">
+            {% for item in return_list %}
+        <div class="item">
+            <div class="item-image"><img src="{{ item.category_img.url }}" alt="" class="food_item_image"></div>
+            <div class="item-name">
+                <h6 class="item-price">{{ item.categoryName }}</h6>
+            <input style=" border-width: 20px;" type="radio" name="category" value="{{ item.categoryName }}" required>
+            </div>
+            
+
+        </div>
+        {% endfor %}
+            <div class="button-container">
+    <button   type="submit" class="btn btn-dark m-3">Go</button>
+        </div>
+        </form>
+      </div>
+
+
+
+<!--<div id="footer">-->
+<!--    <div>-->
+<!--        <h5>Copyright &copy;2023 | <a href="">Resturant</a></h5>-->
+<!--    </div>-->
+<!--    <div id=""top>-->
+<!--        <a href="#header"><i class="fa fa-chevron-circle-up"></i></a>-->
+<!--    </div>-->
+
+</body>
+</html>
+{% endblock %}

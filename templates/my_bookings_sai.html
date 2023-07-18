@@ -1,0 +1,41 @@
+{% extends 'base_sai.html' %}
+
+{% block content %}
+  <h1 class="text-center mt-5 text-decoration-underline">My Bookings</h1>
+
+  <div class="card-deck p-3 m-5">
+    {% for booking in my_bookings %}
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title">Room Number: {{ booking.room_chosen.number_var }}</h2>
+          <h3 class="card-text p-2">From Date: {{ booking.from_date }}</h3>
+          <h3 class="card-text p-2">To Date: {{ booking.to_date }}</h3>
+          {% if not booking.check_in and not booking.check_out %}
+            <form action="{% url 'cancel_booking' booking.id %}" method="POST">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit">Cancel Booking</button>
+            </form>
+          {% endif %}
+          {% if booking.check_in_date_time %}
+            <h3 class="card-text">Checked In Time: {{ booking.check_in_date_time }}</h3>
+          {% endif %}
+          {% if booking.check_out_date_time %}
+            <h3 class="card-text">Checked Out Time: {{ booking.check_out_date_time }}</h3>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if not my_bookings %}
+  <div class="text-center">
+  <img src="../static/img/logo.svg" alt="" class="footer-logo py-3 ">
+    <h1 class="text-center display-2">No bookings found.</h1>
+</div>
+  {% endif %}
+  <div class="text-center p-2">
+    <a href="{% url 'room_list'%}">
+      <button class="btn btn-dark">Back To Home</button>
+    </a>
+  </div>
+{% endblock %}
