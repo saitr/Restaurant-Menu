@@ -5,6 +5,7 @@
 <html>
 <head>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.pushbullet.com/libs/pushbullet.js"></script>
 
     <title>Order Items</title>
@@ -40,10 +41,12 @@
             box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
             padding: 20px;
             background: white;
-            width: 44%;
+            width: 35%;
             text-align: center;
             font-size: xx-large;
         }
+
+
 
         .order-group input {
             padding: 10px;
@@ -98,7 +101,41 @@
             color: green;
         }
 
+ /* Styles for screens up to 375px (mobile) */
+        @media (max-width: 375px) {
+          /* CSS rules for mobile view */
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 135%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
 
+        /* Styles for screens between 376px and 768px (tablet) */
+        @media (min-width: 376px) and (max-width: 768px) {
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 59%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+        /* Styles for screens between 769px and 1024px (laptop) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 44%;
+            text-align: center;
+            font-size: xx-large;
+        }
 
     </style>
 
