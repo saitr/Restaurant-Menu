@@ -8,6 +8,7 @@ from menu_app.api.views.user_api import VerifyOTPView
 from menu_app.api.views.admin_login_api import AdminLoginDetailAPIList
 from menu_app.api.views.varify_api import ValidateOTPView
 from menu_app.api.views.order_item_api import OrderApiView
+from menu_app.api.views.add_chef_api import AddChefAPIList
 from menu_app.api.views.admin_view_page import AdminDetailAPIList
 from menu_app.api.views.index import indexAPIList
 from menu_app.api.views.home import HomeAPIList
@@ -24,6 +25,7 @@ urlpatterns = [
     path('home', HomeAPIList.as_view() , name='home'),
     path('first_page/<int:variant>/', FirstPageAPIList.as_view() , name='home'),
     path('admin_view_page', AdminDetailAPIList.as_view() , name='admin_view_page'),
+    path('add_chef_api', AddChefAPIList.as_view() , name='add_chef_api'),
     path('notification_api', NotificationAPIList.as_view() , name='notification_api'),
     path('admin_login_api', AdminLoginDetailAPIList.as_view() , name='admin_login_api'),
     path('generate_bill', GenerateBillAPIList.as_view() , name='generate_bill'),

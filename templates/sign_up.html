@@ -23,7 +23,13 @@
                 {% csrf_token %}
                 <div class="row" style="display:block;">
 
-                <label style="font-size: 18px;" for="phone_number">Phone Number</label>
+
+
+                     <label style="font-size: 18px;" for="email_id">Email Id</label>
+                <input style="width: 300px;height: 50px;border:1px solid;"  type="tel" id="email_id" name="email_id" required><br><br>
+
+                   
+                     <label style="font-size: 18px;" for="phone_number">Phone Number</label>
                 <input style="width: 300px;height: 50px;border:1px solid;"  type="tel" id="phone_number" name="phone_number" required><br><br>
 
                 <input type="hidden" name="table_number" value="{{table_number}}">
@@ -42,9 +48,14 @@
     </div>
 </div>
 </div>
-{% endblock %}
+</body>
+</html>
+
 <script>
+
          function sendPasswordAndTableNumber(table_number) {
+            sessionStorage.clear();
+            console.log("clear")
             console.log("table_number", table_number);
             // Create a form dynamically
             var form = document.createElement('form');
@@ -61,11 +72,11 @@
             var inputPassword = document.createElement('input');
             inputPassword.type = 'password';
             inputPassword.name = 'password';
-            inputPassword.required = true;
+            inputPassword.required = false;
 
             // Append the input fields to the form
             form.appendChild(inputTableName);
-            form.appendChild(inputPassword);
+            // form.appendChild(inputPassword);
 
             // Append the form to the document
             document.body.appendChild(form);
@@ -75,6 +86,9 @@
         }
 
         function placeOrder(table_name) {
+            console.log("Inside placeorder")
+            sessionStorage.clear();
+            console.log("clear local store")
             console.log("table_name",table_name)
             // Create a form dynamically
             var form = document.createElement('form');
@@ -127,5 +141,5 @@
         }
 
 </script>
-</body>
-</html>
+
+{% endblock %}

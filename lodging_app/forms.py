@@ -64,11 +64,11 @@ class VerifyOTPForm(forms.Form):
 ###################Signin form#################################
 
 class SignInForm(forms.Form):
-    username= forms.CharField(widget=forms.TextInput(attrs={'class': 'input--style-2', 'placeholder': 'UserName'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input--style-2','placeholder': 'Password'}))
+    username_or_phone = forms.CharField(label='Username or Phone Number', widget=forms.TextInput(attrs={'class': 'input--style-2', 'placeholder': 'Username or Phone Number'}))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'input--style-2', 'placeholder': 'Password'}))
+
     class Meta:
-        model = CustomUser
-        fields = ('username', 'password')
+        fields = ('username_or_phone', 'password')
 
 
 
@@ -92,6 +92,40 @@ class ChangeUserDetails(forms.Form):
 
 
 class RoomCreationForm(forms.ModelForm):
+    number_var = forms.CharField(
+        label='Room Number',
+        widget=forms.TextInput(attrs={'class': 'input--style-2', 'placeholder': 'Room Number'})
+    )
+    room_number = forms.ChoiceField(
+        label='Is It a Room?',
+        choices=[('Yes', 'Yes'), ('No', 'No')],
+        widget=forms.Select(attrs={'class': 'input--style-2'})
+    )
+    description = forms.CharField(
+        label='Description',
+        widget=forms.Textarea(attrs={'class': 'input--style-2', 'placeholder': 'Description'})
+    )
+    room_price = forms.DecimalField(
+        label='Room Price',
+        widget=forms.NumberInput(attrs={'class': 'input--style-2', 'placeholder': 'Room Price'})
+    )
+    image1 = forms.ImageField(
+        label='Image 1',
+        widget=forms.FileInput(attrs={'class': 'input--style-2'})
+    )
+    image2 = forms.ImageField(
+        label='Image 2',
+        widget=forms.FileInput(attrs={'class': 'input--style-2'})
+    )
+    image3 = forms.ImageField(
+        label='Image 3',
+        widget=forms.FileInput(attrs={'class': 'input--style-2'})
+    )
+    image4 = forms.ImageField(
+        label='Image 4',
+        widget=forms.FileInput(attrs={'class': 'input--style-2'})
+    )
+
     class Meta:
         model = Owner_Utility
-        fields = ['number_var', 'room_number','description', 'room_price', 'image1', 'image2', 'image3', 'image4']
+        fields = ['number_var', 'room_number', 'description', 'room_price', 'image1', 'image2', 'image3', 'image4']

@@ -12,10 +12,10 @@
                         {{ form.non_field_errors }}
                     </div>
                     <div class="form-group">
-                        
-                        {{ form.username }}
+                       
+                        {{ form.username_or_phone }}
                         <div class="error-message">
-                            {{ form.username.errors }}
+                            {{ form.username_or_phone.errors }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -26,9 +26,10 @@
                         </div>
                     </div>
                     <div class="p-t-30">
-                        <button class="btn btn--radius btn--green" type="submit">SignIn</button>
+                        <button class="btn btn--radius btn--green" type="submit">Sign In</button>
                     </div>
                 </form>
+                
                 <span class="signup-signin-text">Not a member yet? <a href="{% url 'signup' %}" style="text-decoration: none;">SignUp</a></span>
             </div>
         </div>

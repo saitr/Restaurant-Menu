@@ -1,7 +1,7 @@
 {% extends 'base_sai.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container w-50">
   <h1 class="mt-5 mb-4">Create Room</h1>
 
   <form method="POST" enctype="multipart/form-data">
@@ -17,9 +17,12 @@
       {{ form.description }}
     </div>
 
-    <div class="mb-3 form-check">
-      {{ form.room_number }}
-      <label class="form-check-label" for="{{ form.room_number.id_for_label }}">Is It a Room?</label>
+    <div class="mb-3">
+      <label class="form-label">Is It a Room?</label>
+      <select class="form-select" name="{{ form.room_number.name }}">
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+      </select>
     </div>
 
     <div class="mb-3">

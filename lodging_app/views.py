@@ -190,18 +190,28 @@ def signin(request):
     if request.method == 'POST':
         form = SignInForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            username_or_phone = form.cleaned_data['username_or_phone']
             password = form.cleaned_data['password']
-            
-            try:
-                user = CustomUser.objects.get(username=username)
-            except CustomUser.DoesNotExist:
-                form.add_error(None, 'Incorrect username or password')
-                return render(request, 'signin_sai.html', {'form': form})
+
+            # Check if the input is a valid phone number
+            if validate_phone_number(username_or_phone):
+                # If it's a valid phone number, authenticate using phone number
+                try:
+                    user = CustomUser.objects.get(phone_number=username_or_phone)
+                except CustomUser.DoesNotExist:
+                    form.add_error('username_or_phone', 'Incorrect username or password')
+                    return render(request, 'signin_sai.html', {'form': form})
+            else:
+                # If it's not a valid phone number, authenticate using username
+                try:
+                    user = CustomUser.objects.get(username=username_or_phone)
+                except CustomUser.DoesNotExist:
+                    form.add_error('username_or_phone', 'Incorrect username or password')
+                    return render(request, 'signin_sai.html', {'form': form})
 
             # Use check_password to validate the password
             if not check_password(password, user.password):
-                form.add_error(None, 'Incorrect username or password')
+                form.add_error('username_or_phone', 'Incorrect username or password')
                 return render(request, 'signin_sai.html', {'form': form})
 
             login(request, user)

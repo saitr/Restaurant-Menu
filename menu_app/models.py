@@ -18,23 +18,23 @@ from rest_framework.authtoken.models import Token
 import secrets
 
 class CustomUser(AbstractUser, PermissionsMixin):
-    phone_number = models.CharField(max_length=20,unique=True,null=True,blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
     is_verified = models.BooleanField(default=False)
     is_chef = models.BooleanField(default=False)
-    otp = models.CharField(max_length=20)
-    username = models.CharField(max_length=150, unique=True, null=True)
-    password = models.CharField(max_length=100,null=False,blank=False)
-    email = models.EmailField(unique=True)
-    address = models.TextField(max_length=250)
-    jwt_token = models.CharField(max_length=250,unique=True,null=True)
-    token = models.CharField(max_length=100,unique=True,null=True,blank=True)
+    otp = models.CharField(max_length=20, blank=True, null=True)
+    username = models.CharField(max_length=150, unique=True, null=True, blank=True)
+    password = models.CharField(max_length=100, null=False, blank=True)
+    email = models.EmailField(unique=True, blank=True)
+    address = models.TextField(max_length=250, blank=True)
+    jwt_token = models.CharField(max_length=250, unique=True, null=True, blank=True)
+    token = models.CharField(max_length=100, unique=True, null=True, blank=True)
     is_logged_in = models.BooleanField(default=False)
-    display_picture = CloudinaryField('Display Picture',null=True, blank=True)
+    display_picture = CloudinaryField('Display Picture', null=True, blank=True)
     objects = CustomUserManager()
 
     # Use 'phone_number' as the unique identifier for authentication
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['username','email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username','phone_number']
 
     class Meta:
         db_table = 'CustomUser'
@@ -46,7 +46,6 @@ class CustomUser(AbstractUser, PermissionsMixin):
 
         super().save(*args, **kwargs)
 
-    
     def update_token(self):
         self.token = None
         self.token_created = None
@@ -83,17 +82,17 @@ class Items(models.Model):
 class Owner_Utility(models.Model):
     table_number = models.IntegerField(default=False)
     qr_code = models.ImageField(upload_to='qr_code',  blank=True)
-    number_var = models.IntegerField(blank=False,null=False)
-    is_table = models.BooleanField(default=False)
-    room_number = models.BooleanField(default=False)
-    is_booked = models.BooleanField(default=False)
-    is_cancelled = models.BooleanField(default=False)
-    image1 = CloudinaryField(blank=False)
-    image2 = CloudinaryField(blank=False)
-    image3 = CloudinaryField(blank=False)
-    image4 = CloudinaryField(blank=False)
-    description = models.CharField(blank=False,max_length=250)
-    room_price = models.IntegerField(blank=False,null=False)
+    number_var = models.IntegerField(blank=True,null=True)
+    is_table = models.BooleanField(default=False,blank=True)
+    room_number = models.BooleanField(default=False,blank=True)
+    is_booked = models.BooleanField(default=False,blank=True)
+    is_cancelled = models.BooleanField(default=False,blank=True)
+    image1 = CloudinaryField(blank=True)
+    image2 = CloudinaryField(blank=True)
+    image3 = CloudinaryField(blank=True)
+    image4 = CloudinaryField(blank=True)
+    description = models.CharField(blank=True,max_length=250)
+    room_price = models.IntegerField(blank=True,null=True)
 
     class Meta:
         managed = True

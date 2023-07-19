@@ -83,12 +83,87 @@ height: 100%;
 <div id="cartContainer">
   <a id="cartLink" href="{% url 'cart_api' %}?table_name={{ table_name }}">
     <h1><i id="cartIcon" class="fas fa-shopping-cart"></i></h1>
-    <span id="cartCountOverlay">0</span>
+    <span id="cartCountOverlay">{{cart_item_count}}</span>
   </a>
 </div>
 
 
 
+
+<!--<script>-->
+<!--// Get the buttons, count element, and cart image-->
+<!--var addToCartButtons = document.getElementsByClassName("addToCartButton");-->
+<!--var cartCount = document.getElementById("cartCountOverlay");-->
+<!--var cartIcon = document.getElementById("cartIcon");-->
+<!--var cartLink = document.getElementById("cartLink");-->
+
+<!--// Set the initial count value-->
+<!--&lt;!&ndash;var count = 0;&ndash;&gt;-->
+<!--var count = parseInt("{{ cart_item_count }}") || 0;-->
+
+<!--// Function to update the cart count element and cart image-->
+<!--function updateCartCount() {-->
+
+<!--  cartCount.textContent = count;-->
+<!--  cartIcon.classList.add("cartAnimation");-->
+<!--  setTimeout(function() {-->
+<!--    cartIcon.classList.remove("cartAnimation");-->
+<!--  }, 500);-->
+<!--}-->
+
+<!--// Function to make a POST request to the cart API-->
+<!--function callCartAPI(itemId, tableNumber) {-->
+<!--  // Create a new XMLHttpRequest object-->
+<!--  var xhr = new XMLHttpRequest();-->
+
+<!--  // Set the request URL-->
+<!--  var url = "{% url 'cart_api' %}";-->
+<!--  console.log("url",url)-->
+<!--  // Create the payload-->
+<!--  var payload = JSON.stringify({ item_id: itemId, table_name: tableNumber });-->
+<!--  console.log("payload",payload)-->
+<!--  // Open a POST request-->
+<!--  xhr.open("POST", url, true);-->
+
+<!--  // Set the request headers-->
+<!--  xhr.setRequestHeader("Content-Type", "application/json");-->
+
+<!--  // Define the callback function for successful response-->
+<!--  xhr.onload = function() {-->
+<!--    if (xhr.status === 200) {-->
+<!--      console.log("Cart API request successful");-->
+<!--      // Handle the response here if needed-->
+<!--    }-->
+<!--  };-->
+
+<!--  // Define the callback function for error response-->
+<!--  xhr.onerror = function() {-->
+<!--    console.error("Error making Cart API request");-->
+<!--  };-->
+
+<!--  // Send the request with the payload-->
+<!--  xhr.send(payload);-->
+<!--}-->
+
+<!--// Add event listeners to the "Add to Cart" buttons-->
+<!--for (var i = 0; i < addToCartButtons.length; i++) {-->
+<!--  addToCartButtons[i].addEventListener("click", function(event) {-->
+<!--    if (!event.target.classList.contains("disabled")) {-->
+<!--      event.target.classList.add("disabled"); // Disable the button-->
+<!--      count++; // Increase the count-->
+<!--      updateCartCount();-->
+
+<!--      // Get the item id and table number from the data attributes-->
+<!--      var itemId = event.target.getAttribute("data-item-id");-->
+<!--      var tableNumber = "{{ table_name }}";-->
+
+<!--      // Call the cart API with the item id and table number-->
+<!--      callCartAPI(itemId, tableNumber);-->
+<!--      updateCartCount()-->
+<!--    }-->
+<!--  });-->
+<!--}-->
+<!--</script>-->
 
 <script>
 // Get the buttons, count element, and cart image
@@ -98,7 +173,7 @@ var cartIcon = document.getElementById("cartIcon");
 var cartLink = document.getElementById("cartLink");
 
 // Set the initial count value
-var count = 0;
+var count = parseInt("{{ cart_item_count }}") || 0;
 
 // Function to update the cart count element and cart image
 function updateCartCount() {
@@ -116,10 +191,10 @@ function callCartAPI(itemId, tableNumber) {
 
   // Set the request URL
   var url = "{% url 'cart_api' %}";
-  console.log("url",url)
+
   // Create the payload
   var payload = JSON.stringify({ item_id: itemId, table_name: tableNumber });
-  console.log("payload",payload)
+
   // Open a POST request
   xhr.open("POST", url, true);
 
@@ -143,19 +218,32 @@ function callCartAPI(itemId, tableNumber) {
   xhr.send(payload);
 }
 
+// Function to disable the button and store its state in sessionStorage
+function disableButton(button) {
+  button.classList.add("disabled");
+  var itemId = button.getAttribute("data-item-id");
+  sessionStorage.setItem(itemId, "disabled");
+}
+
 // Add event listeners to the "Add to Cart" buttons
 for (var i = 0; i < addToCartButtons.length; i++) {
-  addToCartButtons[i].addEventListener("click", function(event) {
+  var button = addToCartButtons[i];
+  var itemId = button.getAttribute("data-item-id");
+
+  // Check if the button was previously disabled and disable it again
+  if (sessionStorage.getItem(itemId) === "disabled") {
+    disableButton(button);
+  }
+
+  button.addEventListener("click", function(event) {
     if (!event.target.classList.contains("disabled")) {
-      event.target.classList.add("disabled"); // Disable the button
-      count++; // Increase the count
+      disableButton(event.target);
+      count++;
       updateCartCount();
 
-      // Get the item id and table number from the data attributes
       var itemId = event.target.getAttribute("data-item-id");
       var tableNumber = "{{ table_name }}";
 
-      // Call the cart API with the item id and table number
       callCartAPI(itemId, tableNumber);
     }
   });

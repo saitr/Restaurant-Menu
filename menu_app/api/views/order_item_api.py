@@ -13,6 +13,8 @@ from django.http import HttpResponseBadRequest
 from django.http import HttpResponse
 import json
 from menu_app.api.views.utils import api_utils
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 
 
 class OrderApiView(APIView):
@@ -21,10 +23,14 @@ class OrderApiView(APIView):
         print("INSIDE GET OF ORDER ITEM for chef",request.query_params)
         password = request.query_params['password']
         phone_number = request.query_params['phone_number']
-        user = authenticate(request, username=phone_number, password=password)
+        hashed_password = make_password(password)
+        # user = authenticate(request, username=phone_number, password=hashed_password)
+        # print("user", user)
+        user = CustomUser.objects.filter(phone_number=phone_number,is_chef=True).first()  # Assuming User is the user model you are using
         print("user", user)
+        password_matched = check_password(password, user.password)
 
-        if user is None:
+        if not password_matched:
             print("invalid")
 
             return render(request, 'login.html', {'error_message': 'Invalid credentials'})

@@ -31,7 +31,7 @@ class ItemAPIList(APIView):
         table = Owner_Utility.objects.get(table_number=table_name)
         print("table_number", table)
 
-        cart_item_count = Cart.objects.filter(table_number=table, orderid=None).first()
+        cart_item_count = Cart.objects.filter(table_number_id=table, orderid_id__isnull=True,sub_order_id_id__order_place=None,cart_created=True).count()
         print("cart_item_count", cart_item_count)
 
         return_list = []
@@ -49,7 +49,8 @@ class ItemAPIList(APIView):
 
         context = {
             'return_list': return_list,
-            'table_name': request.query_params['table_name']
+            'table_name': request.query_params['table_name'],
+            "cart_item_count": cart_item_count
         }
         print("context",context)
         return render(request, 'item.html', context)

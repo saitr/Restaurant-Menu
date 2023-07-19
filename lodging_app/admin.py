@@ -4,4 +4,3 @@ from menu_app.models import *
 # Register your models here.
 
 admin.site.register(Lodge)
-admin.site.register(Owner_Utility)

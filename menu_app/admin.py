@@ -52,31 +52,31 @@ class Items_UtilityAdmin(admin.ModelAdmin):
             super().save_model(request, obj, form, change)
 
 
-# class Owner_UtilityAdmin(admin.ModelAdmin):
-#     list_display = ('table_number', 'qr_code','delete_button')
+class Owner_UtilityAdmin(admin.ModelAdmin):
+    list_display = ('table_number', 'qr_code','delete_button')
 
-#     def save_model(self, request, obj, form, change):
-#         # Check if the field values are repetitive
-#         if Owner_Utility.objects.filter(table_number=obj.table_number).exists():
-#             # Display an error message and prevent saving the object
-#             self.message_user(request, "Field value is already repetitive.", level='ERROR')
-#         else:
-#             # Save the object
-#             super().save_model(request, obj, form, change)
-
-
-#     def delete_button(self, obj):
-
-#         if obj.pk:
-#             url = reverse('admin_utiliti', args=[obj.pk])
-#             button_html = '<a href="{}">Delete</a>'.format(url)
-#             return format_html(button_html)
-#         else:
-#             return 'No PK available'
-
-#     delete_button.short_description = 'Delete'
+    def save_model(self, request, obj, form, change):
+        # Check if the field values are repetitive
+        if Owner_Utility.objects.filter(table_number=obj.table_number).exists():
+            # Display an error message and prevent saving the object
+            self.message_user(request, "Field value is already repetitive.", level='ERROR')
+        else:
+            # Save the object
+            super().save_model(request, obj, form, change)
 
 
+    def delete_button(self, obj):
+
+        if obj.pk:
+            url = reverse('admin_utiliti', args=[obj.pk])
+            button_html = '<a href="{}">Delete</a>'.format(url)
+            return format_html(button_html)
+        else:
+            return 'No PK available'
+
+    delete_button.short_description = 'Delete'
 
 
-# admin.site.register(Owner_Utility,Owner_UtilityAdmin)
+
+
+admin.site.register(Owner_Utility,Owner_UtilityAdmin)

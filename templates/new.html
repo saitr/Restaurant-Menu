@@ -80,6 +80,7 @@ let tableName
 
 
         function placeOrder(table_name) {
+            sessionStorage.clear()
             console.log("table_name",table_name)
             // Create a form dynamically
             var form = document.createElement('form');
