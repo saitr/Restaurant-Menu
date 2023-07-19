@@ -50,9 +50,14 @@
     </div>
 </div>
 </div>
-{% endblock %}
+</body>
+</html>
+
 <script>
+
          function sendPasswordAndTableNumber(table_number) {
+            sessionStorage.clear();
+            console.log("clear")
             console.log("table_number", table_number);
             // Create a form dynamically
             var form = document.createElement('form');
@@ -83,6 +88,9 @@
         }
 
         function placeOrder(table_name) {
+            console.log("Inside placeorder")
+            sessionStorage.clear();
+            console.log("clear local store")
             console.log("table_name",table_name)
             // Create a form dynamically
             var form = document.createElement('form');
@@ -135,5 +143,5 @@
         }
 
 </script>
-</body>
-</html>
+
+{% endblock %}
