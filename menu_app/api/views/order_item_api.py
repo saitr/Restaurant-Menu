@@ -15,7 +15,7 @@ import json
 from menu_app.api.views.utils import api_utils
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class OrderApiView(APIView):
     def get(self,request):
@@ -26,61 +26,66 @@ class OrderApiView(APIView):
         hashed_password = make_password(password)
         # user = authenticate(request, username=phone_number, password=hashed_password)
         # print("user", user)
-        user = CustomUser.objects.filter(phone_number=phone_number,is_chef=True).first()  # Assuming User is the user model you are using
-        print("user", user)
-        password_matched = check_password(password, user.password)
+        try:
+            user = CustomUser.objects.get(phone_number=phone_number)  # Assuming User is the user model you are using
+            print("user", user)
+            password_matched = check_password(password, user.password)
 
-        if not password_matched:
-            print("invalid")
+            if not password_matched:
+                print("invalid")
 
-            return render(request, 'login.html', {'error_message': 'Invalid credentials'})
-        else:
-            print("valid")
-            cart_items = Cart.objects.filter(orderid__generate_bill=False)
-            print("cart_items", cart_items)
-            return_list = []
-            order_dict = {}
-            list_item = []
+                return render(request, 'login.html', {'error_message': 'Invalid credentials'})
+            else:
+                print("valid")
+                cart_items = Cart.objects.filter(orderid__generate_bill=False)
+                print("cart_items", cart_items)
+                return_list = []
+                order_dict = {}
+                list_item = []
 
 
-            for item in cart_items:
-                item_data = {
-                        "sub_order_id": item.sub_order_id_id,
-                        "item_name": item.items.itemName,
-                        "table_name": item.table_number.table_number,
-                        "item": item.items,
-                        "quantity": item.quantity,
-                        "order_id":item.orderid_id,
-                        "order_deliverd":item.sub_order_id.order_deliverd
-                    }
-                list_item.append(item_data)
+                for item in cart_items:
+                    item_data = {
+                            "sub_order_id": item.sub_order_id_id,
+                            "item_name": item.items.itemName,
+                            "table_name": item.table_number.table_number,
+                            "item": item.items,
+                            "quantity": item.quantity,
+                            "order_id":item.orderid_id,
+                            "order_deliverd":item.sub_order_id.order_deliverd
+                        }
+                    list_item.append(item_data)
 
-            order_dict = {}
+                order_dict = {}
 
-            for item in list_item:
-                print("****************************", item['order_id'])
-                order_id = item['order_id']
-                sub_order_id = item['sub_order_id']
-                if order_id not in order_dict:
-                    order_dict[order_id] = {}
-                if sub_order_id not in order_dict[order_id]:
-                    order_dict[order_id][sub_order_id] = []
-                order_dict[order_id][sub_order_id].append(item)
+                for item in list_item:
+                    print("****************************", item['order_id'])
+                    order_id = item['order_id']
+                    sub_order_id = item['sub_order_id']
+                    if order_id not in order_dict:
+                        order_dict[order_id] = {}
+                    if sub_order_id not in order_dict[order_id]:
+                        order_dict[order_id][sub_order_id] = []
+                    order_dict[order_id][sub_order_id].append(item)
 
-            grouped_data = []
-            for order_id, sub_orders in order_dict.items():
-                order_data = {'order_id': order_id, 'sub_orders': []}
-                for sub_order_id, sub_order_items in sub_orders.items():
-                    sub_order_data = {'sub_order_id': sub_order_id, 'items': sub_order_items}
-                    order_data['sub_orders'].append(sub_order_data)
-                grouped_data.append(order_data)
+                grouped_data = []
+                for order_id, sub_orders in order_dict.items():
+                    order_data = {'order_id': order_id, 'sub_orders': []}
+                    for sub_order_id, sub_order_items in sub_orders.items():
+                        sub_order_data = {'sub_order_id': sub_order_id, 'items': sub_order_items}
+                        order_data['sub_orders'].append(sub_order_data)
+                    grouped_data.append(order_data)
 
-            context = {
-                'return_list': grouped_data
-            }
-            print("context", context)
+                context = {
+                    'return_list': grouped_data
+                }
+                print("context", context)
 
-            return render(request, 'chef.html', context)
+                return render(request, 'chef.html', context)
+
+        except ObjectDoesNotExist:
+            print("User does not exist")
+            return render(request, 'login.html', {'error_message': 'User does not exist'})
 
     def post(self, request):
         print("Inside api OrderApiView post", request.data)

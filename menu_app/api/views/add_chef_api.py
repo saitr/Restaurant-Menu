@@ -66,7 +66,7 @@ class AddChefAPIList(APIView):
                     phone_number=phone_number,
                     password=hashed_password,
                     email=email_id,
-                    is_chef=True
+                    is_chef = True
                 )
                 return render(request, 'add_chef.html', {'message': 'Chef added successfully'})
             except IntegrityError:

@@ -93,7 +93,7 @@ class VerifyOTPView(APIView):
         print("inside post USER_API", request )
         phone_number = request.POST.get('phone_number')
         email_id = request.POST.get('email_id')
-        password = request.POST.get('password')
+
         print("phone_number", phone_number)
         table_name = request.POST.get('table_number')
         print("table_name", table_name)
@@ -102,9 +102,9 @@ class VerifyOTPView(APIView):
 
         if phone_number and not entered_otp:
             user_dict = {}
-            hashed_password = make_password(password)
+
             user_dict["phone_number"] = phone_number
-            user_dict["password"] = hashed_password
+
             user_dict["email"] = email_id
 
             cursor, connection = DBUtils.get_db_connect()
