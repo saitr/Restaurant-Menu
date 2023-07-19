@@ -26,9 +26,9 @@ class CustomUser_UtilityAdmin(admin.ModelAdmin):
     list_display = ('phone_number', 'is_verified', 'is_chef', 'otp','username')
 
 
-# @admin.register(Order)
-# class Order_UtilityAdmin(admin.ModelAdmin):
-#     list_display = ('table_number', 'created_at', 'total_price','generate_bill')
+@admin.register(Order)
+class Order_UtilityAdmin(admin.ModelAdmin):
+    list_display = ('table_number', 'created_at', 'total_price','generate_bill')
 
 
 @admin.register(SubOrder)

@@ -60,6 +60,13 @@ class AddChefAPIList(APIView):
                 email_id = request.data['email_id']
                 # Hash the password
                 hashed_password = make_password(password)
+                # Check if the email ID already exists
+                if CustomUser.objects.filter(email=email_id).exists():
+                    print("email already exist")
+                    error_message = 'Email ID already exists. Please choose a different email ID.'
+                    return render(request, 'add_chef.html', {'error_message': error_message})
+
+                print("after email valid")
 
                 user = CustomUser.objects.create(
                     username=user_name,
