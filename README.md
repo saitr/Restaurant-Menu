@@ -4,10 +4,11 @@
  
 </head>
 <body>
-  <h1>Restaurant Menu and Lodging App</h1>
-  <h1>Restaurant Menu App
-  <h2>Prerequisites</h2>
+  <h1>Restaurant Menu and Room Booking App</h1>
+  <h1>Restaurant Menu App</h1>
+  <h2>Prerequisites Of the project</h2>
   <ul>
+    <li>Install Python by navigating to the link <a href="https://www.python.org/downloads/">Download Python</a></li>
     <li>Install the Pushbullet Google Chrome plugin: <a href="https://chrome.google.com/webstore/detail/pushbullet/chlffgpmiacpedhhbkiomidkjlcfhogd">Pushbullet</a></li>
     <li>Also install mobile app from playstore Pushbullet</li>
     <li>Create an account on Pushbullet and generate an access token in the settings. Replace the access token in the .env file with your generated token.</li>
@@ -15,7 +16,7 @@
     <li>Ensure you have Python and Django installed on your local machine.</li>
   </ul>
 
-   <h2>Project Setup</h2>
+   <h2>Project Setup (Restaurant Menu)</h2>
    <li>Clone project from github</li>
    <li>Run requirements by the command <strong>pip3 install -r requirements.txt</strong></li>
    <li>Go the restaurants folder and then settings folder and open base.py file and change the database settings with your own local mysql settings</li>
@@ -37,6 +38,42 @@
     <li>Waiters can log in to the Admin Utility link to select table numbers and proceed with taking orders.</li>
     <li>Customers can use their mobile devices to scan the provided QR code and access the menu. They can view menu items and place orders directly.</li>
   </ol>
+
+  <h1>Room Booking App</h1>
+  <h2>Description: </h2> <p>The Room Booking App is a web application that allows users to search for and book rooms in accommodation. It provides a seamless and user-friendly interface for both guests and accommodation owners to manage their reservations effectively.</p>
+ <h2>Key Features:</h2>
+<ul>
+  <li>User Registration and Authentication: Users can sign up for an account, log in, and securely authenticate their identity to access personalized features.</li>
+  
+  <li>Room Search and Booking: Guests can search for available rooms based on their preferred location, dates, and other filters. Once a suitable room is found, they can easily book it and receive booking confirmation.</li>
+  
+  <li>Owner Dashboard: Accommodation owners can create an account, add their rooms to the system, manage room availability, and view incoming reservations through a dedicated dashboard.</li>
+  
+  <li>Room Details and Media: Users can view detailed information about each room, including room type, amenities, and images, to make informed booking decisions.</li>
+  
+  <li>User Profile: Users have their own profile pages where they can update personal information, view booking history, and manage preferences.</li>
+  
+  <li>Room Availability Calendar: Owners can easily manage their room availability using an intuitive calendar view.</li>
+  
+  <li>Admin Panel: An administrative panel is available to manage user accounts, listings, and resolve any issues that may arise.</li>
+</ul>
+
+<h2>Technologies Used:</h2>
+<ul>
+  <li>Backend: Python and Django web framework.</li>
+  <li>Frontend: HTML, CSS, JavaScript, and Bootstrap for responsive design.</li>
+  <li>Database: Mysql to store room listings, user data, and reservations.</li>
+  <li>Cloudinary: To handle image uploads and storage.</li>
+</ul>
+
+
+  <h2>Project Entry Point</h2>
+  <ul>
+    <li>After the cloning the project now in the terminal execute the commnad <strong>python3 manage.py createsuperuser</strong></li>
+    <li>The above command is to create a admin for the project.</li>
+   <li>Execute the command <strong>python3 manage.py runserver</strong><small>(This will start local server) </small> and you can use the project.</li>
+  </ul>
+  
 </body>
 </html>
 
