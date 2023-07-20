@@ -5393,3 +5393,128 @@ django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLR
 2023-07-20 06:34:37.537 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/restaurants/static/css/style_sai.css notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
 2023-07-20 06:34:42.206 INFO     django.server  :212 "GET / HTTP/1.1" 200 5903
 2023-07-20 06:34:42.290 INFO     django.server  :212 "GET /static/css/style_sai.css HTTP/1.1" 200 10254
+2023-07-20 06:36:27.262 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689834701.814368, current mtime: 1689834987.035367
+2023-07-20 06:36:27.264 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:29.373 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689834987.035367, current mtime: 1689834989.0591633
+2023-07-20 06:36:29.374 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:34.753 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689834989.0591633, current mtime: 1689834994.1306536
+2023-07-20 06:36:34.754 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:36.898 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689834994.1306536, current mtime: 1689834996.6424017
+2023-07-20 06:36:36.901 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:54.247 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689834996.6424017, current mtime: 1689835014.2406416
+2023-07-20 06:36:54.248 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:55.383 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835014.2406416, current mtime: 1689835015.1365523
+2023-07-20 06:36:55.385 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:36:57.565 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835015.1365523, current mtime: 1689835016.7403924
+2023-07-20 06:36:57.568 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:03.708 DEBUG    django.db.backends:131 (0.001) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+2023-07-20 06:37:03.711 DEBUG    django.db.backends:131 (0.001) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:37:03.712 DEBUG    django.db.backends:131 (0.001) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility`; args=(); alias=default
+2023-07-20 06:37:03.736 INFO     django.server  :212 "GET /admin_utiliti HTTP/1.1" 200 9681
+2023-07-20 06:37:03.794 INFO     django.server  :212 "GET /static/css/main.css HTTP/1.1" 200 10888
+2023-07-20 06:37:03.795 INFO     django.server  :212 "GET /static/css/style.css HTTP/1.1" 200 17784
+2023-07-20 06:37:03.798 INFO     django.server  :212 "GET /static/css/profile_page.css HTTP/1.1" 200 1977
+2023-07-20 06:37:04.349 DEBUG    django.utils.autoreload:394 File /home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/conf/locale/en/__init__.py first seen with mtime 1689665916.1559062
+2023-07-20 06:37:04.357 DEBUG    django.utils.autoreload:394 File /home/dsaidthimmareddy/.local/lib/python3.8/site-packages/django/conf/locale/en/formats.py first seen with mtime 1689665916.1559062
+2023-07-20 06:37:10.827 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835016.7403924, current mtime: 1689835030.4750273
+2023-07-20 06:37:10.829 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:15.210 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835030.4750273, current mtime: 1689835034.6786108
+2023-07-20 06:37:15.212 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:18.521 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835034.6786108, current mtime: 1689835037.6703146
+2023-07-20 06:37:18.522 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:20.852 INFO     django.server  :212 "GET /static/img/images5_new.jpg HTTP/1.1" 200 13821
+2023-07-20 06:37:27.252 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835037.6703146, current mtime: 1689835047.2373693
+2023-07-20 06:37:27.253 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:30.498 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835047.2373693, current mtime: 1689835050.3290644
+2023-07-20 06:37:30.503 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:31.628 DEBUG    django.utils.autoreload:397 File /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html previous mtime: 1689835050.3290644, current mtime: 1689835050.841014
+2023-07-20 06:37:31.637 DEBUG    django.utils.autoreload:371 /home/dsaidthimmareddy/Desktop/Restaurant-Menu/templates/home_page_sai.html notified as changed. Signal results: [(<function template_changed at 0x7f8d85eea280>, True), (<function translation_file_changed at 0x7f8d83f54790>, None)].
+2023-07-20 06:37:32.555 DEBUG    django.db.backends:131 (0.002) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+2023-07-20 06:37:32.560 DEBUG    django.db.backends:131 (0.001) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:37:32.563 DEBUG    django.db.backends:131 (0.002) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility`; args=(); alias=default
+2023-07-20 06:37:32.599 INFO     django.server  :212 "GET /admin_utiliti HTTP/1.1" 200 9681
+2023-07-20 06:37:36.065 INFO     django.server  :212 "GET / HTTP/1.1" 200 6006
+2023-07-20 06:37:36.103 INFO     django.server  :212 "GET /static/css/style_sai.css HTTP/1.1" 304 0
+2023-07-20 06:37:36.105 INFO     django.server  :212 "GET /static/css/main_sai.css HTTP/1.1" 304 0
+2023-07-20 06:37:36.107 INFO     django.server  :212 "GET /static/css/profile_page_sai.css HTTP/1.1" 304 0
+2023-07-20 06:37:36.295 INFO     django.server  :212 "GET / HTTP/1.1" 200 6006
+2023-07-20 06:37:37.922 DEBUG    django.db.backends:131 (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:37:37.926 DEBUG    django.db.backends:131 (0.002) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility`; args=(); alias=default
+2023-07-20 06:37:37.935 INFO     django.server  :212 "GET /admin_utiliti HTTP/1.1" 200 9681
+2023-07-20 06:37:49.026 DEBUG    django.db.backends:131 (0.001) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:37:49.028 DEBUG    django.db.backends:131 (0.001) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`expire_date` > '2023-07-20 06:37:49.017705' AND `django_session`.`session_key` = '5rgd8m19eftulz3wzouerir8q6w1u6m1') LIMIT 21; args=('2023-07-20 06:37:49.017705', '5rgd8m19eftulz3wzouerir8q6w1u6m1'); alias=default
+2023-07-20 06:37:49.033 DEBUG    django.db.backends:131 (0.002) SELECT `CustomUser`.`id`, `CustomUser`.`last_login`, `CustomUser`.`is_superuser`, `CustomUser`.`first_name`, `CustomUser`.`last_name`, `CustomUser`.`is_staff`, `CustomUser`.`is_active`, `CustomUser`.`date_joined`, `CustomUser`.`phone_number`, `CustomUser`.`is_verified`, `CustomUser`.`is_chef`, `CustomUser`.`otp`, `CustomUser`.`username`, `CustomUser`.`password`, `CustomUser`.`email`, `CustomUser`.`address`, `CustomUser`.`jwt_token`, `CustomUser`.`token`, `CustomUser`.`is_logged_in`, `CustomUser`.`display_picture` FROM `CustomUser` WHERE `CustomUser`.`id` = 3 LIMIT 21; args=(3,); alias=default
+2023-07-20 06:37:49.066 DEBUG    django.db.backends:131 (0.001) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility` WHERE (`owner_utility`.`is_booked` = 0 AND `owner_utility`.`room_number` = 1); args=(False, True); alias=default
+2023-07-20 06:37:49.075 INFO     django.server  :212 "GET /rooms/ HTTP/1.1" 200 27096
+2023-07-20 06:37:49.167 INFO     django.server  :212 "GET /static/img/logo.svg HTTP/1.1" 200 35948
+2023-07-20 06:37:49.172 INFO     django.server  :212 "GET /static/img/luxury_hotel_heading_image.png HTTP/1.1" 200 10664
+2023-07-20 06:37:49.177 INFO     django.server  :212 "GET /static/img/gym.jpg HTTP/1.1" 200 417733
+2023-07-20 06:37:49.178 INFO     django.server  :212 "GET /static/img/confernce_hall.jpg HTTP/1.1" 200 461925
+2023-07-20 06:37:49.179 INFO     django.server  :212 "GET /static/img/stunning_views.jpg HTTP/1.1" 200 611326
+2023-07-20 06:37:54.615 DEBUG    django.db.backends:131 (0.001) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+2023-07-20 06:37:54.622 DEBUG    django.db.backends:131 (0.001) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:37:54.630 DEBUG    django.db.backends:131 (0.005) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`expire_date` > '2023-07-20 06:37:54.598671' AND `django_session`.`session_key` = '5rgd8m19eftulz3wzouerir8q6w1u6m1') LIMIT 21; args=('2023-07-20 06:37:54.598671', '5rgd8m19eftulz3wzouerir8q6w1u6m1'); alias=default
+2023-07-20 06:37:54.655 DEBUG    django.db.backends:131 (0.017) SELECT `CustomUser`.`id`, `CustomUser`.`last_login`, `CustomUser`.`is_superuser`, `CustomUser`.`first_name`, `CustomUser`.`last_name`, `CustomUser`.`is_staff`, `CustomUser`.`is_active`, `CustomUser`.`date_joined`, `CustomUser`.`phone_number`, `CustomUser`.`is_verified`, `CustomUser`.`is_chef`, `CustomUser`.`otp`, `CustomUser`.`username`, `CustomUser`.`password`, `CustomUser`.`email`, `CustomUser`.`address`, `CustomUser`.`jwt_token`, `CustomUser`.`token`, `CustomUser`.`is_logged_in`, `CustomUser`.`display_picture` FROM `CustomUser` WHERE `CustomUser`.`id` = 3 LIMIT 21; args=(3,); alias=default
+2023-07-20 06:37:54.660 DEBUG    django.db.backends:131 (0.001) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility` WHERE (`owner_utility`.`is_booked` = 0 AND `owner_utility`.`room_number` = 1); args=(False, True); alias=default
+2023-07-20 06:37:54.680 INFO     django.server  :212 "GET /rooms/ HTTP/1.1" 200 27096
+2023-07-20 06:37:54.736 INFO     django.server  :212 "GET /static/css/style_sai.css HTTP/1.1" 304 0
+2023-07-20 06:38:21.244 INFO     django.server  :212 "GET / HTTP/1.1" 200 6006
+2023-07-20 06:38:21.353 INFO     django.server  :212 "GET /static/css/style_sai.css HTTP/1.1" 304 0
+2023-07-20 06:38:22.840 DEBUG    django.db.backends:131 (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:38:22.842 DEBUG    django.db.backends:131 (0.002) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility`; args=(); alias=default
+2023-07-20 06:38:22.853 INFO     django.server  :212 "GET /admin_utiliti HTTP/1.1" 200 9681
+2023-07-20 06:38:30.849 DEBUG    django.db.backends:131 (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:38:30.850 DEBUG    django.db.backends:131 (0.001) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`expire_date` > '2023-07-20 06:38:30.840864' AND `django_session`.`session_key` = '5rgd8m19eftulz3wzouerir8q6w1u6m1') LIMIT 21; args=('2023-07-20 06:38:30.840864', '5rgd8m19eftulz3wzouerir8q6w1u6m1'); alias=default
+2023-07-20 06:38:30.853 DEBUG    django.db.backends:131 (0.001) SELECT `CustomUser`.`id`, `CustomUser`.`last_login`, `CustomUser`.`is_superuser`, `CustomUser`.`first_name`, `CustomUser`.`last_name`, `CustomUser`.`is_staff`, `CustomUser`.`is_active`, `CustomUser`.`date_joined`, `CustomUser`.`phone_number`, `CustomUser`.`is_verified`, `CustomUser`.`is_chef`, `CustomUser`.`otp`, `CustomUser`.`username`, `CustomUser`.`password`, `CustomUser`.`email`, `CustomUser`.`address`, `CustomUser`.`jwt_token`, `CustomUser`.`token`, `CustomUser`.`is_logged_in`, `CustomUser`.`display_picture` FROM `CustomUser` WHERE `CustomUser`.`id` = 3 LIMIT 21; args=(3,); alias=default
+2023-07-20 06:38:30.859 DEBUG    django.db.backends:131 (0.002) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility` WHERE (`owner_utility`.`is_booked` = 0 AND `owner_utility`.`room_number` = 1); args=(False, True); alias=default
+2023-07-20 06:38:30.869 INFO     django.server  :212 "GET /rooms/ HTTP/1.1" 200 27096
+2023-07-20 06:38:35.446 INFO     django.server  :212 "GET /static/img/multiple_cusines.png HTTP/1.1" 200 15402
+2023-07-20 06:38:35.465 INFO     django.server  :212 "GET /static/img/double_beds.png HTTP/1.1" 200 7069
+2023-07-20 06:38:35.919 INFO     django.server  :212 "GET /static/img/swimming_pool.png HTTP/1.1" 200 11181
+2023-07-20 06:38:35.934 INFO     django.server  :212 "GET /static/img/hot_beverages.png HTTP/1.1" 200 11948
+2023-07-20 06:38:35.964 INFO     django.server  :212 "GET /static/img/kids_playground.png HTTP/1.1" 200 12101
+2023-07-20 06:38:35.965 INFO     django.server  :212 "GET /static/img/sun_beds.png HTTP/1.1" 200 9230
+2023-07-20 06:38:35.972 INFO     django.server  :212 "GET /static/img/jaccuzi_bath.jpg HTTP/1.1" 200 526380
+2023-07-20 06:38:35.995 INFO     django.server  :212 "GET /static/img/nearby_place.jpg HTTP/1.1" 200 38011
+2023-07-20 06:38:36.043 INFO     django.server  :212 "GET /static/img/nearby_place2.jpg HTTP/1.1" 200 31886
+2023-07-20 06:38:36.091 INFO     django.server  :212 "GET /static/img/nearby_place3.jpg HTTP/1.1" 200 27140
+2023-07-20 06:38:51.664 DEBUG    django.db.backends:131 (0.002) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+2023-07-20 06:38:51.667 DEBUG    django.db.backends:131 (0.001) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:38:51.672 DEBUG    django.db.backends:131 (0.001) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`expire_date` > '2023-07-20 06:38:51.654174' AND `django_session`.`session_key` = '5rgd8m19eftulz3wzouerir8q6w1u6m1') LIMIT 21; args=('2023-07-20 06:38:51.654174', '5rgd8m19eftulz3wzouerir8q6w1u6m1'); alias=default
+2023-07-20 06:38:51.679 DEBUG    django.db.backends:131 (0.002) SELECT `CustomUser`.`id`, `CustomUser`.`last_login`, `CustomUser`.`is_superuser`, `CustomUser`.`first_name`, `CustomUser`.`last_name`, `CustomUser`.`is_staff`, `CustomUser`.`is_active`, `CustomUser`.`date_joined`, `CustomUser`.`phone_number`, `CustomUser`.`is_verified`, `CustomUser`.`is_chef`, `CustomUser`.`otp`, `CustomUser`.`username`, `CustomUser`.`password`, `CustomUser`.`email`, `CustomUser`.`address`, `CustomUser`.`jwt_token`, `CustomUser`.`token`, `CustomUser`.`is_logged_in`, `CustomUser`.`display_picture` FROM `CustomUser` WHERE `CustomUser`.`id` = 3 LIMIT 21; args=(3,); alias=default
+2023-07-20 06:38:51.690 DEBUG    django.db.backends:131 (0.004) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility` WHERE `owner_utility`.`id` = 1 LIMIT 21; args=(1,); alias=default
+2023-07-20 06:38:51.704 INFO     django.server  :212 "GET /book-room/1/ HTTP/1.1" 200 8612
+2023-07-20 06:38:53.548 DEBUG    django.db.backends:131 (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+2023-07-20 06:38:53.549 DEBUG    django.db.backends:131 (0.001) SELECT `django_session`.`session_key`, `django_session`.`session_data`, `django_session`.`expire_date` FROM `django_session` WHERE (`django_session`.`expire_date` > '2023-07-20 06:38:53.536973' AND `django_session`.`session_key` = '5rgd8m19eftulz3wzouerir8q6w1u6m1') LIMIT 21; args=('2023-07-20 06:38:53.536973', '5rgd8m19eftulz3wzouerir8q6w1u6m1'); alias=default
+2023-07-20 06:38:53.552 DEBUG    django.db.backends:131 (0.001) SELECT `CustomUser`.`id`, `CustomUser`.`last_login`, `CustomUser`.`is_superuser`, `CustomUser`.`first_name`, `CustomUser`.`last_name`, `CustomUser`.`is_staff`, `CustomUser`.`is_active`, `CustomUser`.`date_joined`, `CustomUser`.`phone_number`, `CustomUser`.`is_verified`, `CustomUser`.`is_chef`, `CustomUser`.`otp`, `CustomUser`.`username`, `CustomUser`.`password`, `CustomUser`.`email`, `CustomUser`.`address`, `CustomUser`.`jwt_token`, `CustomUser`.`token`, `CustomUser`.`is_logged_in`, `CustomUser`.`display_picture` FROM `CustomUser` WHERE `CustomUser`.`id` = 3 LIMIT 21; args=(3,); alias=default
+2023-07-20 06:38:53.562 DEBUG    django.db.backends:131 (0.001) SELECT `owner_utility`.`id`, `owner_utility`.`table_number`, `owner_utility`.`qr_code`, `owner_utility`.`number_var`, `owner_utility`.`is_table`, `owner_utility`.`room_number`, `owner_utility`.`is_booked`, `owner_utility`.`is_cancelled`, `owner_utility`.`image1`, `owner_utility`.`image2`, `owner_utility`.`image3`, `owner_utility`.`image4`, `owner_utility`.`description`, `owner_utility`.`room_price` FROM `owner_utility` WHERE (`owner_utility`.`is_booked` = 0 AND `owner_utility`.`room_number` = 1); args=(False, True); alias=default
+2023-07-20 06:38:53.572 INFO     django.server  :212 "GET /rooms/ HTTP/1.1" 200 27096
+2023-07-20 06:38:53.679 INFO     django.server  :212 "GET /static/css/style_sai.css HTTP/1.1" 304 0
