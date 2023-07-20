@@ -4,8 +4,8 @@
  
 </head>
 <body>
-  <h1>Restaurant Menu</h1>
-
+  <h1>Restaurant Menu and Lodging App</h1>
+  <h1>Restaurant Menu App
   <h2>Prerequisites</h2>
   <ul>
     <li>Install the Pushbullet Google Chrome plugin: <a href="https://chrome.google.com/webstore/detail/pushbullet/chlffgpmiacpedhhbkiomidkjlcfhogd">Pushbullet</a></li>
@@ -17,8 +17,9 @@
 
    <h2>Project Setup</h2>
    <li>Clone project from github</li>
-   <li>Run requirement </li>
-   <li>Run makemigration and migrate</li>
+   <li>Run requirements by the command <strong>pip3 install -r requirements.txt</strong></li>
+   <li>Go the restaurants folder and then settings folder and open base.py file and change the database settings with your own local mysql settings</li>
+   <li>Run the commands <strong>Python3 manage.py makemigrations <br> Python3 manage.py migrate</strong> </li>
    
   <h2>Project Entry Points</h2>
   <ol>
