@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Order Items</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <style>
+        .order-heading {
+            text-align: center;
+        }
+
+        .order {
+            padding: 20px;
+            background: #f8f9fa;
+            height: 100vh;
+        }
+
+        .order-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 30%;
+            text-align: center;
+            font-size: xx-large;
+        }
+
+        .order-group input {
+            padding: 10px;
+        }
+
+        .add-to-cart {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0px 0px 0px;
+        }
+        .add-to-cart button {
+            height: 80px; /* Adjust the height as needed */
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        td, th {
+            text-align: left;
+            padding: 8px;
+        }
+  .order-id {
+            background-color: lightgray;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+
+        .sub-order-id {
+            background-color: lightblue;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid black;
+        }
+
+        .sub-order-items {
+            background-color: #f2f2f2;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        .order-delivered-btn {
+            background-color: green;
+            color: white;
+        }
+
+        .order-delivered-msg {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+        /* Styles for screens up to 375px (mobile) */
+        @media (max-width: 375px) {
+          /* CSS rules for mobile view */
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 135%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+        /* Styles for screens between 376px and 768px (tablet) */
+        @media (min-width: 376px) and (max-width: 768px) {
+            .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 59%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+        /* Styles for screens between 769px and 1024px (laptop) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .order-group {
+            box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+            padding: 20px;
+            background: white;
+            width: 44%;
+            text-align: center;
+            font-size: xx-large;
+        }
+        }
+
+
+
+    </style>
+    <script>
+
+
+        function generateBill(orderID, tableName) {
+            var url = "/generate_bill";
+            var method = 'GET';
+
+            var params = new URLSearchParams();
+            params.append('order_id', orderID);
+            params.append('table_number', tableName);
+
+            fetch(url + '?' + params.toString(), {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+                .then(response => response.text())  // Convert response to text
+                .then(html => {
+                    // Render the HTML response
+                    var billWindow = window.open('', '_blank');
+                    billWindow.document.open();
+                    billWindow.document.write(html);
+                    billWindow.document.close();
+                })
+                .catch(error => {
+                    // Handle any errors that occur during the request
+                });
+        }
+
+
+        function handleNotification(data) {
+        console.log("Inside notify")
+        console.log(data);  // Display the notification data in the browser console
+
+        // Modify the DOM to show the notification message
+        var notificationDiv = document.createElement('div');
+        notificationDiv.textContent = data.message;
+        notificationDiv.classList.add('notification');
+        document.body.appendChild(notificationDiv);
+    }
+
+    // Call the handleNotification function with the initial notification data
+    handleNotification(notificationData);
+
+    setTimeout(function() {
+        console.log("**** settime")
+        location.reload();
+    }, 300000);
+
+    </script>
+
+</head>
+<body>
+<div class="order">
+    <h1 class="order-heading">Admin View </h1>
+    <div class="order-container">
+        {% for order_data in return_list %}
+
+        <div class="order-group">
+            <div class="order-id">Order ID: {{ order_data.order_id }}</div>
+            {% for sub_order_data in order_data.sub_orders %}
+            <div class="sub-order-id">Sub Order ID: {{ sub_order_data.sub_order_id }}</div>
+            <div class="sub-order-items">
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Table Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in sub_order_data.items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.table_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            {% endfor %}
+
+            <div class="add-to-cart">
+                <button class="btn btn-dark w-25" value="Generate Bill"
+                        onclick="generateBill('{{ order_data.order_id }}', '{{ order_data.sub_orders.0.items.0.table_name }}')">Generate Bill</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+
+</html>
+{% endblock %}

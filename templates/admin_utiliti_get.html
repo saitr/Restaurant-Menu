@@ -1,0 +1,8 @@
+<h1>Owner Utility Details</h1>
+<p>Table Number: {{ object.table_number }}</p>
+<p>QR Code: <img src="{{ object.qr_code.url }}" alt="QR Code"></p>
+
+<form method="post" action="{% url 'admin_utiliti' pk=object.pk %}">
+  {% csrf_token %}
+  <button type="submit">Delete</button>
+</form>

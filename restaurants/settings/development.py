@@ -36,3 +36,12 @@ REST_FRAMEWORK = {
 # Required by DRF Throttler. https://www.django-rest-framework.org/api-guide/throttling/#how-clients-are-identified
 NUM_PROXIES = 1
 
+STATIC_URL = '/static/'
+
+# Absolute filesystem path to the directory that will hold static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional locations of static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]

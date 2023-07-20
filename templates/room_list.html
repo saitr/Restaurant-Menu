@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<!-- header starting  -->
+<header class="navbar navbar-expand-lg navbar-light justify-content-around">
+  <a class="navbar-brand" href="#">
+      <img src="/static/img/logo.svg" alt="" class="logo">
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+      <ul class="navbar-nav justify-content-around ml-auto">
+          <li class="nav-item" style="text-align: center;">
+              <a class="nav-link" href="#" style="font-size: 20px;">Home</a>
+          </li>
+          <hr class="dropdown-divider">
+          <li class="nav-item" style="text-align: center;">
+              <a class="nav-link" href="http://127.0.0.1:8000/category_api/{{table_name}}/" style="font-size: 20px;">Menu</a>
+          </li>
+          <hr class="dropdown-divider">
+          <li class="nav-item" style="text-align: center;">
+              <a class="nav-link" href="#" style="font-size: 20px;">About</a>
+          </li>
+          <hr class="dropdown-divider">
+
+
+
+      </ul>
+  </div>
+
+</header>
+<!-- header ending  -->
+<!-- background starts -->
+
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+  <div class="memories-div">
+      <h1 class="stayonce1 display-1">Good Food,Good Mood,</h1>
+  <h1 class="stayonce2 display-3">Bliss On A Plate</h1>
+
+ <a href="http://127.0.0.1:8000/category_api/{{table_name}}/">
+  <button class="book-room-background button-animation">Menu</button>
+ </a>
+  </div>
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="5000">
+      <img src="/static/img/hero.jpeg" class="d-block w-100 carousel-image" style="height: 90vh;" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="5000">
+      <img src="/static/img/resturant_2.jpeg" class="d-block w-100 carousel-image" style="height: 90vh;" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="5000">
+      <img src="/static/img/background_resturant.jpg" class="d-block w-100 carousel-image" style="height: 90vh;" alt="...">
+    </div>
+  </div>
+</div>
+
+<!-- background ends  -->
+
+<!-- heading of rooms section  -->
+
+<section class="d-flex flex-column justify-content-center align-items-center">
+  <img src="/static/img/luxury_hotel_heading_image.png" alt="" class="luxury_image pt-5">
+  <h1 class="luxury_text text-center p-3" style="font-size: 70px; font-weight: 400;font-family: cursive;">Showing Delicious Items</h1>
+  <p class="text-center" style="font-family: cursive;">Mauris nec risus congue dui suscipit interdum id ac felis.
+      Cras venete finibus quis. <br> Phasellus tempor at turpis quis ultrices. Vivamus.</p>
+      {% if request.user.is_superuser %}
+      <div class="text-ends m-3">
+        <a href="{% url 'create_room' %}"><button class="btn btn-dark">Create A Room</button></a>
+      </div>
+      {% endif %}
+</section>
+
+
+
+<!-- end of heading rooms section  -->
+
+<!-- room starts  -->
+<div class="row" id="room">
+  {% for room in rooms %}
+    <div class="col-md-4">
+      <div class="mb-4">
+        <strong><h2 class="p-2 text-decoration-underline text-center">Room Number: {{ room.number_var }}</h2></strong>
+        <div id="carouselExampleFade-{{ room.pk }}" class="carousel slide carousel-fade" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{{ room.image1.url }}" class="d-block w-100 img-carousel" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ room.image2.url }}" class="d-block w-100 img-carousel" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ room.image3.url }}" class="d-block w-100 img-carousel" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ room.image4.url }}" class="d-block w-100 img-carousel" alt="...">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade-{{ room.pk }}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade-{{ room.pk }}" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+<!--        {% if not room.is_booked %}-->
+<!--&lt;!&ndash;        <div class="text-center p-3">&ndash;&gt;-->
+<!--&lt;!&ndash;          <a href="#" hx-get="{% url 'book_room' room.id %}" class="btn btn-dark text-light" hx-target="#content">Book Room</a>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+
+
+<!--      {% endif %}-->
+
+    </div>
+    </div>
+    {% cycle '' '' '</div><div class="row">' %}
+  {% endfor %}
+</div>
+<div id="content"></div>
+<!-- room ends  -->
+
+<!-- Start of Amenities heading section  -->
+<section class="amenities-heading">
+  <h5 class="amenites-heading text-center pt-3">COME AND ENJOY</h5>
+  <h1 class="luxury_text text-center pt-3" style="font-size: 70px; font-weight: 400;font-family: cursive;">
+      Amenities At Hotel</h1>
+  <p class="text-center" style="font-family: cursive;">Aenean sed rutrum purus. Nunc nec magna laoreet, sodales
+      nisi at, co rutrum viverra. Nunc nec magna aculis metus libero vehiculaNullam iaculis metus nehicula. <br>
+      Nunc nec magna laoreet, sodales nisi at, co rutrum viverra. <br> </p>
+</section>
+<!-- end of Amenities-heading section  -->
+
+<!-- start of Amenities section  -->
+
+<div class=" amenities d-flex justify-content-around flex-wrap pt-5 pb-5">
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/multiple_cusines.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Multiple Cusines</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/double_beds.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Double Beds</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/swimming_pool.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Swimming Pool</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+</div>
+<div class=" amenities d-flex justify-content-around flex-wrap pt-5 pb-5">
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/hot_beverages.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Hot Beverages</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/kids_playground.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Kid's Playground</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+  <div class="amenities1 d-flex p-3">
+      <img src="/static/img/sun_beds.png" alt="" class="cusines pe-3">
+      <div class="amenities-description">
+          <h2 class="amenities1-heading">Sun Beds</h2>
+          <h5 class="amenities1-description">Vitae tempus quam pellentesque <br> nec nam aliquam sem.</h5>
+      </div>
+  </div>
+</div>
+
+<!-- end of Amenities section  -->
+
+    <!-- Highlighted Amenities section start  -->
+    <section class="highlighted-amenities-heading mt-5 mb-5">
+      <h5 class="highlighted-amenites-heading text-center pt-3 text-light" style="background-color: #3d3931;">
+          IMPRESSIVE FACILITIES</h5>
+      <h1 class="highlighted-luxury_text text-center pt-3 display-2 text-light"
+          style="font-size: 70px; font-weight: 400; font-family: cursive; background-color: #3d3931;">Highlighted
+          Amenities</h1>
+      <p class="text-center text-light" style="font-family: cursive;background-color: #3d3931;">Aenean sed rutrum
+          purus. Nunc nec magna laoreet, sodales nisi at, co rutrum viverra. Nunc nec magna aculis metus libero
+          vehiculaNullam iaculis metus nehicula.<br>Nunc nec magna laoreet, sodales nisi at, co rutrum viverra.<br>
+      </p>
+      <div class="highlighted-images">
+          <div class="highlighted-image-div">
+              <h1 class="image-type text-center text-light">Conference Hall</h1>
+              <img src="/static/img/confernce_hall.jpg" class="highlighted-images1 h-100" alt="">
+          </div>
+          <div class="highlighted-image-div">
+              <h1 class="image-type text-center text-light">Studio Gym</h1>
+              <img src="/static/img/gym.jpg" class="highlighted-images1 h-100" alt="">
+          </div>
+          <div class="highlighted-image-div">
+              <h1 class="image-type text-center text-light">Jacuzzi Bathtub</h1>
+              <img src="/static/img/jaccuzi_bath.jpg" class="highlighted-images1 h-100" alt="">
+          </div>
+      </div>
+  </section>
+
+
+  <!-- End of Highlighted Ameniteis  -->
+
+
+  <!-- start of nearby locations  -->
+  <div class="nearby-place-heading">
+    <h5 class="text-dark">
+        IMPRESSIVE FACILITIES</h5>
+    <h1 class="highlighted-luxury_text pt-3 display-2 text-dark"
+        style="font-size: 70px; font-weight: 400; font-family: cursive;">Popular Dishes</h1>
+    <p class="text-dark">Lauris nec risus congue dui suscipit interdum id ac felis. Cras venenatis finitis ante <br>
+        finibus quis. Phasellus tempor at turpis quis ultrices. Vivamus fringilla, ama
+    </p>
+</div>
+
+<section class="nearby-section">
+
+    <div class="nearby-places-div">
+        <div class="nearby-image-div d-flex" onmouseover="showMap(0)">
+            <img src="/static/img/breakfast2.jpg" style="width: 40%;" class="p-3 h-100" alt="">
+            <div class="nearby-details-div p-3">
+                <button class="p-2 border-0 text-light rounded" style="background-color: #3d3931;">Price:$20</button>
+                <h1>Parota</h1>
+                <p>Pharetra massa donec ullamcorper lorem <br> dolor, non vulputate at.</p>
+            </div>
+        </div>
+        <div class="nearby-image-div d-flex" onmouseover="showMap(1)">
+            <img src="/static/img/dinner1.jpg" style="width: 40%;" class="h-100 p-3" alt="">
+            <div class="nearby-details-div p-3">
+                <button class="p-2 border-0 text-light rounded" style="background-color: #3d3931;">Price: $20</button>
+                <h1>Chicken Wings</h1>
+                <p>Commodo sed egestas egestas fringilla <br> phasellus faucibus scelerisq.</p>
+            </div>
+        </div>
+        <div class="nearby-image-div d-flex" onmouseover="showMap(2)">
+            <img src="/static/img/dinner3.jpg" style="width: 40%;" class="h-100 p-3" alt="">
+            <div class="nearby-details-div p-3">
+                <button class="p-2 border-0 text-light rounded" style="background-color: #3d3931;">Price: $20</button>
+                <h1>Mushroom</h1>
+                <p>Commodo sed egestas egestas fringilla <br> phasellus faucibus scelerisq.</p>
+            </div>
+        </div>
+    </div>
+    <div class="vertical"></div>
+    <div id="map-container" style="display: none;">
+        <div id="map-iframe-container"></div>
+    </div>
+</section>
+
+<section class="subscribe" style="background-color:#9b804e;">
+    <div class="subscribe-text">
+        <h6 class="subscribe-text text-light">SUBSCRIBE</h6>
+        <h1 class="display-1 text-light">For More Deals</h1>
+    </div>
+    <div class="subscriber-input-div">
+        <input type="text" class="subscriber-input" placeholder="Enter your email"> <br class="break-subscribe-button">
+        <button class="submit">Submit</button>
+    </div>
+
+</section>
+
+<hr class="my-5">
+<!-- end of nearby-locations seciton  -->
+
+<!-- footer section starts  -->
+
+<footer>
+    <div class="text-center">
+        <img src="/static/img/logo.svg" alt="" class="footer-logo py-3 ">
+        <h5 class="footer-address py-2"><strong>Address :</strong>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br> consequatur veniam ducimus rerum, adipisci illo!
+            Tempora accusantium deserunt eius nesciunt veniam</h5>
+        <h5 class="phone-number"><strong>Phone Number :</strong>+91 7234023449</h5>
+        <h5 class="footer-email"><strong>Gmail :</strong>sai@gmail.com</h5>
+        <hr class="my-3">
+        <h5 class="copyright-tex my-3">© 2023 DollarBird WeDesignTech</h5>
+    </div>
+
+</footer>
+
+<!-- footer section ends  -->
+
+<script>
+    function showMap(mapIndex) {
+        var mapContainer = document.getElementById("map-container");
+        var mapIframeContainer = document.getElementById("map-iframe-container");
+
+        // Clear the map iframe container
+        mapIframeContainer.innerHTML = "";
+
+        // Create a new iframe element
+        var mapIframe = document.createElement("iframe");
+        mapIframe.setAttribute("src", getMapSrc(mapIndex));
+        mapIframe.setAttribute("width", "600");
+        mapIframe.setAttribute("height", "600");
+        mapIframe.setAttribute("style", "border-radius: 5%; border: 10px solid rgba(0, 0, 0, 0.2);");
+        mapIframe.setAttribute("allowfullscreen", "");
+        mapIframe.setAttribute("loading", "lazy");
+        mapIframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+
+        // Append the iframe to the map iframe container
+        mapIframeContainer.appendChild(mapIframe);
+
+        // Get the position of the nearby-image-div element
+        var nearbyDiv = document.getElementsByClassName("nearby-image-div")[mapIndex];
+        var rect = nearbyDiv.getBoundingClientRect();
+        var top = rect.top + window.pageYOffset;
+
+        // Set the top position of the map container
+        mapContainer.style.top = top + "px";
+
+        // Show the map container
+        mapContainer.style.display = "block";
+    }
+
+    function getMapSrc(mapIndex) {
+        switch (mapIndex) {
+            case 0:
+                return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15532.925178017018!2d74.71465876228183!3d13.273481593123869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbcba65277d7c89%3A0xbce72c5845f20ae2!2sMattu%20Beach!5e0!3m2!1sen!2sin!4v1688557705441!5m2!1sen!2sin";
+            case 1:
+                return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7695.59670738866!2d76.45818484504804!3d15.333189790978631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb77fd95d4be823%3A0x6e52e05076df36b8!2sHampi%2C%20Karnataka%20583239!5e0!3m2!1sen!2sin!4v1688558040811!5m2!1sen!2sin";
+            case 2:
+                return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31170.195398340893!2d75.71427031342444!3d12.431427271521965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba50075627a7fff%3A0xaf8a66ea4651c1a6!2sMadikeri%2C%20Karnataka%20571201!5e0!3m2!1sen!2sin!4v1688559459154!5m2!1sen!2sin";
+            default:
+                return "";
+        }
+    }
+    window.addEventListener("DOMContentLoaded", function () {
+        // Show the default map on page load
+        showMap(1); // Replace the mapIndex with the desired default map index
+    });
+
+</script>
+{% endblock %}
