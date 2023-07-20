@@ -9,11 +9,17 @@
   <h2>Prerequisites</h2>
   <ul>
     <li>Install the Pushbullet Google Chrome plugin: <a href="https://chrome.google.com/webstore/detail/pushbullet/chlffgpmiacpedhhbkiomidkjlcfhogd">Pushbullet</a></li>
+    <li>Also install mobile app from playstore Pushbullet</li>
     <li>Create an account on Pushbullet and generate an access token in the settings. Replace the access token in the .env file with your generated token.</li>
     <li>Install the required dependencies mentioned in the project.</li>
     <li>Ensure you have Python and Django installed on your local machine.</li>
   </ul>
 
+   <h2>Project Setup</h2>
+   <li>Clone project from github</li>
+   <li>Run requirement </li>
+   <li>Run makemigration and migrate</li>
+   
   <h2>Project Entry Points</h2>
   <ol>
     <li><strong>Table Number Selection (Waiter):</strong> Waiters can log in to the application through the <a href="http://127.0.0.1:8000/admin_utiliti">Admin Utility</a> link to select the table number for the customers and proceed with taking orders.</li>
