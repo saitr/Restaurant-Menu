@@ -521,3 +521,7 @@ def send_invoice_email(request, invoice_id):
 def all_bookings(request):
     bookings = Lodge.objects.all()
     return render(request, 'bookings_sai.html', {'bookings': bookings})
+
+
+def home_page(request):
+    return render(request,'home_page_sai.html')
