@@ -43,12 +43,12 @@ logging.config.dictConfig(LOGGING)
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'restaurants',
-        'USER': 'root',
-        'PASSWORD': 'Sai481309@',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'ENGINE': 'django.db.backends.mysql', #name of the type of databse in this case it  is mysql
+        'NAME': 'restaurants', #Name of the database
+        'USER': 'root', #Name of the mysql user
+        'PASSWORD': 'Sai481309@', #Password of the mysql
+        'HOST':'localhost', # host of the sql 
+        'PORT':'3306', # Running Port
     }
 }
 
